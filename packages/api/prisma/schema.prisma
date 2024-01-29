@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String        @id @default(uuid())
+  username    String        @unique
+  password    String
+  role        Role          @default(CUSTOMER)
+  email       String        @unique
+  telephone   String        @unique
+  reservation Reservation[]
+}
+
+model Table {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  status      Status        @default(IDLE)
+  seat        Int
+  reservation Reservation[]
+}
+
+model Order {
+  id       String @id @default(uuid())
+  quantity Int
+  menu     Menu   @relation(fields: [menuId], references: [id])
+  menuId   String @map("menu_id")
+  usage    Usage  @relation(fields: [usageId], references: [id])
+  usageId  String @map("usage_id")
+}
+
+model Reservation {
+  id      String @id @default(uuid())
+  seat    Int
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @map("user_id")
+  table   Table  @relation(fields: [tableId], references: [id])
+  tableId String @map("table_id")
+}
+
+model Menu {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  price Float
+  image String  @unique
+  order Order[]
+}
+
+model Billing {
+  id      String @id @default(uuid())
+  price   Float
+  usage   Usage  @relation(fields: [usageId], references: [id])
+  usageId String @map("usage_id")
+}
+
+model Usage {
+  id      String    @id @default(uuid())
+  start   DateTime
+  end     DateTime
+  order   Order[]
+  billing Billing[]
+}
+
+enum Status {
+  IDLE
+  EATING
+  RESERVED
+}
+
+enum Role {
+  MANAGER
+  CHEF
+  STAFF
+  CUSTOMER
+}

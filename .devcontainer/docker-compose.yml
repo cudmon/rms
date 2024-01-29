@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/rms:cached
+    command: sleep infinity
+    network_mode: service:database
+    environment:
+      API_URL: http://127.0.0.1:5000
+      DATABASE_URL: postgres://postgres:postgres@database:5432/postgres
+    depends_on:
+      - database
+
+  database:
+    image: postgres
+    restart: unless-stopped
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  data:
