@@ -3,15 +3,15 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  prisma.user.deleteMany({});
-  prisma.billing.deleteMany({});
-  prisma.menu.deleteMany({});
-  prisma.order.deleteMany({});
-  prisma.reservation.deleteMany({});
-  prisma.usage.deleteMany({});
-  prisma.table.deleteMany({});
+  await prisma.user.deleteMany({});
+  await prisma.billing.deleteMany({});
+  await prisma.menu.deleteMany({});
+  await prisma.order.deleteMany({});
+  await prisma.reservation.deleteMany({});
+  await prisma.usage.deleteMany({});
+  await prisma.table.deleteMany({});
 
-  prisma.user.createMany({
+  await prisma.user.createMany({
     data: [
       {
         username: "alex",
@@ -23,27 +23,27 @@ async function main() {
     ],
   });
 
-  prisma.menu.createMany({
+  await prisma.menu.createMany({
     data: [
       {
         name: "Burger",
         price: 10,
-        image: ".",
+        image: "burger.png",
       },
       {
         name: "Pizza",
         price: 20,
-        image: ".",
+        image: "pizza.png",
       },
       {
         name: "Pasta",
         price: 15,
-        image: ".",
+        image: "pasta.png",
       },
     ],
   });
 
-  prisma.table.createMany({
+  await prisma.table.createMany({
     data: [
       {
         name: "A",
