@@ -28,18 +28,18 @@ model Table {
 model Order {
   id       String @id @default(uuid())
   quantity Int
-  menu     Menu   @relation(fields: [menuId], references: [id])
+  menu     Menu   @relation(fields: [menuId], references: [id], onDelete: Cascade)
   menuId   String @map("menu_id")
-  usage    Usage  @relation(fields: [usageId], references: [id])
+  usage    Usage  @relation(fields: [usageId], references: [id], onDelete: Cascade)
   usageId  String @map("usage_id")
 }
 
 model Reservation {
   id      String @id @default(uuid())
   seat    Int
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String @map("user_id")
-  table   Table  @relation(fields: [tableId], references: [id])
+  table   Table  @relation(fields: [tableId], references: [id], onDelete: Cascade)
   tableId String @map("table_id")
 }
 
@@ -54,7 +54,7 @@ model Menu {
 model Billing {
   id      String @id @default(uuid())
   price   Float
-  usage   Usage  @relation(fields: [usageId], references: [id])
+  usage   Usage  @relation(fields: [usageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   usageId String @map("usage_id")
 }
 
