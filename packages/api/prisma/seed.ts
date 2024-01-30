@@ -16,6 +16,7 @@ async function main() {
       {
         username: "alex",
         password: "alex",
+        name: "Alex",
         role: "MANAGER",
         email: "alex@rms.com",
         telephone: "1234567890",
