@@ -1,6 +1,7 @@
 import { AppModule } from "@/app.module";
 import { NestFactory } from "@nestjs/core";
 import { ZodFilter } from "@/exceptions/zod.exception";
+import { HttpExceptionFilter } from "@/exceptions/http.exception";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +11,7 @@ async function bootstrap() {
   app.getHttpAdapter().getInstance().disable("x-powered-by");
 
   app.useGlobalFilters(new ZodFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(5000);
 }
