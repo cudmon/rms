@@ -9,6 +9,8 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -19,15 +21,18 @@ export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Get()
-  async findAll(@Query("take") take: string, @Query("skip") skip: string) {
+  async findAll(
+    @Query("take", new ParseIntPipe({ optional: true })) take?: number,
+    @Query("skip", new ParseIntPipe({ optional: true })) skip?: number
+  ) {
     return await this.menuService.findAll({
-      take: parseInt(take) || 100,
-      skip: parseInt(skip) || 0,
+      take: take || 100,
+      skip: skip || 0,
     });
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string) {
+  async findOne(@Param("id", ParseUUIDPipe) id: string) {
     try {
       return await this.menuService.findOne({ id });
     } catch (e) {
@@ -54,7 +59,7 @@ export class MenuController {
 
   @Patch(":id")
   async update(
-    @Param("id") id: string,
+    @Param("id", ParseUUIDPipe) id: string,
     @Body(updateMenuSchema) data: Prisma.MenuUpdateInput
   ) {
     await this.findOne(id);
@@ -71,7 +76,7 @@ export class MenuController {
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
+  async remove(@Param("id", ParseUUIDPipe) id: string) {
     await this.findOne(id);
 
     return await this.menuService.remove({ id });
