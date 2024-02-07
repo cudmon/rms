@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiQuery, ApiTags } from "@nestjs/swagger";
 import { MenuService } from "@/app/menu/menu.service";
 import { CreateMenuDto, UpdateMenuDto } from "@/app/menu/menu.dto";
 import {
