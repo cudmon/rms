@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
+import { ApiQuery } from "@nestjs/swagger";
 import { MenuService } from "@/app/menu/menu.service";
-import { createMenuSchema, updateMenuSchema } from "@/app/menu/menu.schema";
+import { CreateMenuDto, UpdateMenuDto } from "@/app/menu/menu.dto";
 import {
   Body,
   ConflictException,
@@ -21,6 +22,8 @@ export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Get()
+  @ApiQuery({ name: "take", required: false, type: Number })
+  @ApiQuery({ name: "skip", required: false, type: Number })
   async findAll(
     @Query("take", new ParseIntPipe({ optional: true })) take?: number,
     @Query("skip", new ParseIntPipe({ optional: true })) skip?: number
@@ -45,7 +48,7 @@ export class MenuController {
   }
 
   @Post()
-  async create(@Body(createMenuSchema) data: Prisma.MenuCreateInput) {
+  async create(@Body() data: CreateMenuDto) {
     try {
       return await this.menuService.create(data);
     } catch (e) {
@@ -60,7 +63,7 @@ export class MenuController {
   @Patch(":id")
   async update(
     @Param("id", ParseUUIDPipe) id: string,
-    @Body(updateMenuSchema) data: Prisma.MenuUpdateInput
+    @Body() data: UpdateMenuDto
   ) {
     await this.findOne(id);
 
