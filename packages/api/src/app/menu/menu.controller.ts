@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { ApiQuery } from "@nestjs/swagger";
+import { ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { MenuService } from "@/app/menu/menu.service";
 import { CreateMenuDto, UpdateMenuDto } from "@/app/menu/menu.dto";
 import {
@@ -17,6 +17,7 @@ import {
   Query,
 } from "@nestjs/common";
 
+@ApiTags("Menu")
 @Controller("menu")
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
