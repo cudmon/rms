@@ -11,7 +11,7 @@ model User {
   id          String        @id @default(uuid())
   username    String        @unique
   password    String
-  name        String        @unique
+  name        String
   role        Role          @default(CUSTOMER)
   email       String        @unique
   telephone   String        @unique
@@ -48,7 +48,7 @@ model Menu {
   id    String  @id @default(uuid())
   name  String  @unique
   price Float
-  image String  @unique
+  image String
   order Order[]
 }
 
