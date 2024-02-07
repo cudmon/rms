@@ -55,7 +55,7 @@ export class MenuController {
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
-          throw new ConflictException();
+          throw new ConflictException("Menu with this name already exists.");
         }
       }
     }
@@ -73,7 +73,7 @@ export class MenuController {
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
-          throw new ConflictException();
+          throw new ConflictException("Menu with this name already exists.");
         }
       }
     }
