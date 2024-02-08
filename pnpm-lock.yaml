@@ -126,6 +126,9 @@ importers:
         specifier: '2'
         version: 2.11.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
+      '@tabler/icons-react':
+        specifier: ^2.47.0
+        version: 2.47.0(react@18.2.0)
       '@types/node':
         specifier: ^20.11.5
         version: 20.11.5
@@ -1479,6 +1482,20 @@ packages:
     dependencies:
       tslib: 2.6.2
     dev: false
+
+  /@tabler/icons-react@2.47.0(react@18.2.0):
+    resolution: {integrity: sha512-iqly2FvCF/qUbgmvS8E40rVeYY7laltc5GUjRxQj59DuX0x/6CpKHTXt86YlI2whg4czvd/c8Ce8YR08uEku0g==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@tabler/icons': 2.47.0
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: true
+
+  /@tabler/icons@2.47.0:
+    resolution: {integrity: sha512-4w5evLh+7FUUiA1GucvGj2ReX2TvOjEr4ejXdwL/bsjoSkof6r1gQmzqI+VHrE2CpJpB3al7bCTulOkFa/RcyA==}
+    dev: true
 
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -5820,7 +5837,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /readable-stream@2.3.8:
     resolution: {integrity: sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==}
