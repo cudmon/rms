@@ -17,8 +17,8 @@ import {
   Query,
 } from "@nestjs/common";
 
-@ApiTags("Menu")
-@Controller("menu")
+@ApiTags("Menus")
+@Controller("menus")
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
