@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { ApiQuery, ApiTags } from "@nestjs/swagger";
 import { MenuService } from "@/app/menu/menu.service";
 import { CreateMenuDto, UpdateMenuDto } from "@/app/menu/menu.dto";
 import {
@@ -17,14 +16,11 @@ import {
   Query,
 } from "@nestjs/common";
 
-@ApiTags("Menus")
 @Controller("menus")
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Get()
-  @ApiQuery({ name: "take", required: false, type: Number })
-  @ApiQuery({ name: "skip", required: false, type: Number })
   async findAll(
     @Query("take", new ParseIntPipe({ optional: true })) take?: number,
     @Query("skip", new ParseIntPipe({ optional: true })) skip?: number
