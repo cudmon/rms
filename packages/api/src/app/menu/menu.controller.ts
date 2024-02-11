@@ -1,3 +1,4 @@
+import { join } from "path";
 import { Response } from "express";
 import { createReadStream } from "fs";
 import { Prisma } from "@prisma/client";
@@ -21,7 +22,6 @@ import {
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
-import { join } from "path";
 
 @Controller("menus")
 export class MenuController {
