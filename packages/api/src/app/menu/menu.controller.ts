@@ -1,3 +1,5 @@
+import { Response } from "express";
+import { createReadStream } from "fs";
 import { Prisma } from "@prisma/client";
 import { MenuService } from "@/app/menu/menu.service";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -15,9 +17,11 @@ import {
   Patch,
   Post,
   Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
+import { join } from "path";
 
 @Controller("menus")
 export class MenuController {
@@ -45,6 +49,19 @@ export class MenuController {
         }
       }
     }
+  }
+
+  @Get(":id/image")
+  async findImage(
+    @Param("id", ParseUUIDPipe) id: string,
+    @Res() res: Response
+  ) {
+    const menu = await this.findOne(id);
+    const file = createReadStream(
+      join(__dirname, "..", "..", "..", "uploads/menus", menu.image)
+    );
+
+    file.pipe(res);
   }
 
   @Post()
