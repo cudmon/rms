@@ -54,8 +54,6 @@ export class MenuController {
     @UploadedFile() image: Express.Multer.File
   ) {
     try {
-      console.log(data, image);
-
       return await this.menuService.create({
         ...data,
         image: image.filename,
