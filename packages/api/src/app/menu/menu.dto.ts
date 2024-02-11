@@ -1,4 +1,5 @@
-import { PartialType } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
+import { PartialType } from "@nestjs/mapped-types";
 import {
   IsNotEmpty,
   IsNumber,
@@ -16,16 +17,11 @@ export class CreateMenuDto {
   @IsNotEmpty()
   name: string;
 
-  @MinLength(3)
-  @MaxLength(255)
-  @IsString()
-  @IsNotEmpty()
-  image: string;
-
-  @Min(1)
+  @Min(0.01)
   @Max(1000)
   @IsNumber()
   @IsNotEmpty()
+  @Transform(({ value }) => parseFloat(value))
   price: number;
 }
 

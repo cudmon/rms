@@ -10,7 +10,11 @@ async function bootstrap() {
   app.getHttpAdapter().getInstance().set("etag", false);
   app.getHttpAdapter().getInstance().disable("x-powered-by");
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    })
+  );
 
   app.useGlobalFilters(new HttpExceptionFilter());
 

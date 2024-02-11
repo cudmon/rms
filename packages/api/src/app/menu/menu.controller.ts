@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { MenuService } from "@/app/menu/menu.service";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { CreateMenuDto, UpdateMenuDto } from "@/app/menu/menu.dto";
 import {
   Body,
@@ -14,6 +15,8 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
 
 @Controller("menus")
@@ -45,9 +48,18 @@ export class MenuController {
   }
 
   @Post()
-  async create(@Body() data: CreateMenuDto) {
+  @UseInterceptors(FileInterceptor("image"))
+  async create(
+    @Body() data: CreateMenuDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
     try {
-      return await this.menuService.create(data);
+      console.log(data, image);
+
+      return await this.menuService.create({
+        ...data,
+        image: image.filename,
+      });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
@@ -58,14 +70,22 @@ export class MenuController {
   }
 
   @Patch(":id")
+  @UseInterceptors(FileInterceptor("image"))
   async update(
     @Param("id", ParseUUIDPipe) id: string,
-    @Body() data: UpdateMenuDto
+    @Body() data: UpdateMenuDto,
+    @UploadedFile() image: Express.Multer.File
   ) {
     await this.findOne(id);
 
     try {
-      return await this.menuService.update({ id }, data);
+      return await this.menuService.update(
+        { id },
+        {
+          ...data,
+          image: image?.filename,
+        }
+      );
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
