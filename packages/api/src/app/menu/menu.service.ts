@@ -6,26 +6,23 @@ import { PrismaService } from "@/providers/prisma.service";
 export class MenuService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll({ take, skip }: Prisma.MenuFindManyArgs) {
-    return await this.prisma.menu.findMany({ take, skip });
+  async findAll(args: Prisma.MenuFindManyArgs) {
+    return await this.prisma.menu.findMany(args);
   }
 
-  async findOne(where: Prisma.MenuWhereUniqueInput) {
-    return await this.prisma.menu.findUniqueOrThrow({ where });
+  async findOne(args: Prisma.MenuFindUniqueOrThrowArgs) {
+    return await this.prisma.menu.findUniqueOrThrow(args);
   }
 
-  async create(data: Prisma.MenuCreateInput) {
-    return await this.prisma.menu.create({ data });
+  async create(args: Prisma.MenuCreateArgs) {
+    return await this.prisma.menu.create(args);
   }
 
-  async update(
-    where: Prisma.MenuWhereUniqueInput,
-    data: Prisma.MenuUpdateInput
-  ) {
-    return await this.prisma.menu.update({ where, data });
+  async update(args: Prisma.MenuUpdateArgs) {
+    return await this.prisma.menu.update(args);
   }
 
-  async remove(where: Prisma.MenuWhereUniqueInput) {
-    return await this.prisma.menu.delete({ where });
+  async remove(args: Prisma.MenuDeleteArgs) {
+    return await this.prisma.menu.delete(args);
   }
 }

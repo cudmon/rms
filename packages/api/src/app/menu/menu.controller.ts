@@ -41,7 +41,7 @@ export class MenuController {
   @Get(":id")
   async findOne(@Param("id", ParseUUIDPipe) id: string) {
     try {
-      return await this.menuService.findOne({ id });
+      return await this.menuService.findOne({ where: { id } });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2025") {
@@ -72,8 +72,10 @@ export class MenuController {
   ) {
     try {
       return await this.menuService.create({
-        ...data,
-        image: image.filename,
+        data: {
+          ...data,
+          image: image.filename,
+        },
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -94,13 +96,13 @@ export class MenuController {
     await this.findOne(id);
 
     try {
-      return await this.menuService.update(
-        { id },
-        {
+      return await this.menuService.update({
+        where: { id },
+        data: {
           ...data,
           image: image?.filename,
-        }
-      );
+        },
+      });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
@@ -114,6 +116,8 @@ export class MenuController {
   async remove(@Param("id", ParseUUIDPipe) id: string) {
     await this.findOne(id);
 
-    return await this.menuService.remove({ id });
+    return await this.menuService.remove({
+      where: { id },
+    });
   }
 }
