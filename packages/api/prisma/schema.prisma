@@ -23,6 +23,7 @@ model Table {
   name        String        @unique
   status      Status        @default(IDLE)
   seat        Int
+  passcode    String
   reservation Reservation[]
 }
 
