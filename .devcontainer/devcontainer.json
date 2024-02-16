@@ -4,7 +4,8 @@
   "service": "app",
   "remoteUser": "node",
   "workspaceFolder": "/workspaces/rms",
-  "postCreateCommand": "pnpm install && cd packages/api && prisma generate && prisma db push &&pnpm run prisma:seed",
+  "postCreateCommand": "pnpm install && cd packages/api && prisma generate && prisma db push && pnpm run prisma:seed",
+  "postAttachCommand": "pnpm install",
   "customizations": {
     "vscode": {
       "extensions": [
