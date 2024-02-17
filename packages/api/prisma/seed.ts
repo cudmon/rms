@@ -49,14 +49,17 @@ async function main() {
       {
         name: "A",
         seat: 4,
+        passcode: "1234",
       },
       {
         name: "B",
         seat: 2,
+        passcode: "1234",
       },
       {
         name: "C",
         seat: 10,
+        passcode: "1234",
       },
     ],
   });
