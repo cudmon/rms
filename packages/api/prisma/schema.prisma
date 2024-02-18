@@ -60,18 +60,19 @@ model Billing {
   id      String     @id @default(uuid())
   price   Float
   status  BillStatus @default(UNPAID)
-  usage   Usage      @relation(fields: [usageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   usageId String     @map("usage_id")
+  Usage   Usage?
 }
 
 model Usage {
-  id      String    @id @default(uuid())
-  start   DateTime
-  end     DateTime?
-  order   Order[]
-  billing Billing[]
-  table   Table?    @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  tableId String?
+  id        String    @id @default(uuid())
+  start     DateTime
+  end       DateTime?
+  order     Order[]
+  bill      Billing?  @relation(fields: [billingId], references: [id])
+  table     Table?    @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tableId   String?
+  billingId String    @unique @map("billing_id")
 }
 
 enum TableStatus {
