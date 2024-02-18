@@ -39,7 +39,7 @@ export class UsageService {
   }
 
   async getActiveUsageWithOrders(tableId: string) {
-    return await this.prisma.usage.findFirst({
+    return await this.prisma.usage.findFirstOrThrow({
       where: {
         tableId,
         end: null,
