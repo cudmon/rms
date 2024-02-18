@@ -31,6 +31,7 @@ model Table {
 model Order {
   id       String      @id @default(uuid())
   quantity Int
+  price    Float
   status   OrderStatus @default(PENDING)
   menu     Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
   menuId   String      @map("menu_id")
