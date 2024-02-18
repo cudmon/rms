@@ -54,12 +54,10 @@ export class ReservationService {
       "RESERVATION_MIN_DAY"
     );
 
-    const openingTime = await this.settingService.getSettingByName(
-      "OPENING_TIME"
-    );
-    const closingTime = await this.settingService.getSettingByName(
-      "CLOSING_TIME"
-    );
+    const openingTime =
+      await this.settingService.getSettingByName("OPENING_TIME");
+    const closingTime =
+      await this.settingService.getSettingByName("CLOSING_TIME");
 
     if (reservedTable >= maxReservableTables) {
       throw new Error("NO_TABLE_AVAILABLE");

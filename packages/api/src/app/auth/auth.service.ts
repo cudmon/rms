@@ -7,7 +7,10 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private prisma: PrismaService) {}
+  constructor(
+    private jwtService: JwtService,
+    private prisma: PrismaService
+  ) {}
 
   async logIn(username: string, pass: string): Promise<any> {
     const user = await this.findOne({ where: { username } });
@@ -36,8 +39,7 @@ export class AuthService {
         },
         select,
       });
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   async findOne({ where, select }: Prisma.UserFindUniqueArgs) {
