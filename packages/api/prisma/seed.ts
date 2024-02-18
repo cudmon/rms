@@ -11,6 +11,7 @@ async function main() {
   await prisma.reservation.deleteMany({});
   await prisma.usage.deleteMany({});
   await prisma.table.deleteMany({});
+  await prisma.setting.deleteMany({});
 
   await prisma.user.createMany({
     data: [
@@ -61,6 +62,47 @@ async function main() {
         name: "C",
         seat: 10,
         passcode: "1234",
+      },
+    ],
+  });
+
+  await prisma.setting.createMany({
+    data: [
+      {
+        name: "OPENING_TIME",
+        value: "09:00",
+      },
+      {
+        name: "CLOSING_TIME",
+        value: "22:00",
+      },
+      {
+        name: "RESERVATION_LIMIT_PER_USER",
+        value: "1",
+      },
+      {
+        name: "RESERVATION_MAX_DAY",
+        value: "7",
+      },
+      {
+        name: "RESERVATION_MIN_DAY",
+        value: "1",
+      },
+      {
+        name: "BILLING_TAX",
+        value: "10",
+      },
+      {
+        name: "SERVICE_CHARGE",
+        value: "10",
+      },
+      {
+        name: "CURRENCY",
+        value: "USD",
+      },
+      {
+        name: "MAX_TABLE_BOOKING_PERCENTAGE",
+        value: "50",
       },
     ],
   });
