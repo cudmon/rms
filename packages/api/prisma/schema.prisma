@@ -12,7 +12,7 @@ model User {
   username    String        @unique
   password    String
   name        String
-  role        Role          @default(CUSTOMER)
+  role        UserRole      @default(CUSTOMER)
   email       String        @unique
   telephone   String        @unique
   reservation Reservation[]
@@ -21,7 +21,7 @@ model User {
 model Table {
   id          String        @id @default(uuid())
   name        String        @unique
-  status      Status        @default(IDLE)
+  status      TableStatus   @default(IDLE)
   seat        Int
   passcode    String
   usage       Usage[]
@@ -29,12 +29,13 @@ model Table {
 }
 
 model Order {
-  id       String @id @default(uuid())
+  id       String      @id @default(uuid())
   quantity Int
-  menu     Menu   @relation(fields: [menuId], references: [id], onDelete: Cascade)
-  menuId   String @map("menu_id")
-  usage    Usage  @relation(fields: [usageId], references: [id], onDelete: Cascade)
-  usageId  String @map("usage_id")
+  status   OrderStatus
+  menu     Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  menuId   String      @map("menu_id")
+  usage    Usage       @relation(fields: [usageId], references: [id], onDelete: Cascade)
+  usageId  String      @map("usage_id")
 }
 
 model Reservation {
@@ -55,10 +56,11 @@ model Menu {
 }
 
 model Billing {
-  id      String @id @default(uuid())
+  id      String     @id @default(uuid())
   price   Float
-  usage   Usage  @relation(fields: [usageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  usageId String @map("usage_id")
+  status  BillStatus
+  usage   Usage      @relation(fields: [usageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  usageId String     @map("usage_id")
 }
 
 model Usage {
@@ -71,13 +73,26 @@ model Usage {
   tableId String?
 }
 
-enum Status {
+enum TableStatus {
   IDLE
   EATING
   RESERVED
 }
 
-enum Role {
+enum BillStatus {
+  PAID
+  UNPAID
+  CANCLED
+}
+
+enum OrderStatus {
+  PENDING
+  COOKING
+  SERVED
+  CANCELED
+}
+
+enum UserRole {
   MANAGER
   CHEF
   STAFF
