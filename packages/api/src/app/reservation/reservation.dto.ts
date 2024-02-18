@@ -1,6 +1,13 @@
-import { IsNotEmpty, IsNumber, IsUUID, Max, Min } from "class-validator";
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsUUID,
+  Max,
+  Min,
+} from "class-validator";
 
-export class ReservationCreateDto {
+export class MakeReservationDto {
   @Min(1)
   @Max(12)
   @IsNumber()
@@ -9,9 +16,9 @@ export class ReservationCreateDto {
 
   @IsUUID()
   @IsNotEmpty()
-  userId: string;
-
-  @IsUUID()
-  @IsNotEmpty()
   tableId: string;
+
+  @IsDate()
+  @IsNotEmpty()
+  when: Date;
 }

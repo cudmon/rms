@@ -6,37 +6,42 @@ import { PrismaService } from "@/providers/prisma.service";
 export class ReservationService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(args: Prisma.ReservationFindManyArgs) {
+  async getReservations(args?: Prisma.ReservationFindManyArgs) {
     return await this.prisma.reservation.findMany(args);
   }
 
-  async findOne(args: Prisma.ReservationFindUniqueArgs) {
-    return await this.prisma.reservation.findUnique(args);
+  async getReservation(reservationId: string) {
+    return await this.prisma.reservation.findUniqueOrThrow({
+      where: {
+        id: reservationId,
+      },
+    });
   }
 
-  async create({
-    seat,
-    userId,
-    tableId,
-  }: {
-    seat: number;
-    userId: string;
-    tableId: string;
-  }) {
+  async makeReservation(
+    when: Date,
+    seat: number,
+    userId: string,
+    tableId: string
+  ) {
     return await this.prisma.reservation.create({
       data: {
         seat,
+        when,
         userId,
         tableId,
       },
     });
   }
 
-  async update(args: Prisma.ReservationUpdateArgs) {
-    return await this.prisma.reservation.update(args);
-  }
-
-  async delete(args: Prisma.ReservationDeleteArgs) {
-    return await this.prisma.reservation.delete(args);
+  async cancelReservation(reservationId: string) {
+    return await this.prisma.reservation.update({
+      where: {
+        id: reservationId,
+      },
+      data: {
+        status: "CANCELED",
+      },
+    });
   }
 }
