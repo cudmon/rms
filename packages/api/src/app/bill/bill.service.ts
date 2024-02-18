@@ -2,12 +2,14 @@ import { Prisma } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 import { UsageService } from "@/app/usage/usage.service";
 import { PrismaService } from "@/providers/prisma.service";
+import { SettingService } from "@/app/settings/setting.service";
 
 @Injectable()
 export class BillService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly usageService: UsageService
+    private readonly usageService: UsageService,
+    private readonly settingService: SettingService
   ) {}
 
   async getBills(args?: Prisma.BillingFindManyArgs) {
@@ -45,12 +47,20 @@ export class BillService {
       throw new Error("BILL_ALREADY_CREATED");
     }
 
+    const tax = await this.settingService.getSettingByName("BILLING_TAX");
+    const charge = await this.settingService.getSettingByName("SERVICE_CHARGE");
+
+    let total = usage.order.reduce((acc, curr) => {
+      return acc + curr.price;
+    }, 0);
+
+    total += (total * Number(charge.value)) / 100;
+    total += (total * Number(tax.value)) / 100;
+
     return await this.prisma.billing.create({
       data: {
         usageId: usage.id,
-        price: usage.order.reduce((acc, curr) => {
-          return acc + curr.price;
-        }, 0),
+        price: total,
       },
     });
   }
