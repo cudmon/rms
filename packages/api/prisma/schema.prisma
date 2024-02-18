@@ -40,12 +40,13 @@ model Order {
 }
 
 model Reservation {
-  id      String @id @default(uuid())
+  id      String            @id @default(uuid())
   seat    Int
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String @map("user_id")
-  table   Table  @relation(fields: [tableId], references: [id], onDelete: Cascade)
-  tableId String @map("table_id")
+  status  ReservationStatus @default(CONFIRMED)
+  user    User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String            @map("user_id")
+  table   Table             @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  tableId String            @map("table_id")
 }
 
 model Menu {
@@ -91,6 +92,11 @@ enum OrderStatus {
   PENDING
   COOKING
   SERVED
+  CANCELED
+}
+
+enum ReservationStatus {
+  CONFIRMED
   CANCELED
 }
 
