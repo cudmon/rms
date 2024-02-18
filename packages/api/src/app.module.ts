@@ -6,6 +6,7 @@ import { BillModule } from "@/app/bill/bill.module";
 import { TableModule } from "@/app/table/table.module";
 import { OrderModule } from "@/app/order/order.module";
 import { UsageModule } from "@/app/usage/usage.module";
+import { SettingModule } from "@/app/settings/setting.module";
 import { ReservationModule } from "@/app/reservation/reservation.module";
 
 @Module({
@@ -17,6 +18,7 @@ import { ReservationModule } from "@/app/reservation/reservation.module";
     OrderModule,
     BillModule,
     UsageModule,
+    SettingModule,
     ReservationModule,
   ],
 })

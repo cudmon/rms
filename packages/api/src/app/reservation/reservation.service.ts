@@ -1,10 +1,14 @@
 import { Prisma } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "@/providers/prisma.service";
+import { SettingService } from "@/app/settings/setting.service";
 
 @Injectable()
 export class ReservationService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly settingService: SettingService
+  ) {}
 
   async getReservations(args?: Prisma.ReservationFindManyArgs) {
     return await this.prisma.reservation.findMany(args);
