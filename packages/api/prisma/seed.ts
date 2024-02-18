@@ -77,10 +77,6 @@ async function main() {
         value: "22:00",
       },
       {
-        name: "RESERVATION_LIMIT_PER_USER",
-        value: "1",
-      },
-      {
         name: "RESERVATION_MAX_DAY",
         value: "7",
       },
@@ -97,12 +93,8 @@ async function main() {
         value: "10",
       },
       {
-        name: "CURRENCY",
-        value: "USD",
-      },
-      {
-        name: "MAX_TABLE_BOOKING_PERCENTAGE",
-        value: "50",
+        name: "MAX_TABLE_BOOKING",
+        value: "10",
       },
     ],
   });
