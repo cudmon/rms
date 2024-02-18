@@ -1,5 +1,5 @@
 import {
-  IsDate,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsUUID,
@@ -18,7 +18,7 @@ export class MakeReservationDto {
   @IsNotEmpty()
   tableId: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
-  when: Date;
+  when: string;
 }

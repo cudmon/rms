@@ -44,16 +44,18 @@ export class ReservationController {
     @Body() { seat, when, tableId }: MakeReservationDto
   ) {
     try {
-      return this.reservationService.makeReservation(
+      return await this.reservationService.makeReservation(
         when,
         seat,
         user.id,
         tableId
       );
     } catch (e) {
+      console.log(e);
+
       if (e instanceof Error) {
         if (e.message === "NO_TABLE_AVAILABLE") {
-          throw new NotFoundException("Table not available");
+          throw new BadRequestException("Table not available");
         }
 
         if (e.message === "TOO_SOON") {
@@ -65,6 +67,18 @@ export class ReservationController {
         if (e.message === "TOO_FAR") {
           throw new BadRequestException(
             "Reservation must be made at most 30 days in advance"
+          );
+        }
+
+        if (e.message === "OUT_OF_OPERATING_HOURS") {
+          throw new BadRequestException(
+            "Reservation must be made during operating hours"
+          );
+        }
+
+        if (e.message === "MAX_RESERVATION_REACHED") {
+          throw new BadRequestException(
+            "You can only have 1 reservation at a time"
           );
         }
       }
