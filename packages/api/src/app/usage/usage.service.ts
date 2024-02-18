@@ -6,12 +6,12 @@ import { PrismaService } from "@/providers/prisma.service";
 export class UsageService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUsages(args: Prisma.UsageFindManyArgs) {
+  async getUsages(args?: Prisma.UsageFindManyArgs) {
     return await this.prisma.usage.findMany(args);
   }
 
   async getUsage(usageId: string) {
-    return await this.prisma.usage.findUnique({
+    return await this.prisma.usage.findUniqueOrThrow({
       where: {
         id: usageId,
       },
@@ -19,7 +19,7 @@ export class UsageService {
   }
 
   async getActiveUsage(tableId: string) {
-    return await this.prisma.usage.findFirst({
+    return await this.prisma.usage.findFirstOrThrow({
       where: {
         tableId,
         end: null,
@@ -28,7 +28,7 @@ export class UsageService {
   }
 
   async getUsageWithOrders(usageId: string) {
-    return await this.prisma.usage.findUnique({
+    return await this.prisma.usage.findUniqueOrThrow({
       where: {
         id: usageId,
       },
