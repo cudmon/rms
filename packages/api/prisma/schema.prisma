@@ -89,7 +89,7 @@ enum OrderStatus {
   PENDING
   COOKING
   SERVED
-  CANCELED
+  CANCELLED
 }
 
 enum UserRole {
