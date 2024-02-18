@@ -69,7 +69,7 @@ model Usage {
   end     DateTime?
   order   Order[]
   billing Billing[]
-  Table   Table?    @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  table   Table?    @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tableId String?
 }
 
@@ -82,14 +82,14 @@ enum TableStatus {
 enum BillStatus {
   PAID
   UNPAID
-  CANCLED
+  CANCELED
 }
 
 enum OrderStatus {
   PENDING
   COOKING
   SERVED
-  CANCELLED
+  CANCELED
 }
 
 enum UserRole {
