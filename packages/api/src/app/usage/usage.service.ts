@@ -6,27 +6,56 @@ import { PrismaService } from "@/providers/prisma.service";
 export class UsageService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(args: Prisma.UsageFindManyArgs) {
+  async getUsages(args: Prisma.UsageFindManyArgs) {
     return await this.prisma.usage.findMany(args);
   }
 
-  async findOne(args: Prisma.UsageFindUniqueOrThrowArgs) {
-    return await this.prisma.usage.findUniqueOrThrow(args);
+  async getUsage(usageId: string) {
+    return await this.prisma.usage.findUnique({
+      where: {
+        id: usageId,
+      },
+    });
   }
 
-  async findFirst(args: Prisma.UsageFindFirstArgs) {
-    return await this.prisma.usage.findFirst(args);
+  async getActiveUsage(tableId: string) {
+    return await this.prisma.usage.findFirst({
+      where: {
+        tableId,
+        end: null,
+      },
+    });
   }
 
-  async create(args: Prisma.UsageCreateArgs) {
-    return await this.prisma.usage.create(args);
+  async getUsageWithOrders(usageId: string) {
+    return await this.prisma.usage.findUnique({
+      where: {
+        id: usageId,
+      },
+      include: {
+        order: true,
+      },
+    });
   }
 
-  async update(args: Prisma.UsageUpdateArgs) {
-    return await this.prisma.usage.update(args);
+  async getActiveUsageWithOrders(tableId: string) {
+    return await this.prisma.usage.findFirst({
+      where: {
+        tableId,
+        end: null,
+      },
+      include: {
+        order: true,
+      },
+    });
   }
 
-  async remove(args: Prisma.UsageDeleteArgs) {
-    return await this.prisma.usage.delete(args);
+  async createUsage(tableId: string) {
+    return await this.prisma.usage.create({
+      data: {
+        tableId,
+        start: new Date(),
+      },
+    });
   }
 }
