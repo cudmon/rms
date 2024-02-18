@@ -77,6 +77,12 @@ model Usage {
   billingId String?   @unique @map("billing_id")
 }
 
+model Setting {
+  id    String @id @default(uuid())
+  name  String
+  value String
+}
+
 enum TableStatus {
   IDLE
   EATING
