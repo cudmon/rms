@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { IAuth } from "@/app/auth/auth.type";
+import { IAuth } from "@/app/auth/auth.interface";
 import { Auth } from "@/app/auth/auth.decorator";
 import { MakeReservationDto } from "@/app/reservation/reservation.dto";
 import { ReservationService } from "@/app/reservation/reservation.service";
@@ -51,8 +51,6 @@ export class ReservationController {
         tableId
       );
     } catch (e) {
-      console.log(e);
-
       if (e instanceof Error) {
         if (e.message === "NO_TABLE_AVAILABLE") {
           throw new BadRequestException("Table not available");

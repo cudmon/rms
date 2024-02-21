@@ -10,6 +10,7 @@ services:
     command: sleep infinity
     network_mode: service:database
     environment:
+      SECRET: secret
       API_URL: http://127.0.0.1:5000
       DATABASE_URL: postgres://postgres:postgres@database:5432/postgres
     depends_on:

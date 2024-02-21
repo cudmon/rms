@@ -1,9 +1,9 @@
 import { compare, hash } from "bcrypt";
 import { Prisma } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
-import { CreateUserDto } from "../user/user.dto";
-import { PrismaService } from "@/providers/prisma.service";
 import { Injectable } from "@nestjs/common";
+import { CreateUserDto } from "@/app/user/user.dto";
+import { PrismaService } from "@/providers/prisma.service";
 
 @Injectable()
 export class AuthService {
@@ -15,10 +15,13 @@ export class AuthService {
   async logIn(username: string, pass: string): Promise<any> {
     const user = await this.findOne({ where: { username } });
     const match = await compare(pass, user.password);
+
     if (!match) {
       return false;
     }
+
     const payload = { id: user.id, username: user.username };
+
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

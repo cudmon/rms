@@ -1,4 +1,3 @@
-import { PartialType } from "@nestjs/mapped-types";
 import {
   IsEmail,
   IsNotEmpty,
@@ -22,8 +21,6 @@ export class RegisterDto {
 
   @MinLength(3)
   @MaxLength(255)
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
   @IsEmail()

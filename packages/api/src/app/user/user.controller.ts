@@ -1,5 +1,6 @@
-import { UserService } from "@/app/user/user.service";
 import { Prisma } from "@prisma/client";
+import { UserService } from "@/app/user/user.service";
+import { CreateUserDto, UpdateUserDto } from "@/app/user/user.dto";
 import {
   Body,
   ConflictException,
@@ -14,7 +15,6 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
-import { CreateUserDto, UpdateUserDto } from "./user.dto";
 
 @Controller("users")
 export class UserController {

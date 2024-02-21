@@ -9,7 +9,7 @@ import { AuthService } from "./auth.service";
 import { Auth, Public } from "./auth.decorator";
 import { LogInDto, RegisterDto } from "./auth.dto";
 import { UserService } from "../user/user.service";
-import { IAuth } from "./auth.type";
+import { IAuth } from "./auth.interface";
 
 @Controller("auth")
 export class AuthController {
