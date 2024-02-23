@@ -9,6 +9,7 @@ services:
       - 3000:3000
     environment:
       API_URL: http://api:5000
+      NODE_ENV: production
     depends_on:
       - api
       - database
@@ -20,6 +21,7 @@ services:
     ports:
       - 5000:5000
     environment:
+      NODE_ENV: production
       DATABASE_URL: postgres://postgres:postgres@database:5432
     depends_on:
       - database

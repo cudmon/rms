@@ -1,6 +1,6 @@
 FROM node:alpine
 
-ENV NODE_ENV=production
+ENV API_URL=http://api:5000
 
 WORKDIR /app
 

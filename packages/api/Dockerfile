@@ -1,14 +1,12 @@
 FROM node:alpine
 
-ENV NODE_ENV=production
-
 WORKDIR /app
 
 COPY package.json .
 
 COPY . .
 
-RUN npm install -g pnpm prisma
+RUN npm install -g pnpm
 
 RUN pnpm install
 
