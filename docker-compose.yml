@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: packages/web
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      API_URL: http://api:5000
+    depends_on:
+      - api
+      - database
+
+  api:
+    build:
+      context: packages/api
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@database:5432
+    depends_on:
+      - database
+
+  database:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - data:/var/lib/postgresql/data
+
+volumes:
+  data:
