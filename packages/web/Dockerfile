@@ -1,7 +1,5 @@
 FROM node:alpine
 
-ENV API_URL=http://api:5000
-
 WORKDIR /app
 
 COPY package.json .
