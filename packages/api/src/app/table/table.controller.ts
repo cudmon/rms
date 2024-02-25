@@ -16,7 +16,7 @@ import {
   Query,
 } from "@nestjs/common";
 
-@Controller("table")
+@Controller("tables")
 export class TableController {
   constructor(private readonly tableService: TableService) {}
 
