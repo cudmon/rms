@@ -21,10 +21,7 @@ export class TableController {
   constructor(private readonly tableService: TableService) {}
 
   @Get()
-  async findAll(
-    @Query("take", new ParseIntPipe({ optional: true })) take?: number,
-    @Query("skip", new ParseIntPipe({ optional: true })) skip?: number
-  ) {
+  async findAll(@Query("take") take?: number, @Query("skip") skip?: number) {
     return await this.tableService.findAll({
       take: take || 100,
       skip: skip || 0,
