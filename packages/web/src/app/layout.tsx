@@ -9,7 +9,7 @@ type Props = {
 
 const theme = createTheme({
   primaryColor: "blue",
-  defaultRadius: "md",
+  defaultRadius: "xs",
   fontFamily: "Jost, sans-serif",
   headings: {
     fontFamily: "Jost, sans-serif",
