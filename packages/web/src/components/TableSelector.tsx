@@ -12,11 +12,14 @@ type Props = {
 export const TableSelector = ({ tables }: Props) => {
   const router = useRouter();
   const [passcode, setPasscode] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<Table | null>(null);
 
   const connect = () => {
+    setLoading(true);
+
     if (!selected) {
-      return;
+      return setLoading(false);
     }
 
     localStorage.setItem("table-id", selected.id);
@@ -46,7 +49,7 @@ export const TableSelector = ({ tables }: Props) => {
         ))}
       </Grid>
       <PinInput length={6} mask size="xl" onComplete={(v) => setPasscode(v)} />
-      <Button onClick={connect} size="xl" fullWidth>
+      <Button loading={loading} onClick={connect} size="xl" fullWidth>
         Connect
       </Button>
     </Stack>
