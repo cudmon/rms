@@ -1,6 +1,6 @@
 import { http } from "@/modules/http";
 import { Menu } from "@/types/entity";
-import { Title } from "@mantine/core";
+import { Center, Title } from "@mantine/core";
 import { MenusList } from "@/components/Table/MenusList";
 
 export const metadata = {
@@ -15,7 +15,11 @@ export default async function Page() {
 
     menus = res.data;
   } catch (e) {
-    return <div>Failed to load menus</div>;
+    return (
+      <Center py={64} fz={28} c="red" fw={500}>
+        Something went wrong. Please try again later
+      </Center>
+    );
   }
 
   return (

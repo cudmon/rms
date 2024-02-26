@@ -15,7 +15,11 @@ export default async function Page() {
 
     tables = res.data;
   } catch (e) {
-    return <div>Failed to load tables</div>;
+    return (
+      <Center py={64} fz={28} c="red" fw={500}>
+        Something went wrong. Please try again later
+      </Center>
+    );
   }
 
   return (
