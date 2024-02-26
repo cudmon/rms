@@ -9,6 +9,7 @@ import {
   ActionIcon,
   AppShell,
   Button,
+  CloseButton,
   Container,
   Group,
   Text,
@@ -30,7 +31,7 @@ export default function Layout({ children }: Props) {
           mobile: !opened,
           desktop: !opened,
         },
-        width: 500,
+        width: 800,
         breakpoint: "md",
       }}
       padding="md"
@@ -67,9 +68,12 @@ export default function Layout({ children }: Props) {
         </Group>
       </AppShell.Header>
       <AppShell.Aside p={32}>
-        <Text fz={28} fw={500}>
-          Carts
-        </Text>
+        <Group justify="space-between">
+          <Text fz={28} fw={500}>
+            Carts
+          </Text>
+          <CloseButton size="lg" onClick={handlers.close} />
+        </Group>
         <Text fz={16} color="gray" mt={8}>
           View and manage your carts
         </Text>
