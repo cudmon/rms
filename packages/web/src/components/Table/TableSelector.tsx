@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Table } from "@/types/entity";
 import { useRouter } from "next/navigation";
+import { useTableStore } from "@/store/table";
 import { Button, Grid, PinInput, Stack, Title } from "@mantine/core";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 export const TableSelector = ({ tables }: Props) => {
   const router = useRouter();
+  const { setTable } = useTableStore();
   const [passcode, setPasscode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<Table | null>(null);
@@ -22,8 +24,7 @@ export const TableSelector = ({ tables }: Props) => {
       return setLoading(false);
     }
 
-    localStorage.setItem("table-id", selected.id);
-    localStorage.setItem("table-key", "null");
+    setTable({ ...selected, token: passcode });
 
     router.push(`/tables/menus`);
   };

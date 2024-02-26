@@ -5,6 +5,7 @@ import { http } from "@/modules/http";
 import { modals } from "@mantine/modals";
 import { useEffect, useState } from "react";
 import { Order, Usage } from "@/types/entity";
+import { useTableStore } from "@/store/table";
 import { notifications } from "@mantine/notifications";
 import {
   Badge,
@@ -119,6 +120,7 @@ const List = ({
 };
 
 export const OrdersList = () => {
+  const { table } = useTableStore();
   const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -126,8 +128,7 @@ export const OrdersList = () => {
   useEffect(() => {
     (async () => {
       try {
-        const id = localStorage.getItem("table-id");
-        const res = await http.get<Usage>(`/usages/active/${id}`);
+        const res = await http.get<Usage>(`/usages/active/${table.id}`);
 
         setLoading(false);
         setOrders(res.data.order);
@@ -136,7 +137,7 @@ export const OrdersList = () => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [table.id]);
 
   useEffect(() => {
     if (error) {
