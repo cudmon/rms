@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { API_URL } from "@/constants";
 import { Cart, Menu } from "@/types/entity";
 import { useCartsStore } from "@/store/carts";
 import { notifications } from "@mantine/notifications";
@@ -37,13 +38,13 @@ export const MenusList = ({ menus }: Props) => {
   };
 
   return (
-    <Grid grow gutter={32}>
+    <Grid gutter={16}>
       {menus.map((menu) => (
-        <GridCol span={{ base: 12, sm: 4, md: 3 }} key={menu.id}>
+        <GridCol span={{ base: 12, sm: 4 }} key={menu.id}>
           <Card shadow="sm" pt={0} withBorder>
             <CardSection>
               <Image
-                src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
+                src={`${API_URL}/menus/${menu.id}/image`}
                 height={160}
                 alt="Norway"
               />
