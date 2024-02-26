@@ -33,7 +33,7 @@ export class UsageController {
   @Get("active/:tableId")
   async getActiveUsage(@Param("tableId", ParseUUIDPipe) tableId: string) {
     try {
-      return await this.usageService.getActiveUsage(tableId);
+      return await this.usageService.getActiveUsageWithOrders(tableId);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2025") {

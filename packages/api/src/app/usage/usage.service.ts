@@ -45,7 +45,11 @@ export class UsageService {
         end: null,
       },
       include: {
-        order: true,
+        order: {
+          include: {
+            menu: true,
+          },
+        },
       },
     });
   }
