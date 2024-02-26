@@ -1,7 +1,10 @@
 import { ReactNode } from "react";
+import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 type Props = {
   children: ReactNode;
@@ -24,7 +27,10 @@ export default function Layout({ children }: Props) {
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <Notifications />
+          <ModalsProvider>{children}</ModalsProvider>
+        </MantineProvider>
       </body>
     </html>
   );
