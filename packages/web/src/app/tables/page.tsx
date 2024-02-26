@@ -1,7 +1,7 @@
 import { http } from "@/modules/http";
 import { Table } from "@/types/entity";
 import { Center, Stack } from "@mantine/core";
-import { TableSelector } from "@/components/TableSelector";
+import { TableSelector } from "@/components/Table/TableSelector";
 
 export const metadata = {
   title: "Table Selector",
