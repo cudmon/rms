@@ -8,7 +8,7 @@ import {
   ParseUUIDPipe,
 } from "@nestjs/common";
 
-@Controller("usage")
+@Controller("usages")
 export class UsageController {
   constructor(private readonly usageService: UsageService) {}
 
