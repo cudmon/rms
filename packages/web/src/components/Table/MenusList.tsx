@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Menu } from "@/types/entity";
 import { useCartsStore } from "@/store/carts";
 import {
@@ -22,6 +23,7 @@ type Props = {
 
 export const MenusList = ({ menus }: Props) => {
   const { add } = useCartsStore();
+  const [quantitys, setQuantitys] = useState<Map<string, number>>(new Map());
 
   return (
     <Grid grow gutter={32}>
@@ -44,15 +46,24 @@ export const MenusList = ({ menus }: Props) => {
               </Badge>
             </Group>
             <Flex gap={8} align="center" justify="space-between">
-              <NumberInput defaultValue={1} min={1} max={10} />
+              <NumberInput
+                defaultValue={1}
+                min={1}
+                max={10}
+                onChange={(value) => {
+                  setQuantitys((prev) =>
+                    new Map(prev).set(menu.id, Number(value))
+                  );
+                }}
+              />
               <Button
                 fullWidth
                 onClick={() =>
                   add({
                     id: menu.id,
                     name: menu.name,
-                    price: menu.price,
-                    quantity: 1,
+                    price: menu.price * (quantitys.get(menu.id) || 1),
+                    quantity: quantitys.get(menu.id) || 1,
                   })
                 }
               >
