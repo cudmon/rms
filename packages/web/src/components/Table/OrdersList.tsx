@@ -5,6 +5,7 @@ import { Order, Usage } from "@/types/entity";
 import { useEffect, useState } from "react";
 import {
   Badge,
+  Button,
   Card,
   Group,
   LoadingOverlay,
@@ -42,21 +43,21 @@ export const OrdersList = () => {
     return <LoadingOverlay visible />;
   }
 
+  const cancel = async (id: string) => {
+    return;
+  };
+
   return (
     <Stack gap={32}>
       <Card shadow="sm" p={0} withBorder>
-        <Table
-          fz={16}
-          verticalSpacing="lg"
-          highlightOnHover
-          horizontalSpacing="lg"
-        >
+        <Table fz={16} verticalSpacing="lg" horizontalSpacing="lg">
           <Table.Thead>
             <Table.Tr>
               <Table.Th>Name</Table.Th>
               <Table.Th>Quantity</Table.Th>
               <Table.Th>Price</Table.Th>
               <Table.Th>Status</Table.Th>
+              <Table.Th>Actions</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -69,6 +70,16 @@ export const OrdersList = () => {
                 </Table.Td>
                 <Table.Td>
                   <Badge>{order.status}</Badge>
+                </Table.Td>
+                <Table.Td>
+                  <Button
+                    size="compact-sm"
+                    color="red"
+                    variant="subtle"
+                    onClick={() => cancel(order.id)}
+                  >
+                    Cancel
+                  </Button>
                 </Table.Td>
               </Table.Tr>
             ))}
