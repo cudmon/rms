@@ -1,10 +1,5 @@
 import { ReactNode } from "react";
-import {
-  ColorSchemeScript,
-  Container,
-  createTheme,
-  MantineProvider,
-} from "@mantine/core";
+import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 
 import "@mantine/core/styles.css";
 
@@ -13,7 +8,8 @@ type Props = {
 };
 
 const theme = createTheme({
-  primaryColor: "blue",
+  primaryColor: "lime",
+  primaryShade: 7,
   defaultRadius: "xs",
   fontFamily: "Jost, sans-serif",
   headings: {
@@ -28,9 +24,7 @@ export default function Layout({ children }: Props) {
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider theme={theme}>
-          <Container>{children}</Container>
-        </MantineProvider>
+        <MantineProvider theme={theme}>{children}</MantineProvider>
       </body>
     </html>
   );
