@@ -1,5 +1,10 @@
 import { ReactNode } from "react";
-import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
+import {
+  ColorSchemeScript,
+  Container,
+  createTheme,
+  MantineProvider,
+} from "@mantine/core";
 
 import "@mantine/core/styles.css";
 
@@ -23,7 +28,9 @@ export default function Layout({ children }: Props) {
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <Container>{children}</Container>
+        </MantineProvider>
       </body>
     </html>
   );
