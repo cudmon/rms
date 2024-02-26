@@ -48,7 +48,7 @@ export default function Layout({ children }: Props) {
             <Button
               component={Link}
               href="/tables/menus"
-              size="lg"
+              size="compact-lg"
               variant="subtle"
               color={pathname === "/tables/menus" ? "lime" : "gray"}
             >
@@ -57,7 +57,7 @@ export default function Layout({ children }: Props) {
             <Button
               component={Link}
               href="/tables/orders"
-              size="lg"
+              size="compact-lg"
               variant="subtle"
               color={pathname === "/tables/orders" ? "lime" : "gray"}
             >
