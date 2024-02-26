@@ -15,15 +15,12 @@ import {
   Query,
 } from "@nestjs/common";
 
-@Controller("order")
+@Controller("orders")
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Get()
-  async findAll(
-    @Query("take", new ParseIntPipe({ optional: true })) take?: number,
-    @Query("skip", new ParseIntPipe({ optional: true })) skip?: number
-  ) {
+  async findAll(@Query("take") take?: number, @Query("skip") skip?: number) {
     return await this.orderService.findAll({
       take: take || 100,
       skip: skip || 0,
