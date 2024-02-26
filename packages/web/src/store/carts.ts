@@ -1,12 +1,6 @@
 import { create } from "zustand";
+import { Cart } from "@/types/entity";
 import { persist, createJSONStorage } from "zustand/middleware";
-
-type Cart = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-};
 
 type Store = {
   carts: Cart[];

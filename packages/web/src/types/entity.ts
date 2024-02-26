@@ -25,3 +25,10 @@ export type Usage = {
   table: Table;
   order: Order[];
 };
+
+export type Cart = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
