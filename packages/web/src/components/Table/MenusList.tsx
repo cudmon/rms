@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Menu } from "@/types/entity";
+import { Cart, Menu } from "@/types/entity";
 import { useCartsStore } from "@/store/carts";
+import { notifications } from "@mantine/notifications";
 import {
   Grid,
   GridCol,
@@ -22,8 +23,18 @@ type Props = {
 };
 
 export const MenusList = ({ menus }: Props) => {
-  const { add } = useCartsStore();
+  const carts = useCartsStore();
   const [quantitys, setQuantitys] = useState<Map<string, number>>(new Map());
+
+  const add = (item: Cart) => {
+    carts.add(item);
+
+    notifications.show({
+      title: "Added to cart",
+      message: `${item.quantity}x ${item.name} added to cart`,
+      color: "teal",
+    });
+  };
 
   return (
     <Grid grow gutter={32}>
