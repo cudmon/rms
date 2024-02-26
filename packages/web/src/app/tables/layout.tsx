@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useCartsStore } from "@/store/carts";
 import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import { IconShoppingCartFilled } from "@tabler/icons-react";
@@ -22,6 +23,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   const pathname = usePathname();
+  const { carts, remove } = useCartsStore();
   const [opened, handlers] = useDisclosure();
 
   return (
@@ -74,9 +76,15 @@ export default function Layout({ children }: Props) {
           </Text>
           <CloseButton size="lg" onClick={handlers.close} />
         </Group>
-        <Text fz={16} color="gray" mt={8}>
-          View and manage your carts
-        </Text>
+        <Group mt={16}>
+          {carts.map((cart) => (
+            <Group key={cart.id} justify="space-between">
+              <Text>{cart.name}</Text>
+              <Text>${cart.price}</Text>
+              <Button onClick={() => remove(cart.id)}>Remove</Button>
+            </Group>
+          ))}
+        </Group>
       </AppShell.Aside>
       <AppShell.Main>
         <Container>{children}</Container>
