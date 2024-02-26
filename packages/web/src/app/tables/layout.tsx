@@ -39,7 +39,7 @@ export default function Layout({ children }: Props) {
       <AppShell.Header withBorder>
         <Group h={60} px={32} justify="space-between">
           <Title order={1} fz={24} fw={600}>
-            Mantine
+            RMS
           </Title>
           <Group justify="space-evenly">
             <Button
