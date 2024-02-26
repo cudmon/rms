@@ -44,7 +44,7 @@ export const OrdersList = () => {
 
   return (
     <Stack gap={32}>
-      <Card p={0} withBorder>
+      <Card shadow="sm" p={0} withBorder>
         <Table
           fz={16}
           verticalSpacing="lg"
@@ -75,7 +75,7 @@ export const OrdersList = () => {
           </Table.Tbody>
         </Table>
       </Card>
-      <Card withBorder>
+      <Card shadow="sm" withBorder>
         <Group justify="space-between">
           <Text fz={28} fw={500}>
             Total:
