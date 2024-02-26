@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { useCartsStore } from "@/store/carts";
 import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
+import { CartList } from "@/components/Table/CartList";
 import { IconShoppingCartFilled } from "@tabler/icons-react";
 import {
   ActionIcon,
@@ -76,16 +77,7 @@ export default function Layout({ children }: Props) {
           </Text>
           <CloseButton size="lg" onClick={handlers.close} />
         </Group>
-        <Group mt={16}>
-          {carts.map((cart) => (
-            <Group key={cart.id} justify="space-between">
-              <Text>{cart.name}</Text>
-              <Text>${cart.price}</Text>
-              <Text>{cart.quantity}</Text>
-              <Button onClick={() => remove(cart.id)}>Remove</Button>
-            </Group>
-          ))}
-        </Group>
+        <CartList carts={carts} remover={remove} />
       </AppShell.Aside>
       <AppShell.Main>
         <Container>{children}</Container>
