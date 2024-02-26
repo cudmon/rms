@@ -128,6 +128,10 @@ export const OrdersList = () => {
   useEffect(() => {
     (async () => {
       try {
+        if (!table.id) {
+          return;
+        }
+
         const res = await http.get<Usage>(`/usages/active/${table.id}`);
 
         setLoading(false);
