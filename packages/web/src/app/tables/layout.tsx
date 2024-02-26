@@ -81,6 +81,7 @@ export default function Layout({ children }: Props) {
             <Group key={cart.id} justify="space-between">
               <Text>{cart.name}</Text>
               <Text>${cart.price}</Text>
+              <Text>{cart.quantity}</Text>
               <Button onClick={() => remove(cart.id)}>Remove</Button>
             </Group>
           ))}
