@@ -24,7 +24,7 @@ services:
       - api
       - database
     deploy:
-      replicas: 2
+      replicas: 1
 
   api:
     build:
@@ -40,7 +40,7 @@ services:
     depends_on:
       - database
     deploy:
-      replicas: 3
+      replicas: 1
 
   database:
     image: postgres
