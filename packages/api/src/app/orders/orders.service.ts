@@ -26,6 +26,21 @@ export class OrdersService {
     });
   }
 
+  async findByStatus(
+    status: OrderStatus,
+    params: { take?: number; skip?: number }
+  ) {
+    return await this.prisma.order.findMany({
+      where: {
+        status,
+      },
+      include: {
+        menu: true,
+      },
+      ...params,
+    });
+  }
+
   async create(data: { menuId: string; tableId: string; quantity: number }) {
     let usage: Usage;
 
