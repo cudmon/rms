@@ -97,7 +97,7 @@ enum BillStatus {
 
 enum OrderStatus {
   PENDING
-  COOKING
+  FINISHED
   SERVED
   CANCELED
 }
