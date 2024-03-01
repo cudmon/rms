@@ -1,0 +1,62 @@
+import { CreateOrderDto } from "@/app/orders/orders.dto";
+import { CurrentClient } from "@/app/auth/types/auth.type";
+import { OrdersService } from "@/app/orders/orders.service";
+import { Client } from "@/app/auth/decorators/client.decorator";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+} from "@nestjs/common";
+
+@Controller("orders")
+export class OrdersController {
+  constructor(private readonly ordersService: OrdersService) {}
+
+  @Get()
+  async findAll(@Query() params: { take?: number; skip?: number }) {
+    return await this.ordersService.findAll(params);
+  }
+
+  @Get(":id")
+  async findById(@Param("id", ParseUUIDPipe) id: string) {
+    const order = await this.ordersService.findById(id);
+
+    if (!order) {
+      throw new Error("Order not found");
+    }
+
+    return order;
+  }
+
+  @Post()
+  async create(
+    @Client() client: CurrentClient,
+    @Body() { menuId, quantity }: CreateOrderDto
+  ) {
+    return await this.ordersService.create({
+      menuId,
+      quantity,
+      tableId: client.id,
+    });
+  }
+
+  @Patch("/cancel/:id")
+  async cancel(@Param("id", ParseUUIDPipe) id: string) {
+    return await this.ordersService.updateStatusById(id, "CANCELED");
+  }
+
+  @Patch("/finish/:id")
+  async finish(@Param("id", ParseUUIDPipe) id: string) {
+    return await this.ordersService.updateStatusById(id, "SERVED");
+  }
+
+  @Patch("/cooking/:id")
+  async cooking(@Param("id", ParseUUIDPipe) id: string) {
+    return await this.ordersService.updateStatusById(id, "COOKING");
+  }
+}

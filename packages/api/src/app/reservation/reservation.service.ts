@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
-import { TableService } from "@/app/table/table.service";
+import { TablesService } from "@/app/tables/tables.service";
 import { PrismaService } from "@/providers/prisma.service";
 import { SettingService } from "@/app/settings/setting.service";
 
@@ -9,7 +9,7 @@ export class ReservationService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly settingService: SettingService,
-    private readonly tableService: TableService
+    private readonly tablesService: TablesService
   ) {}
 
   async getReservations(args?: Prisma.ReservationFindManyArgs) {
@@ -46,7 +46,7 @@ export class ReservationService {
     tableId: string
   ) {
     const maxReservableTables = await this.getMaxReservation();
-    const reservedTable = await this.tableService.countReservedTables();
+    const reservedTable = await this.tablesService.countReservedTables();
     const maxDayReservation = await this.settingService.getSettingByName(
       "RESERVATION_MAX_DAY"
     );
@@ -97,27 +97,16 @@ export class ReservationService {
       },
     });
 
-    await this.tableService.update({
-      where: {
-        id: tableId,
-      },
-      data: {
-        status: "RESERVED",
-      },
-    });
+    await this.tablesService.updateStatusById(tableId, "RESERVED");
 
     return re;
   }
 
   async cancelReservation(reservationId: string) {
-    await this.tableService.update({
-      where: {
-        id: (await this.getReservation(reservationId)).tableId,
-      },
-      data: {
-        status: "IDLE",
-      },
-    });
+    await this.tablesService.updateStatusById(
+      (await this.getReservation(reservationId)).tableId,
+      "IDLE"
+    );
 
     return await this.prisma.reservation.update({
       where: {

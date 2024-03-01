@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { IAuth } from "@/app/auth/auth.interface";
-import { Auth } from "@/app/auth/auth.decorator";
+import { CurrentClient } from "@/app/auth/types/auth.type";
+import { Client } from "@/app/auth/decorators/client.decorator";
 import { MakeReservationDto } from "@/app/reservation/reservation.dto";
 import { ReservationService } from "@/app/reservation/reservation.service";
 import {
@@ -14,7 +14,7 @@ import {
   Post,
 } from "@nestjs/common";
 
-@Controller("reservation")
+@Controller("reservations")
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
@@ -40,14 +40,14 @@ export class ReservationController {
 
   @Post()
   async makeReservation(
-    @Auth() user: IAuth,
+    @Client() client: CurrentClient,
     @Body() { seat, when, tableId }: MakeReservationDto
   ) {
     try {
       return await this.reservationService.makeReservation(
         when,
         seat,
-        user.id,
+        client.id,
         tableId
       );
     } catch (e) {

@@ -1,23 +1,23 @@
 import { Module } from "@nestjs/common";
 import { MenuModule } from "@/app/menu/menu.module";
-import { UserModule } from "@/app/user/user.module";
+import { UsersModule } from "@/app/users/users.module";
 import { AuthModule } from "@/app/auth/auth.module";
-import { BillModule } from "@/app/bill/bill.module";
-import { TableModule } from "@/app/table/table.module";
-import { OrderModule } from "@/app/order/order.module";
-import { UsageModule } from "@/app/usage/usage.module";
+import { BillsModule } from "@/app/bills/bills.module";
+import { TablesModule } from "@/app/tables/tables.module";
+import { OrdersModule } from "@/app/orders/orders.module";
+import { UsagesModule } from "@/app/usages/usages.module";
 import { SettingModule } from "@/app/settings/setting.module";
 import { ReservationModule } from "@/app/reservation/reservation.module";
 
 @Module({
   imports: [
     MenuModule,
-    UserModule,
+    UsersModule,
     AuthModule,
-    TableModule,
-    OrderModule,
-    BillModule,
-    UsageModule,
+    TablesModule,
+    OrdersModule,
+    BillsModule,
+    UsagesModule,
     SettingModule,
     ReservationModule,
   ],

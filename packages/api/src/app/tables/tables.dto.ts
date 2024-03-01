@@ -1,6 +1,5 @@
 import { PartialType } from "@nestjs/mapped-types";
 import {
-  IsNotEmpty,
   IsNumber,
   IsString,
   Max,
@@ -10,22 +9,19 @@ import {
 } from "class-validator";
 
 export class CreateTableDto {
+  @IsString()
   @MinLength(2)
   @MaxLength(255)
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
+  @IsNumber()
   @Min(0)
   @Max(12)
-  @IsNumber()
-  @IsNotEmpty()
   seat: number;
 
+  @IsString()
   @MinLength(6)
   @MaxLength(6)
-  @IsString()
-  @IsNotEmpty()
   passcode: string;
 }
 

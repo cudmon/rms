@@ -1,51 +1,53 @@
 import { compare, hash } from "bcrypt";
-import { Prisma } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "@/app/user/user.dto";
-import { PrismaService } from "@/providers/prisma.service";
+import { UsersService } from "@/app/users/users.service";
+import { TablesService } from "@/app/tables/tables.service";
+import { LogInDto, RegisterDto, TableLoginDto } from "@/app/auth/auth.dto";
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private prisma: PrismaService
+    private usersService: UsersService,
+    private tablesService: TablesService
   ) {}
 
-  async logIn(username: string, pass: string): Promise<any> {
-    const user = await this.findOne({ where: { username } });
-    const match = await compare(pass, user.password);
+  async tableLogin({ id, passcode }: TableLoginDto) {
+    const table = await this.tablesService.findByIdIncludePasscode(id);
 
-    if (!match) {
-      return false;
+    if (!(await compare(passcode, table.passcode))) {
+      throw new Error("INVALID_CREDENTIALS");
     }
 
-    const payload = { id: user.id, username: user.username };
+    const payload = { id: table.id, role: "TABLE" };
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      token: await this.jwtService.signAsync(payload),
     };
   }
 
-  async register({
-    data,
-    select,
-  }: {
-    data: CreateUserDto;
-    select: Prisma.UserSelect;
-  }) {
-    try {
-      return await this.prisma.user.create({
-        data: {
-          ...data,
-          password: await hash(data.password, 10),
-        },
-        select,
-      });
-    } catch (e) {}
+  async logIn({ username, password }: LogInDto) {
+    const user =
+      await this.usersService.findByUsernameIncludePassword(username);
+
+    if (!(await compare(password, user.password))) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
+
+    const payload = { id: user.id, role: user.role };
+
+    return {
+      token: await this.jwtService.signAsync(payload),
+    };
   }
 
-  async findOne({ where, select }: Prisma.UserFindUniqueArgs) {
-    return await this.prisma.user.findUnique({ where, select });
+  async register(data: RegisterDto) {
+    try {
+      return await this.usersService.create({
+        ...data,
+        password: await hash(data.password, 10),
+      });
+    } catch (error) {}
   }
 }

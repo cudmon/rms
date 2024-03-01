@@ -1,41 +1,32 @@
-import { Prisma } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
-import { UsageService } from "@/app/usage/usage.service";
 import { PrismaService } from "@/providers/prisma.service";
+import { TablesService } from "@/app/tables/tables.service";
+import { UsagesService } from "@/app/usages/usages.service";
 import { SettingService } from "@/app/settings/setting.service";
 
 @Injectable()
-export class BillService {
+export class BillsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly usageService: UsageService,
-    private readonly settingService: SettingService
+    private readonly usagesService: UsagesService,
+    private readonly settingService: SettingService,
+    private readonly tablesService: TablesService
   ) {}
 
-  async getBills(args?: Prisma.BillingFindManyArgs) {
-    return await this.prisma.billing.findMany(args);
+  async findAll(params: { take?: number; skip?: number }) {
+    return await this.prisma.billing.findMany(params);
   }
 
-  async getBill(billId: string) {
+  async findById(id: string) {
     return await this.prisma.billing.findUniqueOrThrow({
       where: {
-        id: billId,
+        id,
       },
     });
   }
 
   async createBill(tableId: string) {
-    let usage;
-
-    try {
-      usage = await this.usageService.getActiveUsageWithOrders(tableId);
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === "P2025") {
-          throw new Error("NO_ACTIVE_USAGE");
-        }
-      }
-    }
+    const usage = await this.usagesService.findActive(tableId);
 
     const bill = await this.prisma.billing.findFirst({
       where: {
@@ -65,25 +56,36 @@ export class BillService {
     });
   }
 
-  async confirmBill(billId: string) {
-    const bill = await this.getBill(billId);
+  async confirm(id: string) {
+    const bill = await this.findById(id);
 
     if (bill.status === "CANCELED") {
       throw new Error("BILL_ALREADY_CANCELLED");
     }
 
-    return this.prisma.billing.update({
+    const paid = await this.prisma.billing.update({
       where: {
-        id: billId,
+        id,
       },
       data: {
         status: "PAID",
       },
+      include: {
+        usage: {
+          include: {
+            table: true,
+          },
+        },
+      },
     });
+
+    await this.tablesService.updateStatusById(paid.usage.tableId, "IDLE");
+
+    return paid;
   }
 
-  async cancelBill(billId: string) {
-    const bill = await this.getBill(billId);
+  async cancel(id: string) {
+    const bill = await this.findById(id);
 
     if (bill.status === "PAID") {
       throw new Error("BILL_ALREADY_CONFIRMED");
@@ -91,7 +93,7 @@ export class BillService {
 
     return this.prisma.billing.update({
       where: {
-        id: billId,
+        id,
       },
       data: {
         status: "CANCELED",
