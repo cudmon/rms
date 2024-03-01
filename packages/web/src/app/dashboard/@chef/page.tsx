@@ -3,7 +3,7 @@ import { Box } from "@mantine/core";
 import { Card, Center, Button } from "@mantine/core";
 import { http } from "@/modules/http";
 import { Order, Menu } from "@/types/entity";
-import { TableOrder } from "@/components/dashboard/OrderTableList";
+import { TableOrder } from "@/components/Dashboard/ChefOrder";
 
 export const metadata = {
   title: "Chef",
