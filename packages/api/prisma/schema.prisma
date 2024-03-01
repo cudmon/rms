@@ -63,7 +63,7 @@ model Billing {
   price   Float
   status  BillStatus @default(UNPAID)
   usageId String     @map("usage_id")
-  Usage   Usage?
+  usage   Usage?
 }
 
 model Usage {
