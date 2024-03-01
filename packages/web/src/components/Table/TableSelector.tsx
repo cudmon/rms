@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { AxiosError } from "axios";
+import { http } from "@/modules/http";
 import { Table } from "@/types/entity";
 import { useRouter } from "next/navigation";
 import { useTableStore } from "@/store/table";
+import { notifications } from "@mantine/notifications";
 import { Button, Grid, PinInput, Stack, Title } from "@mantine/core";
 
 type Props = {
@@ -17,16 +20,60 @@ export const TableSelector = ({ tables }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<Table | null>(null);
 
-  const connect = () => {
+  const connect = async () => {
     setLoading(true);
 
     if (!selected) {
+      notifications.show({
+        title: "Table is required",
+        message: "Please select a table",
+        color: "red",
+      });
+
       return setLoading(false);
     }
 
-    setTable({ ...selected, token: passcode });
+    if (!passcode || passcode.length < 6) {
+      notifications.show({
+        title: "Passcode is required",
+        message: "Please enter passcode",
+        color: "red",
+      });
 
-    router.push(`/tables/menus`);
+      return setLoading(false);
+    }
+
+    try {
+      const res = await http.post("/auth/table-login", {
+        id: selected.id,
+        passcode,
+      });
+
+      setLoading(false);
+      setTable({ id: selected.id, name: selected.name, token: res.data.token });
+
+      return router.push(`/tables/menus`);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          notifications.show({
+            title: "Invalid passcode",
+            message: "Please try again",
+            color: "red",
+          });
+
+          return setLoading(false);
+        }
+      }
+
+      notifications.show({
+        title: "Something went wrong",
+        message: "Please try again",
+        color: "red",
+      });
+
+      return setLoading(false);
+    }
   };
 
   return (
