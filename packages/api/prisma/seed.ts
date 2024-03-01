@@ -51,17 +51,17 @@ async function main() {
       {
         name: "A",
         seat: 4,
-        passcode: "1234",
+        passcode: hashSync("123456", 10),
       },
       {
         name: "B",
         seat: 2,
-        passcode: "1234",
+        passcode: hashSync("123456", 10),
       },
       {
         name: "C",
         seat: 10,
-        passcode: "1234",
+        passcode: hashSync("123456", 10),
       },
     ],
   });
