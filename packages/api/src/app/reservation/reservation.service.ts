@@ -2,13 +2,13 @@ import { Prisma } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 import { TablesService } from "@/app/tables/tables.service";
 import { PrismaService } from "@/providers/prisma.service";
-import { SettingService } from "@/app/settings/setting.service";
+import { SettingsService } from "@/app/settings/settings.service";
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly settingService: SettingService,
+    private readonly settingsService: SettingsService,
     private readonly tablesService: TablesService
   ) {}
 
@@ -26,7 +26,7 @@ export class ReservationService {
 
   private async getMaxReservation() {
     return Number(
-      await this.settingService.getSettingByName("MAX_TABLE_BOOKING")
+      await this.settingsService.getSettingByName("MAX_TABLE_BOOKING")
     );
   }
 
@@ -47,17 +47,17 @@ export class ReservationService {
   ) {
     const maxReservableTables = await this.getMaxReservation();
     const reservedTable = await this.tablesService.countReservedTables();
-    const maxDayReservation = await this.settingService.getSettingByName(
+    const maxDayReservation = await this.settingsService.getSettingByName(
       "RESERVATION_MAX_DAY"
     );
-    const minDayReservation = await this.settingService.getSettingByName(
+    const minDayReservation = await this.settingsService.getSettingByName(
       "RESERVATION_MIN_DAY"
     );
 
     const openingTime =
-      await this.settingService.getSettingByName("OPENING_TIME");
+      await this.settingsService.getSettingByName("OPENING_TIME");
     const closingTime =
-      await this.settingService.getSettingByName("CLOSING_TIME");
+      await this.settingsService.getSettingByName("CLOSING_TIME");
 
     if (reservedTable >= maxReservableTables) {
       throw new Error("NO_TABLE_AVAILABLE");
