@@ -17,7 +17,7 @@ export class BillsController {
   constructor(private readonly billsService: BillsService) {}
 
   @Get()
-  async findAll(@Query("take") take: number, @Query("skip") skip: number) {
+  async findAll(@Query("take") take?: number, @Query("skip") skip?: number) {
     return await this.billsService.findAll({
       take,
       skip,
