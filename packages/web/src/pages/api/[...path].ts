@@ -1,8 +1,6 @@
 import Cookies from "cookies";
 import httpProxy from "http-proxy";
-
-const API_URL = process.env.API_URL;
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+import { API_URL, BASE_URL } from "@/constants";
 
 const proxy = httpProxy.createProxyServer();
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { API_URL } from "@/constants";
+import { BASE_URL } from "@/constants";
 import { Cart, Menu } from "@/types/entity";
 import { useCartsStore } from "@/store/carts";
 import { notifications } from "@mantine/notifications";
@@ -44,7 +44,7 @@ export const MenusList = ({ menus }: Props) => {
           <Card shadow="sm" pt={0} withBorder>
             <CardSection>
               <Image
-                src={`${API_URL}/menus/${menu.id}/image`}
+                src={`${BASE_URL}/menus/${menu.id}/image`}
                 height={160}
                 alt="Norway"
               />
