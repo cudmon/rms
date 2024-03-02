@@ -38,7 +38,7 @@ export class UsersService {
     });
   }
 
-  async findByUsernameIncludePassword(username: string) {
+  async findByUsername(username: string) {
     return await this.prisma.user.findUnique({
       where: {
         username,

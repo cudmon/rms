@@ -20,7 +20,7 @@ export class AuthService {
   async tableLogin({ id, passcode }: TableLoginDto) {
     const table = await this.tablesService.findByIdIncludePasscode(id);
 
-    if (!(await compare(passcode, table.passcode))) {
+    if (!(await compare(passcode, table.passcode)) || !table) {
       throw new Error("INVALID_CREDENTIALS");
     }
 
@@ -32,10 +32,15 @@ export class AuthService {
   }
 
   async logIn({ username, password }: LogInDto) {
-    const user =
-      await this.usersService.findByUsernameIncludePassword(username);
+    const user = await this.usersService.findByUsername(username);
 
-    if (!(await compare(password, user.password))) {
+    if (!user) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
+
+    const match = await compare(password, user.password);
+
+    if (!match) {
       throw new Error("INVALID_CREDENTIALS");
     }
 
