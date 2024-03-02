@@ -27,6 +27,9 @@ export class AuthService {
     const payload = { id: table.id, role: "TABLE" };
 
     return {
+      id: table.id,
+      name: table.name,
+      seat: table.seat,
       token: await this.jwtService.signAsync(payload),
     };
   }
@@ -47,6 +50,7 @@ export class AuthService {
     const payload = { id: user.id, role: user.role };
 
     return {
+      ...user,
       token: await this.jwtService.signAsync(payload),
     };
   }
