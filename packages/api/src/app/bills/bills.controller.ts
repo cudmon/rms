@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from "@nestjs/common";
 
 @Controller("bills")
@@ -16,12 +17,15 @@ export class BillsController {
   constructor(private readonly billsService: BillsService) {}
 
   @Get()
-  async findAll(params: { take?: number; skip?: number }) {
-    return await this.billsService.findAll(params);
+  async findAll(@Query("take") take: number, @Query("skip") skip: number) {
+    return await this.billsService.findAll({
+      take,
+      skip,
+    });
   }
 
   @Get(":id")
-  async findOne(@Param("id", ParseUUIDPipe) id: string) {
+  async findById(@Param("id", ParseUUIDPipe) id: string) {
     const bill = await this.billsService.findById(id);
 
     if (!bill) {
@@ -50,6 +54,8 @@ export class BillsController {
 
   @Patch("/confirm/:id")
   async confirm(@Param("id", ParseUUIDPipe) id: string) {
+    await this.findById(id);
+
     try {
       return await this.billsService.confirm(id);
     } catch (e) {
@@ -63,6 +69,8 @@ export class BillsController {
 
   @Patch("/cancel/:id")
   async cancel(@Param("id", ParseUUIDPipe) id: string) {
+    await this.findById(id);
+
     try {
       return await this.billsService.cancel(id);
     } catch (e) {
