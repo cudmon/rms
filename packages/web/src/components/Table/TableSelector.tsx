@@ -52,7 +52,7 @@ export const TableSelector = ({ tables }: Props) => {
       setLoading(false);
       setTable({ id: selected.id, name: selected.name });
 
-      window.location.href = "/tables/menus";
+      router.push("/tables/menus");
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
