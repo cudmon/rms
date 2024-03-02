@@ -44,7 +44,7 @@ export const MenusList = ({ menus }: Props) => {
           <Card shadow="sm" pt={0} withBorder>
             <CardSection>
               <Image
-                src={`${BASE_URL}/menus/${menu.id}/image`}
+                src={`${BASE_URL}/api/menus/${menu.id}/image`}
                 height={160}
                 alt="Norway"
               />
