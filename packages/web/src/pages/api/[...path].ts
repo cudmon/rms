@@ -19,8 +19,6 @@ const handler = (req: any, res: any) => {
     const needIntercept = (() => {
       const pathname = new URL(req.url, BASE_URL).pathname;
 
-      console.log(pathname);
-
       return (
         pathname === "/api/auth/login" || pathname === "/api/auth/table-login"
       );
@@ -45,7 +43,6 @@ const handler = (req: any, res: any) => {
     });
 
     if (needIntercept) {
-      console.log("Hell yeah");
       proxy.once("proxyRes", (proxyRes: any, req: any, res: any) => {
         let body = "";
 
