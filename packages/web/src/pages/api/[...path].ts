@@ -60,10 +60,19 @@ const handler = (req: any, res: any) => {
                 sameSite: "lax",
               });
 
-              return res.status(200).json({ loggedIn: true });
+              return res.status(200).json({
+                status: "success",
+                client: {
+                  id: data.id,
+                  username: data.username || null,
+                  role: data.role || "TABLE",
+                },
+              });
             }
 
-            return res.status(401).json({ loggedIn: false });
+            return res.status(401).json({
+              error: "Invalid credentials",
+            });
           } catch (err) {
             return res.status(500).json({
               error: "Something went wrong. Please try again later.",
