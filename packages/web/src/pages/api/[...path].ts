@@ -65,7 +65,9 @@ const handler = (req: any, res: any) => {
 
             return res.status(401).json({ loggedIn: false });
           } catch (err) {
-            reject(err);
+            return res.status(500).json({
+              error: "Something went wrong. Please try again later.",
+            });
           }
         });
       });
