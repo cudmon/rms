@@ -57,7 +57,7 @@ const handler = (req: any, res: any) => {
             if (data.token) {
               const cookies = new Cookies(req, res);
 
-              cookies.set("auth-token", data.token, {
+              cookies.set("token", data.token, {
                 httpOnly: true,
                 sameSite: "lax",
               });
