@@ -1,9 +1,7 @@
-import { Table, ActionIcon } from "@mantine/core";
-import { Box } from "@mantine/core";
-import { Card, Center, Button } from "@mantine/core";
+import { Center } from "@mantine/core";
 import { http } from "@/modules/http";
-import { Order, Menu } from "@/types/entity";
-import { TableOrder } from "@/components/Dashboard/ChefOrder";
+import { Order } from "@/types/entity";
+import { ChefOrder } from "@/components/Dashboard/ChefOrder";
 
 export const metadata = {
   title: "Chef",
@@ -13,7 +11,7 @@ export default async function Page() {
   let order: Order[] = [];
 
   try {
-    const res = await http.get("/orders/status/PENDING");
+    const res = await http().get("/orders/status/PENDING");
 
     order = res.data;
   } catch (e) {
@@ -26,7 +24,7 @@ export default async function Page() {
 
   return (
     <div>
-      <TableOrder orders={order} />
+      <ChefOrder orders={order} />
     </div>
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 
+import { http } from "@/modules/http";
 import { Order } from "@/types/entity";
-
+import { modals } from "@mantine/modals";
+import { IconX, IconCheck } from "@tabler/icons-react";
 import {
   Badge,
   Card,
@@ -14,14 +16,9 @@ import {
   Tooltip,
 } from "@mantine/core";
 
-import { http } from "@/modules/http";
-
-import { IconX, IconCheck } from "@tabler/icons-react";
-import { modals } from "@mantine/modals";
-
-export const TableOrder = ({ orders }: { orders: Order[] }) => {
-  const finish = (id: string) => {
-    const res = http.patch(`/orders/finish/${id}`);
+export const ChefOrder = ({ orders }: { orders: Order[] }) => {
+  const finish = async (id: string) => {
+    await http().patch(`/orders/finish/${id}`);
   };
 
   const cancel = (id: string) => {
@@ -46,7 +43,7 @@ export const TableOrder = ({ orders }: { orders: Order[] }) => {
       children: <Text>Are you sure you want to cancel this order?</Text>,
 
       onConfirm: async () => {
-        const res = http.patch(`/orders/cancel/${id}`);
+        await http().patch(`/orders/cancel/${id}`);
       },
     });
   };
