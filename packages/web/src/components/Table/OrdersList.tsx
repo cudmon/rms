@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AxiosError } from "axios";
 import { http } from "@/modules/http";
 import { modals } from "@mantine/modals";
 import { useEffect, useState } from "react";
@@ -132,11 +133,19 @@ export const OrdersList = () => {
           return;
         }
 
-        const res = await http.get<Usage>(`/usages/active/${table.id}`);
+        const res = await http().get<Usage>(`/usages/active/${table.id}`);
 
         setLoading(false);
         setOrders(res.data.order);
       } catch (e) {
+        if (e instanceof AxiosError) {
+          if (e.response?.status === 404) {
+            setOrders([]);
+            setLoading(false);
+            return;
+          }
+        }
+
         setError(true);
         setLoading(false);
       }

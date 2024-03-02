@@ -1,5 +1,6 @@
 import { http } from "@/modules/http";
 import { Menu } from "@/types/entity";
+import { cookies } from "next/headers";
 import { Center, Title } from "@mantine/core";
 import { MenusList } from "@/components/Table/MenusList";
 
@@ -11,7 +12,7 @@ export default async function Page() {
   let menus: Menu[] = [];
 
   try {
-    const res = await http.get("/menus");
+    const res = await http(cookies().get("auth-token")?.value).get("/menus");
 
     menus = res.data;
   } catch (e) {

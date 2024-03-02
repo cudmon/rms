@@ -44,15 +44,15 @@ export const TableSelector = ({ tables }: Props) => {
     }
 
     try {
-      const res = await http.post("/auth/table-login", {
+      await http().post("/auth/table-login", {
         id: selected.id,
         passcode,
       });
 
       setLoading(false);
-      setTable({ id: selected.id, name: selected.name, token: res.data.token });
+      setTable({ id: selected.id, name: selected.name });
 
-      return router.push(`/tables/menus`);
+      window.location.href = "/tables/menus";
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
