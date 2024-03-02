@@ -26,9 +26,9 @@ const handler = (req: any, res: any) => {
 
     req.url = req.url.replace(/^\/api/, "");
 
-    req.headers.cookie = "";
-
     const token = cookies.get("token");
+
+    req.headers.cookie = "";
 
     if (token) {
       req.headers["Authorization"] = `Bearer ${token}`;
