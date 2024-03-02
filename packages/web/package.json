@@ -25,11 +25,12 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.12.1",
-    "url": "^0.11.3",
     "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@tabler/icons-react": "^2.47.0",
+    "@types/cookies": "^0.9.0",
+    "@types/http-proxy": "^1.17.14",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19",
