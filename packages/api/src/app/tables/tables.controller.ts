@@ -3,6 +3,7 @@ import { Public } from "@/app/auth/decorators/public.decorator";
 import { CreateTableDto, UpdateTableDto } from "@/app/tables/tables.dto";
 import {
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
@@ -13,6 +14,7 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 
 @Controller("tables")
 export class TablesController {
@@ -20,8 +22,11 @@ export class TablesController {
 
   @Public()
   @Get()
-  async findAll(@Query() params: { take?: number; skip?: number }) {
-    return this.tableService.findAll(params);
+  async findAll(@Query("take") take?: number, @Query("skip") skip?: number) {
+    return this.tableService.findAll({
+      take,
+      skip,
+    });
   }
 
   @Get(":id")
@@ -37,7 +42,15 @@ export class TablesController {
 
   @Post()
   async create(@Body() data: CreateTableDto) {
-    return await this.tableService.create(data);
+    try {
+      return await this.tableService.create(data);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
+          throw new ConflictException();
+        }
+      }
+    }
   }
 
   @Patch(":id")
@@ -45,11 +58,23 @@ export class TablesController {
     @Param("id", ParseUUIDPipe) id: string,
     @Body() data: UpdateTableDto
   ) {
-    return this.tableService.updateById(id, data);
+    await this.findById(id);
+
+    try {
+      return this.tableService.updateById(id, data);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
+          throw new ConflictException();
+        }
+      }
+    }
   }
 
   @Delete(":id")
   async deleteById(@Param("id", ParseUUIDPipe) id: string) {
+    await this.findById(id);
+
     return this.tableService.deleteById(id);
   }
 }

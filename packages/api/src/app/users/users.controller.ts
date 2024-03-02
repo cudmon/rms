@@ -56,23 +56,23 @@ export class UsersController {
     @Param("id", ParseUUIDPipe) id: string,
     @Body() data: UpdateUserDto
   ) {
-    const user = await this.usersService.updateById(id, data);
+    await this.findById(id);
 
-    if (!user) {
-      throw new NotFoundException();
+    try {
+      return await this.usersService.updateById(id, data);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
+          throw new ConflictException();
+        }
+      }
     }
-
-    return user;
   }
 
   @Delete(":id")
   async deleteById(@Param("id", ParseUUIDPipe) id: string) {
-    const user = await this.usersService.deleteById(id);
+    await this.findById(id);
 
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    return user;
+    return await this.usersService.deleteById(id);
   }
 }
