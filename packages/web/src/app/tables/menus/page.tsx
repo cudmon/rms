@@ -12,7 +12,7 @@ export default async function Page() {
   let menus: Menu[] = [];
 
   try {
-    const res = await http(cookies().get("auth-token")?.value).get("/menus");
+    const res = await http(cookies().get("token")?.value).get("/menus");
 
     menus = res.data;
   } catch (e) {
