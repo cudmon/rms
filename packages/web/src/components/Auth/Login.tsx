@@ -46,7 +46,7 @@ export const Login = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
-          notifications.show({
+          return notifications.show({
             title: "Error",
             message: "Invalid username or password",
             color: "red",
