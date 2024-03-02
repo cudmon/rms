@@ -4,7 +4,7 @@ import { PrismaService } from "@/providers/prisma.service";
 import { TablesService } from "@/app/tables/tables.service";
 import { UsagesService } from "@/app/usages/usages.service";
 import { BillsController } from "@/app/bills/bills.controller";
-import { SettingService } from "@/app/settings/setting.service";
+import { SettingsService } from "@/app/settings/settings.service";
 
 @Module({
   controllers: [BillsController],
@@ -12,7 +12,7 @@ import { SettingService } from "@/app/settings/setting.service";
     BillsService,
     UsagesService,
     TablesService,
-    SettingService,
+    SettingsService,
     PrismaService,
   ],
 })
