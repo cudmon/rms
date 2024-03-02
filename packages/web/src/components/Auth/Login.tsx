@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Button,
   TextInput,
@@ -10,10 +12,8 @@ import {
   Anchor,
   Flex,
 } from "@mantine/core";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-export const LoginForm = () => {
+export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();

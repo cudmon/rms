@@ -1,10 +1,9 @@
 "use client";
 
-import { Stack, Text, TextInput, PasswordInput, Button } from "@mantine/core";
 import { useState } from "react";
+import { Stack, Text, TextInput, PasswordInput, Button } from "@mantine/core";
 
-export const RegisterForm = () => {
-
+export const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,9 +14,7 @@ export const RegisterForm = () => {
   return (
     <>
       <Stack w={400} px={20} py={10}>
-        <Text fz={24}>
-          Please enter your information.
-        </Text>
+        <Text fz={24}>Please enter your information.</Text>
         <TextInput
           label="Name"
           placeholder="Name"

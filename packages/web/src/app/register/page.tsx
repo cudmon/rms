@@ -1,5 +1,5 @@
+import { Register } from "@/components/Auth/Register";
 import { Divider, Group, Text, Center, Card } from "@mantine/core";
-import { RegisterForm } from "@/components/Register/RegisterForm";
 
 export const metadata = {
   title: "Register",
@@ -15,7 +15,7 @@ export default function Page() {
               Welcome to Restaurant.
             </Text>
             <Divider size="md" orientation="vertical" />
-            <RegisterForm />
+            <Register />
           </Group>
         </Card>
       </Center>
