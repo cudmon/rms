@@ -2,15 +2,15 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "@/providers/prisma.service";
 import { TablesService } from "@/app/tables/tables.service";
 import { UsagesService } from "@/app/usages/usages.service";
-import { SettingService } from "@/app/settings/setting.service";
+import { SettingsService } from "@/app/settings/settings.service";
 
 @Injectable()
 export class BillsService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly tablesService: TablesService,
     private readonly usagesService: UsagesService,
-    private readonly settingService: SettingService,
-    private readonly tablesService: TablesService
+    private readonly settingService: SettingsService
   ) {}
 
   async findAll(params: { take?: number; skip?: number }) {
@@ -31,6 +31,7 @@ export class BillsService {
     const bill = await this.prisma.billing.findFirst({
       where: {
         usageId: usage.id,
+        status: "UNPAID",
       },
     });
 
@@ -38,8 +39,8 @@ export class BillsService {
       throw new Error("BILL_ALREADY_CREATED");
     }
 
-    const tax = await this.settingService.getSettingByName("BILLING_TAX");
-    const charge = await this.settingService.getSettingByName("SERVICE_CHARGE");
+    const tax = await this.settingService.findByName("BILLING_TAX");
+    const charge = await this.settingService.findByName("SERVICE_CHARGE");
 
     let total = usage.order.reduce((acc, curr) => {
       return acc + curr.price;

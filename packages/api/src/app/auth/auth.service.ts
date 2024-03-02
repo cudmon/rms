@@ -13,6 +13,10 @@ export class AuthService {
     private tablesService: TablesService
   ) {}
 
+  async checkSession(token: string) {
+    await this.jwtService.verifyAsync(token);
+  }
+
   async tableLogin({ id, passcode }: TableLoginDto) {
     const table = await this.tablesService.findByIdIncludePasscode(id);
 

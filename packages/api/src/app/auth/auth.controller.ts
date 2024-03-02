@@ -2,14 +2,15 @@ import { AuthService } from "@/app/auth/auth.service";
 import { Public } from "./decorators/public.decorator";
 import { UsersService } from "@/app/users/users.service";
 import { CurrentClient } from "@/app/auth/types/auth.type";
-import { LogInDto, RegisterDto, TableLoginDto } from "@/app/auth/auth.dto";
 import { Client } from "@/app/auth/decorators/client.decorator";
+import { LogInDto, RegisterDto, TableLoginDto } from "@/app/auth/auth.dto";
 import {
   Body,
   Controller,
   Post,
   Get,
   UnauthorizedException,
+  Req,
 } from "@nestjs/common";
 
 @Controller("auth")
@@ -22,6 +23,27 @@ export class AuthController {
   @Get("profile")
   async profile(@Client() user: CurrentClient) {
     return this.usersService.findById(user.id);
+  }
+
+  @Get("check-session")
+  async checkSession(@Req() req: Request) {
+    const header = req.headers.get("Authorization");
+
+    const token = header?.split(" ")[1];
+
+    if (!token) {
+      throw new UnauthorizedException("INVALID_SESSION");
+    }
+
+    try {
+      await this.authService.checkSession(token);
+
+      return {
+        message: "valid session",
+      };
+    } catch (e) {
+      throw new UnauthorizedException("INVALID_SESSION");
+    }
   }
 
   @Public()

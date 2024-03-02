@@ -12,6 +12,7 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
+import { OrderStatus } from "@prisma/client";
 
 @Controller("orders")
 export class OrdersController {
@@ -33,6 +34,14 @@ export class OrdersController {
     return order;
   }
 
+  @Get("/status/:status")
+  async findByStatus(
+    @Param("status") status: OrderStatus,
+    @Query() params: { take?: number; skip?: number }
+  ) {
+    return await this.ordersService.findByStatus(status, params);
+  }
+
   @Post()
   async create(
     @Client() client: CurrentClient,
@@ -50,13 +59,13 @@ export class OrdersController {
     return await this.ordersService.updateStatusById(id, "CANCELED");
   }
 
-  @Patch("/finish/:id")
+  @Patch("/serve/:id")
   async finish(@Param("id", ParseUUIDPipe) id: string) {
     return await this.ordersService.updateStatusById(id, "SERVED");
   }
 
-  @Patch("/cooking/:id")
+  @Patch("/finish/:id")
   async cooking(@Param("id", ParseUUIDPipe) id: string) {
-    return await this.ordersService.updateStatusById(id, "COOKING");
+    return await this.ordersService.updateStatusById(id, "FINISHED");
   }
 }
