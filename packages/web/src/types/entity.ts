@@ -10,6 +10,12 @@ export type Menu = {
   image: string;
 };
 
+export type User = {
+  id: string;
+  username: string;
+  role: string;
+};
+
 export type Order = {
   id: string;
   menu: Menu;
