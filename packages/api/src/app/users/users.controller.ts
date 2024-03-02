@@ -20,8 +20,11 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  async findAll(@Query() params: { take?: number; skip?: number }) {
-    return await this.usersService.findAll(params);
+  async findAll(@Query("take") take: number, @Query("skip") skip: number) {
+    return await this.usersService.findAll({
+      skip,
+      take,
+    });
   }
 
   @Get(":id")
