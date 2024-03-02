@@ -25,9 +25,7 @@ export class ReservationService {
   }
 
   private async getMaxReservation() {
-    return Number(
-      await this.settingsService.getSettingByName("MAX_TABLE_BOOKING")
-    );
+    return Number(await this.settingsService.findByName("MAX_TABLE_BOOKING"));
   }
 
   private async isAllowReservation(userId: string) {
@@ -47,17 +45,15 @@ export class ReservationService {
   ) {
     const maxReservableTables = await this.getMaxReservation();
     const reservedTable = await this.tablesService.countReservedTables();
-    const maxDayReservation = await this.settingsService.getSettingByName(
+    const maxDayReservation = await this.settingsService.findByName(
       "RESERVATION_MAX_DAY"
     );
-    const minDayReservation = await this.settingsService.getSettingByName(
+    const minDayReservation = await this.settingsService.findByName(
       "RESERVATION_MIN_DAY"
     );
 
-    const openingTime =
-      await this.settingsService.getSettingByName("OPENING_TIME");
-    const closingTime =
-      await this.settingsService.getSettingByName("CLOSING_TIME");
+    const openingTime = await this.settingsService.findByName("OPENING_TIME");
+    const closingTime = await this.settingsService.findByName("CLOSING_TIME");
 
     if (reservedTable >= maxReservableTables) {
       throw new Error("NO_TABLE_AVAILABLE");
