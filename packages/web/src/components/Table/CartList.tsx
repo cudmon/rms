@@ -1,9 +1,12 @@
 "use client";
 
 import { Cart } from "@/types/entity";
+import { http } from "@/modules/http";
 import { modals } from "@mantine/modals";
+import { useCartsStore } from "@/store/carts";
 import { IconTrash } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
+
 import {
   Table,
   ActionIcon,
@@ -12,12 +15,8 @@ import {
   Stack,
   Text,
   Box,
+  Button,
 } from "@mantine/core";
-
-type Props = {
-  carts: Cart[];
-  remover: (id: string) => void;
-};
 
 const Empty = () => {
   return (
@@ -33,7 +32,9 @@ const Empty = () => {
   );
 };
 
-export const CartList = ({ carts, remover }: Props) => {
+export const CartList = () => {
+  const cart = useCartsStore();
+
   const remove = (id: string) =>
     modals.openConfirmModal({
       title: (
@@ -58,7 +59,7 @@ export const CartList = ({ carts, remover }: Props) => {
       ),
 
       onConfirm: async () => {
-        remover(id);
+        cart.remove(id);
 
         notifications.show({
           title: "Item removed",
@@ -68,9 +69,45 @@ export const CartList = ({ carts, remover }: Props) => {
       },
     });
 
+  const order = async () => {
+    if (cart.carts.length === 0) {
+      notifications.show({
+        title: "Error",
+        message: "Cart is empty",
+        color: "red",
+      });
+
+      return;
+    }
+
+    try {
+      await http().post(
+        "/orders",
+        cart.carts.map((cart: Cart) => ({
+          menuId: cart.menuId,
+          quantity: cart.quantity,
+        }))
+      );
+
+      cart.clear();
+
+      notifications.show({
+        title: "Ordered",
+        message: "Order was successfully placed",
+        color: "blue",
+      });
+    } catch (e) {
+      notifications.show({
+        title: "Error",
+        message: "Failed to order",
+        color: "red",
+      });
+    }
+  };
+
   return (
     <Box mt={32}>
-      {carts.length > 0 ? (
+      {cart.carts.length > 0 ? (
         <Card withBorder>
           <Table
             fz={18}
@@ -87,7 +124,7 @@ export const CartList = ({ carts, remover }: Props) => {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {carts.map((cart) => (
+              {cart.carts.map((cart) => (
                 <Table.Tr key={cart.id}>
                   <Table.Td>{cart.name}</Table.Td>
                   <Table.Td>{cart.quantity}</Table.Td>
@@ -110,6 +147,9 @@ export const CartList = ({ carts, remover }: Props) => {
       ) : (
         <Empty />
       )}
+      <Button onClick={order} mt={32} fullWidth size="lg">
+        Order Now
+      </Button>
     </Box>
   );
 };
