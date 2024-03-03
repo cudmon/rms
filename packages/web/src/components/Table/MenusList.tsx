@@ -72,10 +72,11 @@ export const MenusList = ({ menus }: Props) => {
                 fullWidth
                 onClick={() =>
                   add({
-                    id: menu.id,
+                    id: new Date().getTime().toString(),
                     name: menu.name,
                     price: menu.price * (quantitys.get(menu.id) || 1),
                     quantity: quantitys.get(menu.id) || 1,
+                    menuId: menu.id,
                   })
                 }
               >
