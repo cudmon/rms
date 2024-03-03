@@ -36,5 +36,6 @@ export type Cart = {
   id: string;
   name: string;
   price: number;
+  menuId: string;
   quantity: number;
 };
