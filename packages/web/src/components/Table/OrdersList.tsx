@@ -29,7 +29,7 @@ const Total = ({ orders }: { orders: Order[] }) => {
         <Text c="lime" fz={28} fw={500}>
           <NumberFormatter
             prefix="$"
-            value={orders.reduce((acc, order) => acc + order.price, 0)}
+            value={orders.reduce((acc, o) => acc + o.price * o.quantity, 0)}
           />
         </Text>
       </Group>
@@ -88,7 +88,10 @@ const List = ({ orders }: { orders: Order[] }) => {
               <Table.Td>{order.menu.name}</Table.Td>
               <Table.Td>{order.quantity}</Table.Td>
               <Table.Td>
-                <NumberFormatter prefix="$" value={order.price} />
+                <NumberFormatter
+                  prefix="$"
+                  value={order.price * order.quantity}
+                />
               </Table.Td>
               <Table.Td>
                 <Badge>{order.status}</Badge>
