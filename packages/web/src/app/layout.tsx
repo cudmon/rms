@@ -1,8 +1,10 @@
+"use client";
+
 import { ReactNode } from "react";
 import { Jost } from "next/font/google";
 import { ModalsProvider } from "@mantine/modals";
-
 import { Notifications } from "@mantine/notifications";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 
 import "@mantine/core/styles.css";
@@ -29,6 +31,18 @@ const theme = createTheme({
   },
 });
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: 5000,
+      refetchIntervalInBackground: true,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
+    },
+  },
+});
+
 export default function Layout({ children }: Props) {
   return (
     <html className={jost.className} lang="en">
@@ -36,10 +50,12 @@ export default function Layout({ children }: Props) {
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
       <body>
-        <MantineProvider theme={theme} defaultColorScheme="light">
-          <Notifications />
-          <ModalsProvider>{children}</ModalsProvider>
-        </MantineProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider theme={theme} defaultColorScheme="light">
+            <Notifications />
+            <ModalsProvider>{children}</ModalsProvider>
+          </MantineProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
