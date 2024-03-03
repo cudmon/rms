@@ -1,3 +1,4 @@
+import { OrderStatus } from "@prisma/client";
 import { CreateOrderDto } from "@/app/orders/orders.dto";
 import { CurrentClient } from "@/app/auth/types/auth.type";
 import { OrdersService } from "@/app/orders/orders.service";
@@ -12,7 +13,6 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
-import { OrderStatus } from "@prisma/client";
 
 @Controller("orders")
 export class OrdersController {

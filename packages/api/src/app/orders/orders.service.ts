@@ -51,23 +51,9 @@ export class OrdersService {
       throw new Error("TABLE_NOT_FOUND");
     }
 
-    const prices: {
-      id: string;
-      price: number;
-    }[] = [];
-
-    data.map(async (order) => {
-      const menu = await this.menuService.findById(order.menuId);
-
-      if (!menu) {
-        throw new Error("MENU_NOT_FOUND");
-      }
-
-      prices.push({
-        id: order.menuId,
-        price: menu.price,
-      });
-    });
+    const menus = await this.menuService.findMultipleByIds(
+      data.map((order) => order.menuId)
+    );
 
     if (table.status === "IDLE") {
       usage = await this.usagesService.create(tableId);
@@ -87,7 +73,7 @@ export class OrdersService {
           usageId: usage.id,
           menuId: order.menuId,
           quantity: order.quantity,
-          price: prices.find((price) => price.id === order.menuId).price,
+          price: menus.find((menu) => menu.id === order.menuId).price,
         })),
       ],
     });

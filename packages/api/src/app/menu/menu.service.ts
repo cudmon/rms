@@ -22,6 +22,16 @@ export class MenuService {
     });
   }
 
+  async findMultipleByIds(ids: string[]) {
+    return await this.prisma.menu.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   async create(args: Prisma.MenuCreateArgs) {
     return await this.prisma.menu.create(args);
   }
