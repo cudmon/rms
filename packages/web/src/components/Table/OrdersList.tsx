@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { AxiosError } from "axios";
 import { http } from "@/modules/http";
-import { modals } from "@mantine/modals";
-import { useEffect, useState } from "react";
-import { Order, Usage } from "@/types/entity";
+import { Order } from "@/types/entity";
 import { useTableStore } from "@/store/table";
+import { useQuery } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import {
   Badge,
@@ -105,63 +103,43 @@ const List = ({ orders }: { orders: Order[] }) => {
 
 export const OrdersList = () => {
   const { table } = useTableStore();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    (async () => {
+  const { isPending, isError, data } = useQuery({
+    queryKey: ["orders", table.id],
+    queryFn: async () => {
       try {
-        if (!table.id) {
-          return;
-        }
+        if (!table.id) return [];
 
-        const res = await http().get<Usage>(`/usages/active/${table.id}`);
+        const response = await http().get(`/usages/active/${table.id}`);
 
-        setLoading(false);
-        setOrders(res.data.order);
-      } catch (e) {
-        if (e instanceof AxiosError) {
-          if (e.response?.status === 404) {
-            setOrders([]);
-            setLoading(false);
-            return;
-          }
-        }
-
-        setError(true);
-        setLoading(false);
+        return response.data.order as Order[];
+      } catch (error) {
+        notifications.show({
+          title: "Error",
+          message: "Something went wrong. Please try again later",
+          color: "red",
+        });
       }
-    })();
-  }, [table.id]);
-
-  useEffect(() => {
-    if (error) {
-      notifications.show({
-        title: "Error",
-        message: "Failed to fetch orders",
-        color: "red",
-      });
-    }
-  }, [error]);
+    },
+  });
 
   return (
     <Stack gap={32}>
-      {loading ? (
+      {isPending ? (
         <>
-          <Skeleton visible={loading} height={200} />
-          <Skeleton visible={loading} height={100} />
+          <Skeleton visible={isPending} height={200} />
+          <Skeleton visible={isPending} height={100} />
         </>
-      ) : error ? (
+      ) : isError ? (
         <Fail />
-      ) : orders.length === 0 ? (
+      ) : data?.length === 0 ? (
         <Empty />
-      ) : (
+      ) : data ? (
         <>
-          <List orders={orders} />
-          <Total orders={orders} />
+          <List orders={data} />
+          <Total orders={data} />
         </>
-      )}
+      ) : null}
     </Stack>
   );
 };
