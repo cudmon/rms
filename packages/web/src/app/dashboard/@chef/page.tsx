@@ -1,6 +1,7 @@
-import { Center } from "@mantine/core";
 import { http } from "@/modules/http";
+import { Center } from "@mantine/core";
 import { Order } from "@/types/entity";
+import { cookies } from "next/headers";
 import { ChefOrder } from "@/components/Dashboard/ChefOrder";
 
 export const metadata = {
@@ -11,7 +12,9 @@ export default async function Page() {
   let order: Order[] = [];
 
   try {
-    const res = await http().get("/orders/status/PENDING");
+    const res = await http(cookies().get("token")?.value).get(
+      "/orders/status/PENDING"
+    );
 
     order = res.data;
   } catch (e) {
