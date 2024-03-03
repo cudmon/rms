@@ -72,13 +72,7 @@ const Fail = () => {
   );
 };
 
-const List = ({
-  orders,
-  cancel,
-}: {
-  orders: Order[];
-  cancel: (id: string) => void;
-}) => {
+const List = ({ orders }: { orders: Order[] }) => {
   return (
     <Card shadow="sm" p={0} withBorder>
       <Table fz={16} verticalSpacing="lg" horizontalSpacing="lg">
@@ -88,7 +82,6 @@ const List = ({
             <Table.Th>Quantity</Table.Th>
             <Table.Th>Price</Table.Th>
             <Table.Th>Status</Table.Th>
-            <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -101,16 +94,6 @@ const List = ({
               </Table.Td>
               <Table.Td>
                 <Badge>{order.status}</Badge>
-              </Table.Td>
-              <Table.Td>
-                <Button
-                  size="compact-sm"
-                  color="red"
-                  variant="subtle"
-                  onClick={() => cancel(order.id)}
-                >
-                  Cancel
-                </Button>
               </Table.Td>
             </Table.Tr>
           ))}
@@ -162,51 +145,6 @@ export const OrdersList = () => {
     }
   }, [error]);
 
-  const cancel = async (id: string) =>
-    modals.openConfirmModal({
-      title: (
-        <Text fz={18} fw={500}>
-          Cancel Order
-        </Text>
-      ),
-
-      centered: true,
-
-      labels: {
-        confirm: "Confirm",
-        cancel: "Cancel",
-      },
-
-      confirmProps: {
-        color: "red",
-      },
-
-      children: (
-        <Text>
-          Are you sure you want to cancel this order? This action is
-          irreversible
-        </Text>
-      ),
-
-      onConfirm: async () => {
-        try {
-          notifications.show({
-            title: "Order canceled",
-            message: "Order was successfully canceled",
-            color: "blue",
-          });
-
-          setOrders(orders.filter((order) => order.id !== id));
-        } catch (e) {
-          notifications.show({
-            title: "Error",
-            message: "Failed to cancel order",
-            color: "red",
-          });
-        }
-      },
-    });
-
   return (
     <Stack gap={32}>
       {loading ? (
@@ -220,7 +158,7 @@ export const OrdersList = () => {
         <Empty />
       ) : (
         <>
-          <List orders={orders} cancel={cancel} />
+          <List orders={orders} />
           <Total orders={orders} />
         </>
       )}
