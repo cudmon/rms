@@ -7,6 +7,11 @@ import { ReservationController } from "@/app/reservation/reservation.controller"
 
 @Module({
   controllers: [ReservationController],
-  providers: [ReservationService, SettingsService, TablesService, PrismaService],
+  providers: [
+    ReservationService,
+    SettingsService,
+    TablesService,
+    PrismaService,
+  ],
 })
 export class ReservationModule {}
