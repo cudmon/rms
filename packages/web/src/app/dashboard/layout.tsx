@@ -112,7 +112,7 @@ const Fail = () => {
 
 export default function Layout({ chef, staff, manager, customer }: Props) {
   const router = useRouter();
-  const { user, removeUser } = useUserStore();
+  const { user, loggedIn, removeUser } = useUserStore();
 
   const logout = () => {
     removeUser();
@@ -120,12 +120,10 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
   };
 
   useEffect(() => {
-    if (!user.id) {
+    if (loggedIn === false) {
       router.push("/login");
     }
-  }, [router, user.id]);
-
-  console.log(ROLE.includes(user.role));
+  }, [loggedIn, router]);
 
   if (ROLE.includes(user.role)) {
     return (

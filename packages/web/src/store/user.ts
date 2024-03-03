@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 type Store = {
   user: User;
+  loggedIn: boolean | null;
 
   setUser: (user: Store["user"]) => void;
   removeUser: () => void;
@@ -17,13 +18,17 @@ export const useUserStore = create<Store>()(
         username: "",
         role: "",
       },
+      loggedIn: null,
 
       setUser: (user) => {
-        set({ user });
+        set({ user, loggedIn: true });
       },
 
       removeUser: () => {
-        set({ user: { id: "", username: "", role: "" } });
+        set({
+          loggedIn: false,
+          user: { id: "", username: "", role: "" },
+        });
       },
     }),
     {
