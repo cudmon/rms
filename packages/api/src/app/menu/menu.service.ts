@@ -14,6 +14,14 @@ export class MenuService {
     return await this.prisma.menu.findUniqueOrThrow(args);
   }
 
+  async findById(id: string) {
+    return await this.prisma.menu.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async create(args: Prisma.MenuCreateArgs) {
     return await this.prisma.menu.create(args);
   }

@@ -45,13 +45,9 @@ export class OrdersController {
   @Post()
   async create(
     @Client() client: CurrentClient,
-    @Body() { menuId, quantity }: CreateOrderDto
+    @Body() orders: CreateOrderDto[]
   ) {
-    return await this.ordersService.create({
-      menuId,
-      quantity,
-      tableId: client.id,
-    });
+    return await this.ordersService.bulkCreate(client.id, orders);
   }
 
   @Patch("/cancel/:id")
