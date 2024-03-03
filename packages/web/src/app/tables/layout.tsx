@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
-import { useCartsStore } from "@/store/carts";
 import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import { CartList } from "@/components/Table/CartList";
@@ -24,7 +23,6 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   const pathname = usePathname();
-  const { carts, remove } = useCartsStore();
   const [opened, handlers] = useDisclosure();
 
   return (
@@ -46,6 +44,15 @@ export default function Layout({ children }: Props) {
             RMS
           </Title>
           <Group justify="space-evenly">
+            <Button
+              component={Link}
+              href="/tables"
+              size="compact-lg"
+              variant="subtle"
+              color={pathname === "/tables" ? "lime" : "gray"}
+            >
+              Tables
+            </Button>
             <Button
               component={Link}
               href="/tables/menus"
@@ -77,7 +84,7 @@ export default function Layout({ children }: Props) {
           </Text>
           <CloseButton size="lg" onClick={handlers.close} />
         </Group>
-        <CartList carts={carts} remover={remove} />
+        <CartList />
       </AppShell.Aside>
       <AppShell.Main>
         <Container>{children}</Container>

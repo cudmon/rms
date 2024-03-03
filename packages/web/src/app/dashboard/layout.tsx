@@ -1,6 +1,11 @@
 "use client";
 
-import { ReactNode } from "react";
+import Link from "next/link";
+import { ReactNode, useEffect } from "react";
+import { User } from "@/types/entity";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/user";
+import { usePathname } from "next/navigation";
 import {
   AppShell,
   Avatar,
@@ -11,10 +16,6 @@ import {
   Menu,
   Title,
 } from "@mantine/core";
-import { useUserStore } from "@/store/user";
-import { User } from "@/types/entity";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 type Props = {
   chef: ReactNode;
@@ -39,7 +40,15 @@ const links = {
   ],
 };
 
-const Base = ({ user, children }: { children: ReactNode; user: User }) => {
+const Base = ({
+  user,
+  children,
+  logout,
+}: {
+  children: ReactNode;
+  user: User;
+  logout: () => void;
+}) => {
   const pathname = usePathname();
 
   const selector = (role: string) => {
@@ -80,7 +89,9 @@ const Base = ({ user, children }: { children: ReactNode; user: User }) => {
             <Menu.Target>
               <Avatar src={null} radius="xl" size="md" color="lime" />
             </Menu.Target>
-            <Menu.Dropdown></Menu.Dropdown>
+            <Menu.Dropdown>
+              <Menu.Item onClick={logout}>Logout</Menu.Item>
+            </Menu.Dropdown>
           </Menu>
         </Group>
       </AppShell.Header>
@@ -91,12 +102,34 @@ const Base = ({ user, children }: { children: ReactNode; user: User }) => {
   );
 };
 
+const Fail = () => {
+  return (
+    <Center py={64} fz={28} c="red" fw={500}>
+      Something went wrong. Please try again later
+    </Center>
+  );
+};
+
 export default function Layout({ chef, staff, manager, customer }: Props) {
-  const { user } = useUserStore();
+  const router = useRouter();
+  const { user, removeUser } = useUserStore();
+
+  const logout = () => {
+    removeUser();
+    router.push("/login");
+  };
+
+  useEffect(() => {
+    if (!user.id) {
+      router.push("/login");
+    }
+  }, [router, user.id]);
+
+  console.log(ROLE.includes(user.role));
 
   if (ROLE.includes(user.role)) {
     return (
-      <Base user={user}>
+      <Base user={user} logout={logout}>
         {user.role === "CHEF" && chef}
         {user.role === "STAFF" && staff}
         {user.role === "MANAGER" && manager}
@@ -104,10 +137,6 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
       </Base>
     );
   } else {
-    return (
-      <Center py={64} fz={28} c="red" fw={500}>
-        Something went wrong. Please try again later
-      </Center>
-    );
+    return <Fail />;
   }
 }
