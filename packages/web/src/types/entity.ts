@@ -1,6 +1,8 @@
 export type Table = {
   id: string;
   name: string;
+  seat?: number;
+  status?: string;
 };
 
 export type Menu = {
