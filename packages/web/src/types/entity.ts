@@ -1,8 +1,8 @@
-export type Table = {
+export type TableEntity = {
   id: string;
   name: string;
   seat?: number;
-  status?: string;
+  status: string;
 };
 
 export type Menu = {
@@ -30,7 +30,7 @@ export type Usage = {
   id: string;
   start: string;
   end: string | null;
-  table: Table;
+  table: TableEntity;
   order: Order[];
 };
 
