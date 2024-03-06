@@ -1,7 +1,7 @@
 import { http } from "@/modules/http";
 import { Center } from "@mantine/core";
 import { cookies } from "next/headers";
-import {ManagerUser} from "@/components/Dashboard/@Manager/ManagerUser"
+import {ManagerUser} from "@/components/Dashboard/Manager/ManagerUser"
 import {User} from "@/types/entity";
 
 
