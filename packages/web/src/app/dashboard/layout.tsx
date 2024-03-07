@@ -31,8 +31,8 @@ const links = {
   MANAGER: [
     { to: "/dashboard", label: "Dashboard" },
     { to: "/dashboard/menus", label: "Menus" },
-    { to: "/dashboard/table", label: "Tables" },
-    { to: "/dashboard/user", label: "Users" },
+    { to: "/dashboard/tables", label: "Tables" },
+    { to: "/dashboard/users", label: "Users" },
   ],
 
   CHEF: [

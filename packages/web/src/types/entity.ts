@@ -8,6 +8,7 @@ export type TableEntity = {
 export type Menu = {
   id: string;
   name: string;
+  detail: string;
   price: number;
   image: string;
 };
@@ -15,7 +16,10 @@ export type Menu = {
 export type User = {
   id: string;
   username: string;
+  name: string;
   role: string;
+  email: string;
+  telephone: string;
 };
 
 export type Order = {

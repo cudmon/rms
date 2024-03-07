@@ -1,9 +1,8 @@
-
 import { http } from "@/modules/http";
 import { Center } from "@mantine/core";
+import { TableEntity } from "@/types/entity";
 import { cookies } from "next/headers";
-import {ManagerMenus} from "@/components/Dashboard/Manager/ManagerMenus"
-import {Menu} from "@/types/entity";
+import {ManagerTable} from "@/components/Dashboard/Manager/ManagerTable"
 
 
 export const metadata = {
@@ -12,14 +11,14 @@ export const metadata = {
 
 
 export default async function Page() {
-  let menu:Menu[] = [];
+  let table: TableEntity[] = [];
   try {
     const res = await http(cookies().get("token")?.value).get(
-      "/menus"
+      "/tables"
     );
-    menu = res.data;
+
+    table= res.data;
   } catch (e) {
-    console.log(e);
     return (
       <Center py={64} fz={28} c="red" fw={500}>
         Something went wrong. Please try again later
@@ -29,7 +28,7 @@ export default async function Page() {
 
   return (
     <div>
-      <ManagerMenus food = {menu} />
+      <ManagerTable tablelist= {table} />
     </div>
   );
 
