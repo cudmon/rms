@@ -1,8 +1,9 @@
 export type TableEntity = {
   id: string;
   name: string;
-  seat?: number;
+  seat: number;
   status: string;
+  passcode: string;
 };
 
 export type Menu = {

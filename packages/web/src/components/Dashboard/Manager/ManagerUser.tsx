@@ -138,7 +138,7 @@ export const ManagerUser = () => {
     }
   };
 
-  async function handleSubmitAdd(e: React.FormEvent<HTMLFormElement>) {
+  const handleSubmitAdd = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res_add = await http().post("/users", formDataAdd);

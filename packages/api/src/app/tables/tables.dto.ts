@@ -10,12 +10,12 @@ import {
 
 export class CreateTableDto {
   @IsString()
-  @MinLength(2)
-  @MaxLength(255)
+  @MinLength(1)
+  @MaxLength(64)
   name: string;
 
   @IsNumber()
-  @Min(0)
+  @Min(1)
   @Max(12)
   seat: number;
 
