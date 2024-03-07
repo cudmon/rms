@@ -19,6 +19,7 @@ import {
   rem,
   Flex,
   Center,
+  PasswordInput
 } from "@mantine/core";
 import {
   IconEdit,
@@ -28,6 +29,8 @@ import {
   IconUserEdit,
   IconTrash,
   IconSquareRoundedPlus,
+  IconUserPlus,
+  IconLockSquareRounded
 } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import "@mantine/notifications/styles.css";
@@ -138,7 +141,7 @@ export const ManagerUser = () => {
     }
   };
 
-  const handleSubmitAdd = async(e: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmitAdd(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       const res_add = await http().post("/users", formDataAdd);
@@ -176,7 +179,7 @@ export const ManagerUser = () => {
           users[index] = formDataEdit;
           setusers([...users]);
         }
-        
+
       }
 
       setIsModalOpenEdit(false);
@@ -207,24 +210,24 @@ export const ManagerUser = () => {
       children: <Text>Are you sure you want to Delete this user?</Text>,
 
       onConfirm: async () => {
-        try{
-       const res_remove =  await http().delete(`/users/${id}`);
+        try {
+          const res_remove = await http().delete(`/users/${id}`);
 
-        if (res_remove.status === 200) {
+          if (res_remove.status === 200) {
+            notifications.show({
+              title: "Success",
+              message: "User deleted successfully",
+              color: "green",
+            });
+            setusers(users.filter((user) => user.id !== id));
+          }
+        } catch (e) {
           notifications.show({
-            title: "Success",
-            message: "User deleted successfully",
-            color: "green",
+            title: "Error",
+            message: "Something went wrong. Please try again later",
+            color: "red",
           });
-          setusers(users.filter((user) => user.id !== id));
         }
-      } catch (e) {
-        notifications.show({
-          title: "Error",
-          message: "Something went wrong. Please try again later",
-          color: "red",
-        });
-      }
 
       },
     });
@@ -294,16 +297,25 @@ export const ManagerUser = () => {
   return (
     <>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
-      <Container>
-        <Title order={3} size="h1" fw={900} ta="center" c="black">
-          USER INFO
-        </Title>
-        <Text ta="center" c="dimmed" my="md" fw={750}>
-          User Table
-        </Text>
+      <Container my='md'>
+        <Group justify='space-between'>
+          <Title order={3} size="h2" fw={900} ta="center" c="black">
+            Users
+          </Title>
+          <ActionIcon
+            variant="subtle"
+            color="lime.6"
+            size="lg"
+            radius="xl"
+            aria-label="add"
+            onClick={() => setModalOpenAdd(true)}
+          >
+            <IconSquareRoundedPlus stroke={1.5} size={32} />
+          </ActionIcon>
+        </Group>
         <TextInput
-          placeholder="Search by any field"
-          mb="md"
+          placeholder="Search for user information..."
+          my="md"
           leftSection={
             <IconSearch
               style={{ width: rem(16), height: rem(16) }}
@@ -313,29 +325,16 @@ export const ManagerUser = () => {
           value={search}
           onChange={handleSearchChange}
         />
-        <Card shadow="md" padding="lg" radius="md" withBorder mt="md">
+        <Card padding="lg" radius="md" withBorder mt="md">
           <Table stickyHeader verticalSpacing="sm" highlightOnHover>
             <Table.Thead>{head}</Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
-          <Grid justify="flex-end">
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              size="lg"
-              radius="xl"
-              aria-label="add"
-              onClick={() => setModalOpenAdd(true)}
-            >
-              <IconSquareRoundedPlus stroke={1.5} size={28} />
-            </ActionIcon>
-          </Grid>
         </Card>
       </Container>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
 
       {/*-------------------------------------------------------Modal Edit--------------------------------------------------------------*/}
-
       <Modal
         opened={isModalOpenEdit}
         onClose={() => setIsModalOpenEdit(false)}
@@ -354,11 +353,10 @@ export const ManagerUser = () => {
             size="xl"
             src=""
             alt="no image here"
-            mt="sm"
-          />
+            mt="sm" />
         </Group>
         <form onSubmit={handleSubmitEdit}>
-          <Box mx="xl">
+          <Box mx="xl" c='black'>
             <SimpleGrid cols={{ base: 1, sm: 2 }}>
               <TextInput
                 mt="sm"
@@ -389,7 +387,7 @@ export const ManagerUser = () => {
               mt="sm"
               label="Roles"
               placeholder="Your roles"
-              data={["MANAGER", "CHEF", "STAFF", "CUSTOMER"]}
+              data={["Manager", "Chef", "Staff", "Customer"]}
               leftSection={<IconBuildingStore size={16} />}
               comboboxProps={{ shadow: "md" }}
               {...form.getInputProps("role")}
@@ -428,7 +426,6 @@ export const ManagerUser = () => {
                 type="submit"
                 variant="filled"
                 radius="lg"
-                mt="sm"
                 color="green"
               >
                 Save
@@ -458,59 +455,82 @@ export const ManagerUser = () => {
           },
         }}
       >
+        <Group justify="center">
+          <Avatar
+            variant="light"
+            radius="xl"
+            size="xl"
+            src=""
+            alt="no image here"
+            mt="sm" />
+        </Group>
         <form onSubmit={handleSubmitAdd}>
-          <TextInput
-            mt="sm"
-            autoFocus
-            label="Username"
-            placeholder="Username"
-            value={formDataAdd.username}
-            onChange={(e) =>
-              setFormDataAdd({ ...formDataAdd, username: e.target.value })
-            }
-          />
-          <TextInput
-            mt="sm"
+          <SimpleGrid cols={{ base: 1, sm: 2 }}>
+
+            <TextInput
+              autoFocus
+              label="Username"
+              placeholder="Username"
+              withAsterisk
+              mt="sm"
+              leftSection={<IconUserPlus size={16} />}
+              value={formDataAdd.username}
+              onChange={(e) =>
+                setFormDataAdd({ ...formDataAdd, username: e.target.value })
+              }
+            />
+            <TextInput
+              label="Name"
+              placeholder="Name"
+              withAsterisk
+              mt="sm"
+              leftSection={<IconUserPlus size={16} />}
+              value={formDataAdd.name}
+              onChange={(e) =>
+                setFormDataAdd({ ...formDataAdd, name: e.target.value })
+              }
+            />
+          </SimpleGrid>
+          <PasswordInput
             autoFocus
             label="Password"
             placeholder="Password"
+            withAsterisk
+            mt="sm"
+            leftSection={<IconLockSquareRounded size={16} />}
             value={formDataAdd.password}
             onChange={(e) =>
               setFormDataAdd({ ...formDataAdd, password: e.target.value })
             }
           />
-          <TextInput
-            mt="sm"
-            label="Name"
-            placeholder="Name"
-            value={formDataAdd.name}
-            onChange={(e) =>
-              setFormDataAdd({ ...formDataAdd, name: e.target.value })
-            }
-          />
           <Select
-            mt="sm"
             label="Role"
             placeholder="Pick role"
-            data={["MANAGER", "CHEF", "STAFF", "CUSTOMER"]}
+            mt="sm"
+            leftSection={<IconBuildingStore size={16} />}
+            data={["Manager", "Chef", "Staff", "Customer"]}
             value={formDataAdd.role}
             onChange={(e) => {
               setFormDataAdd({ ...formDataAdd, role: e || "" });
             }}
           />
           <TextInput
-            mt="sm"
             label="Email"
             placeholder="Email"
+            withAsterisk
+            mt="sm"
+            leftSection={<IconAt size={16} />}
             value={formDataAdd.email}
             onChange={(e) =>
               setFormDataAdd({ ...formDataAdd, email: e.target.value })
             }
           />
           <TextInput
-            mt="sm"
             label="Telephone"
             placeholder="Telephone"
+            withAsterisk
+            mt="sm"
+            leftSection={<IconPhone size={16} />}
             value={formDataAdd.telephone}
             onChange={(e) =>
               setFormDataAdd({ ...formDataAdd, telephone: e.target.value })
@@ -533,7 +553,7 @@ export const ManagerUser = () => {
               mt="sm"
               color="green"
             >
-              Save
+              Add 
             </Button>
             <Button
               variant="filled"
