@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import {
   Container,
   Group,
@@ -20,6 +18,7 @@ import {
   Grid,
   rem,
   Flex,
+  Center,
 } from "@mantine/core";
 import {
   IconEdit,
@@ -36,12 +35,17 @@ import { User } from "@/types/entity";
 import { http } from "@/modules/http";
 import { modals } from "@mantine/modals";
 import { IconSearch } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
-export const ManagerUser = ({ Employee }: { Employee: User[] }) => {
+import { useState, useEffect } from "react";
 
+export const ManagerUser = () => {
   const [search, setSearch] = useState("");
   const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
   const [ModalOpenAdd, setModalOpenAdd] = useState(false);
+  const [users, setusers] = useState<User[]>([]);
 
   const [formDataAdd, setFormDataAdd] = useState({
     username: "",
@@ -53,7 +57,7 @@ export const ManagerUser = ({ Employee }: { Employee: User[] }) => {
   });
 
   const [formDataEdit, setFormDataEdit] = useState({
-    id : "",
+    id: "",
     username: "",
     name: "",
     role: "",
@@ -61,9 +65,66 @@ export const ManagerUser = ({ Employee }: { Employee: User[] }) => {
     telephone: "",
   });
 
+  const form = useForm({
+    initialValues: {
+      username: "",
+      name: "",
+      roles: "",
+      email: "",
+      telephone: "",
+    },
+
+    validate: {
+      username: (value) => (value.length < 2 ? "Username is too short" : null),
+      name: (value) =>
+        value.length < 4 ? "Name must have at least 4 letters" : null,
+      roles: (value) => (value.length < 2 ? "Select your Roles" : null),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      telephone: (value) =>
+        value.length < 10 ? "Phonenumber must have at least 10 numbers" : null,
+    },
+  });
+
+  const { isError, data } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      try {
+        const res = await http().get("/users");
+
+        return res.data as User[];
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 404) {
+            return [];
+          }
+        }
+
+        notifications.show({
+          title: "Error",
+          message: "Something went wrong. Please try again later",
+          color: "red",
+        });
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (data !== undefined) {
+      setusers(data);
+    }
+  }, [data]);
+
+  if (isError) {
+    return (
+      <Center py={64} fz={28} c="red" fw={500}>
+        Error fetching users
+      </Center>
+    );
+  }
+
   const handleEdit = (id: string) => {
-    const data = Employee.find((user) => user.id === id);
-    
+    const data = users.find((user) => user.id === id);
+
     if (data !== undefined) {
       setFormDataEdit({
         id: data.id,
@@ -76,33 +137,53 @@ export const ManagerUser = ({ Employee }: { Employee: User[] }) => {
       setIsModalOpenEdit(true);
     }
   };
-  
 
   async function handleSubmitAdd(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      await http().post("/users", formDataAdd);
-      setModalOpenAdd(false);
+      const res_add = await http().post("/users", formDataAdd);
+      if (res_add.status === 201) {
+        notifications.show({
+          title: "Success",
+          message: "User added successfully",
+          color: "green",
+        });
+        setModalOpenAdd(false);
+        setusers([...users, res_add.data]);
+      }
+    } catch (e) {
+      notifications.show({
+        title: "Error",
+        message: "Something went wrong. Please try again later",
+        color: "red",
+      });
+    }
+  }
+
+  const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await http().patch(`/users/${formDataEdit.id}`, formDataEdit);
+      if (res.status === 200) {
+        notifications.show({
+          title: "Success",
+          message: "User updated successfully",
+          color: "green",
+        });
+
+        const index = users.findIndex((user) => user.id === formDataEdit.id);
+        if (index !== -1) {
+          users[index] = formDataEdit;
+          setusers([...users]);
+        }
+        
+      }
+
+      setIsModalOpenEdit(false);
     } catch (e) {
       console.log(e);
     }
   };
-
-const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault(); // ป้องกันการรีโหลดหน้าเว็บ
-  try {
-    await http().patch(`/users/${formDataEdit.id}`, formDataEdit);
-    setIsModalOpenEdit(false);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-  const links = [
-    { link: "/dashboard/menus", label: "Menu" },
-    { link: "/dashboard/table", label: "Table" },
-    { link: "/dashboard/user", label: "User" },
-  ];
 
   const remove = (id: string) => {
     modals.openConfirmModal({
@@ -126,32 +207,49 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
       children: <Text>Are you sure you want to Delete this user?</Text>,
 
       onConfirm: async () => {
-        await http().delete(`/users/${id}`);
+        try{
+       const res_remove =  await http().delete(`/users/${id}`);
+
+        if (res_remove.status === 200) {
+          notifications.show({
+            title: "Success",
+            message: "User deleted successfully",
+            color: "green",
+          });
+          setusers(users.filter((user) => user.id !== id));
+        }
+      } catch (e) {
+        notifications.show({
+          title: "Error",
+          message: "Something went wrong. Please try again later",
+          color: "red",
+        });
+      }
+
       },
     });
   };
-
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  const filteredRows = Employee.filter(employee =>
-    employee.username.toLowerCase().includes(search.toLowerCase()) ||
-    employee.name.toLowerCase().includes(search.toLowerCase()) ||
-    employee.role.toLowerCase().includes(search.toLowerCase()) ||
-    employee.email.toLowerCase().includes(search.toLowerCase()) ||
-    employee.telephone.toLowerCase().includes(search.toLowerCase())
+  const filteredRows = users.filter(
+    (users) =>
+      users.username.toLowerCase().includes(search.toLowerCase()) ||
+      users.name.toLowerCase().includes(search.toLowerCase()) ||
+      users.role.toLowerCase().includes(search.toLowerCase()) ||
+      users.email.toLowerCase().includes(search.toLowerCase()) ||
+      users.telephone.toLowerCase().includes(search.toLowerCase())
   );
-  
 
-  const rows = filteredRows.map(Employee =>  (
-    <Table.Tr key={Employee.username} ta="center">
-      <Table.Td>{Employee.username}</Table.Td>
-      <Table.Td>{Employee.name}</Table.Td>
-      <Table.Td>{Employee.role}</Table.Td>
-      <Table.Td>{Employee.email}</Table.Td>
-      <Table.Td>{Employee.telephone}</Table.Td>
+  const rows = filteredRows.map((users) => (
+    <Table.Tr key={users.username} ta="center">
+      <Table.Td>{users.username}</Table.Td>
+      <Table.Td>{users.name}</Table.Td>
+      <Table.Td>{users.role}</Table.Td>
+      <Table.Td>{users.email}</Table.Td>
+      <Table.Td>{users.telephone}</Table.Td>
       <Table.Td>
         <Tooltip label="Edit">
           <ActionIcon
@@ -159,7 +257,7 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
             variant="default"
             aria-label="Settings"
             size={32}
-            onClick={() => handleEdit(Employee.id)}
+            onClick={() => handleEdit(users.id)}
             mr="md"
           >
             <IconEdit style={{ width: "80%", height: "80%" }} />
@@ -172,8 +270,8 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
             aria-label="Delete"
             size={32}
             color="#f03e3e"
-            onClick={() => remove(Employee.id)}
-            disabled={Employee.role == "MANAGER"}
+            onClick={() => remove(users.id)}
+            disabled={users.role == "MANAGER"}
           >
             <IconTrash style={{ width: "80%", height: "80%" }} />
           </ActionIcon>
@@ -193,28 +291,9 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
     </Table.Tr>
   );
 
-  const form = useForm({
-    initialValues: {
-      username: "",
-      name: "",
-      roles: "",
-      email: "",
-      telephone: "",
-    },
-
-    validate: {
-      username: (value) => (value.length < 2 ? "Username is too short" : null),
-      name: (value) =>
-        value.length < 4 ? "Name must have at least 4 letters" : null,
-      roles: (value) => (value.length < 2 ? "Select your Roles" : null),
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      telephone: (value) =>
-        value.length < 10 ? "Phonenumber must have at least 10 numbers" : null,
-    },
-  });
-
   return (
     <>
+      {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
       <Container>
         <Title order={3} size="h1" fw={900} ta="center" c="black">
           USER INFO
@@ -253,6 +332,9 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
           </Grid>
         </Card>
       </Container>
+      {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
+
+      {/*-------------------------------------------------------Modal Edit--------------------------------------------------------------*/}
 
       <Modal
         opened={isModalOpenEdit}
@@ -276,19 +358,8 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
           />
         </Group>
         <form onSubmit={handleSubmitEdit}>
-        <Box mx="xl" component="form">
-    
+          <Box mx="xl">
             <SimpleGrid cols={{ base: 1, sm: 2 }}>
-              <TextInput
-                mt="sm"
-                label="Username"
-                placeholder="Your Username"
-                withAsterisk
-                leftSection={<IconUserEdit size={16} />}
-                {...form.getInputProps("id")}
-                value={formDataEdit.username}
-                onChange={(e) => setFormDataEdit({ ...formDataEdit, username: e.target.value })}
-              />
               <TextInput
                 mt="sm"
                 label="Username"
@@ -297,7 +368,9 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
                 leftSection={<IconUserEdit size={16} />}
                 {...form.getInputProps("username")}
                 value={formDataEdit.username}
-                onChange={(e) => setFormDataEdit({ ...formDataEdit, username: e.target.value })}
+                onChange={(e) =>
+                  setFormDataEdit({ ...formDataEdit, username: e.target.value })
+                }
               />
               <TextInput
                 mt="sm"
@@ -307,7 +380,9 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
                 leftSection={<IconUserEdit size={16} />}
                 {...form.getInputProps("name")}
                 value={formDataEdit.name}
-                onChange={(e) => setFormDataEdit({ ...formDataEdit, name: e.target.value })}
+                onChange={(e) =>
+                  setFormDataEdit({ ...formDataEdit, name: e.target.value })
+                }
               />
             </SimpleGrid>
             <Select
@@ -319,7 +394,9 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
               comboboxProps={{ shadow: "md" }}
               {...form.getInputProps("role")}
               defaultValue={formDataEdit.role}
-              onChange={(e) => setFormDataEdit({ ...formDataEdit, role: e || "" })}
+              onChange={(e) =>
+                setFormDataEdit({ ...formDataEdit, role: e || "" })
+              }
             />
             <TextInput
               mt="sm"
@@ -329,7 +406,9 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
               leftSection={<IconAt size={16} />}
               {...form.getInputProps("email")}
               value={formDataEdit.email}
-              onChange={(e) => setFormDataEdit({ ...formDataEdit, email: e.target.value })}
+              onChange={(e) =>
+                setFormDataEdit({ ...formDataEdit, email: e.target.value })
+              }
             />
             <TextInput
               mt="sm"
@@ -339,104 +418,136 @@ const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
               leftSection={<IconPhone size={16} />}
               {...form.getInputProps("telephone")}
               value={formDataEdit.telephone}
-              onChange={(e) => setFormDataEdit({ ...formDataEdit, telephone: e.target.value })}
+              onChange={(e) =>
+                setFormDataEdit({ ...formDataEdit, telephone: e.target.value })
+              }
             />
-         
-          <Group justify="center" mt="md">
-          <Button type="submit" variant="filled" radius="lg" mt="sm" color="green">
-    Save
-  </Button>
+
+            <Group justify="center" mt="md">
+              <Button
+                type="submit"
+                variant="filled"
+                radius="lg"
+                mt="sm"
+                color="green"
+              >
+                Save
+              </Button>
+              <Button
+                variant="filled"
+                color="red"
+                radius="lg"
+                onClick={() => setIsModalOpenEdit(false)}
+              >
+                Cancel
+              </Button>
+            </Group>
+          </Box>
+        </form>
+      </Modal>
+      {/*----------------------------------------------------END Modal Edit---------------------------------------------------------*/}
+
+      {/*------------------------------------------------------Modal Add--------------------------------------------------------------*/}
+      <Modal
+        opened={ModalOpenAdd}
+        onClose={() => setModalOpenAdd(false)}
+        title="Add Users"
+        styles={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.1)", // Adjust the last value (0.5) to change opacity
+          },
+        }}
+      >
+        <form onSubmit={handleSubmitAdd}>
+          <TextInput
+            mt="sm"
+            autoFocus
+            label="Username"
+            placeholder="Username"
+            value={formDataAdd.username}
+            onChange={(e) =>
+              setFormDataAdd({ ...formDataAdd, username: e.target.value })
+            }
+          />
+          <TextInput
+            mt="sm"
+            autoFocus
+            label="Password"
+            placeholder="Password"
+            value={formDataAdd.password}
+            onChange={(e) =>
+              setFormDataAdd({ ...formDataAdd, password: e.target.value })
+            }
+          />
+          <TextInput
+            mt="sm"
+            label="Name"
+            placeholder="Name"
+            value={formDataAdd.name}
+            onChange={(e) =>
+              setFormDataAdd({ ...formDataAdd, name: e.target.value })
+            }
+          />
+          <Select
+            mt="sm"
+            label="Role"
+            placeholder="Pick role"
+            data={["MANAGER", "CHEF", "STAFF", "CUSTOMER"]}
+            value={formDataAdd.role}
+            onChange={(e) => {
+              setFormDataAdd({ ...formDataAdd, role: e || "" });
+            }}
+          />
+          <TextInput
+            mt="sm"
+            label="Email"
+            placeholder="Email"
+            value={formDataAdd.email}
+            onChange={(e) =>
+              setFormDataAdd({ ...formDataAdd, email: e.target.value })
+            }
+          />
+          <TextInput
+            mt="sm"
+            label="Telephone"
+            placeholder="Telephone"
+            value={formDataAdd.telephone}
+            onChange={(e) =>
+              setFormDataAdd({ ...formDataAdd, telephone: e.target.value })
+            }
+          />
+
+          <Flex
+            mih={50}
+            mt="md"
+            gap="xl"
+            justify="center"
+            align="flex-start"
+            direction="row"
+            wrap="wrap"
+          >
+            <Button
+              type="submit"
+              variant="filled"
+              radius="lg"
+              mt="sm"
+              color="green"
+            >
+              Save
+            </Button>
             <Button
               variant="filled"
-              color="red"
               radius="lg"
-              onClick={() => setIsModalOpenEdit(false)}
+              mt="sm"
+              color="red"
+              onClick={() => setModalOpenAdd(false)}
             >
               Cancel
             </Button>
-          </Group>
-          
-        </Box>
+          </Flex>
         </form>
       </Modal>
-
-      <Modal
-  opened={ModalOpenAdd}
-  onClose={() => setModalOpenAdd(false)}
-  title="Add Users"
-  styles={{
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.1)", // Adjust the last value (0.5) to change opacity
-    },
-  }}
->
-  <form onSubmit={handleSubmitAdd}>
-    <TextInput 
-      autoFocus
-      label="Username" 
-      placeholder="Username"
-      value={formDataAdd.username}
-      onChange={(e) => setFormDataAdd({ ...formDataAdd, username: e.target.value })}
-    />
-        <TextInput 
-      autoFocus
-      label="Password" 
-      placeholder="Password"
-      value={formDataAdd.password}
-      onChange={(e) => setFormDataAdd({ ...formDataAdd, password: e.target.value })}
-    />
-    <TextInput 
-      mt="md"
-      label="Name" 
-      placeholder="Name" 
-      value={formDataAdd.name}
-      onChange={(e) => setFormDataAdd({ ...formDataAdd, name: e.target.value })}
-    />
-<Select 
-  mt="md"
-  label="Role" 
-  placeholder="Pick role"
-  data={["MANAGER", "CHEF", "STAFF", "CUSTOMER"]} 
-  value={formDataAdd.role}
-  onChange={(e) => {
-    setFormDataAdd({ ...formDataAdd, role: e ||"" });
-  }}
-/>
-    <TextInput 
-      mt="md"
-      label="Email" 
-      placeholder="Email"
-      value={formDataAdd.email}
-      onChange={(e) => setFormDataAdd({ ...formDataAdd, email: e.target.value })}
-    />
-    <TextInput 
-      mt="md"
-      label="Telephone" 
-      placeholder="Telephone"
-      value={formDataAdd.telephone}
-      onChange={(e) => setFormDataAdd({ ...formDataAdd, telephone: e.target.value })}
-    />
-
-    <Flex
-      mih={50}
-      mt="md"
-      gap="xl"
-      justify="center"
-      align="flex-start"
-      direction="row"
-      wrap="wrap"
-    >
-      <Button type="submit" variant="filled" radius="lg" mt="sm" color="green"
-  >
-        Save
-      </Button>
-      <Button variant="filled" radius="lg" mt="sm" color="red" onClick={() => setModalOpenAdd(false)}>
-        Cancel
-      </Button>
-    </Flex>
-  </form>
-</Modal>
-
+      {/*---------------------------------------------------- END Modal Add--------------------------------------------------------------*/}
     </>
   );
 };
