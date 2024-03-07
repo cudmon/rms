@@ -2,7 +2,7 @@ export type TableEntity = {
   id: string;
   name: string;
   seat?: number;
-  status?: string;
+  status: string;
 };
 
 export type Menu = {
