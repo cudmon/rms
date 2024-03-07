@@ -16,11 +16,35 @@ async function main() {
   await prisma.user.createMany({
     data: [
       {
-        username: "alex",
-        password: hashSync("alex", 10),
-        name: "Alex",
+        username: "manager",
+        password: hashSync("manager", 10),
+        name: "Elon Musk",
         role: "MANAGER",
-        email: "alex@rms.com",
+        email: "email@email.com",
+        telephone: "1234567890",
+      },
+      {
+        username: "chef",
+        password: hashSync("chef", 10),
+        name: "Bill Gates",
+        role: "CHEF",
+        email: "email@email.com",
+        telephone: "1234567890",
+      },
+      {
+        username: "staff",
+        password: hashSync("staff", 10),
+        name: "Steve Jobs",
+        role: "STAFF",
+        email: "email@email.com",
+        telephone: "1234567890",
+      },
+      {
+        username: "customer",
+        password: hashSync("customer", 10),
+        name: "Jeff Bezos",
+        role: "CUSTOMER",
+        email: "email@email.com",
         telephone: "1234567890",
       },
     ],
@@ -61,6 +85,16 @@ async function main() {
       {
         name: "C",
         seat: 10,
+        passcode: hashSync("123456", 10),
+      },
+      {
+        name: "D",
+        seat: 6,
+        passcode: hashSync("123456", 10),
+      },
+      {
+        name: "E",
+        seat: 8,
         passcode: hashSync("123456", 10),
       },
     ],

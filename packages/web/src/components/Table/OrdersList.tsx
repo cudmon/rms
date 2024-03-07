@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AxiosError } from "axios";
 import { http } from "@/modules/http";
 import { Order } from "@/types/entity";
 import { useTableStore } from "@/store/table";
@@ -117,6 +118,12 @@ export const OrdersList = () => {
 
         return response.data.order as Order[];
       } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 404) {
+            return [];
+          }
+        }
+
         notifications.show({
           title: "Error",
           message: "Something went wrong. Please try again later",

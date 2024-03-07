@@ -1,7 +1,7 @@
 import { join } from "path";
 import { Response } from "express";
-import { createReadStream } from "fs";
 import { Prisma } from "@prisma/client";
+import { createReadStream, existsSync } from "fs";
 import { MenuService } from "@/app/menu/menu.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { CreateMenuDto, UpdateMenuDto } from "@/app/menu/menu.dto";
@@ -54,11 +54,18 @@ export class MenuController {
     @Res() res: Response
   ) {
     const menu = await this.findOne(id);
-    const file = createReadStream(
+
+    const exists = existsSync(
       join(__dirname, "..", "..", "..", "uploads/menus", menu.image)
     );
 
-    file.pipe(res);
+    if (exists) {
+      createReadStream(
+        join(__dirname, "..", "..", "..", "uploads/menus", menu.image)
+      ).pipe(res);
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   @Post()
