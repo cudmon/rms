@@ -29,7 +29,7 @@ const ROLE = ["CHEF", "STAFF", "MANAGER", "CUSTOMER"];
 const links = {
   MANAGER: [
     { to: "/dashboard", label: "Dashboard" },
-    { to: "/dashboard/menu", label: "Menus" },
+    { to: "/dashboard/menus", label: "Menus" },
     { to: "/dashboard/tables", label: "Tables" },
     { to: "/dashboard/users", label: "Users" },
   ],
