@@ -78,10 +78,10 @@ export class AuthController {
   async register(@Body() data: RegisterDto) {
     try {
       return await this.authService.register(data);
-    } catch(error) {
+    } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if(error.code === "P2002") {
-          throw new UnauthorizedException("Already used information")
+        if (error.code === "P2002") {
+          throw new UnauthorizedException("Already used information");
         }
       }
     }
