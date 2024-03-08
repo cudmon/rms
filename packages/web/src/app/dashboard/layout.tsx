@@ -151,7 +151,7 @@ const Base = ({
 
 export default function Layout({ chef, staff, manager, customer }: Props) {
   const router = useRouter();
-  const { user, loggedIn, removeUser } = useUserStore();
+  const { user, removeUser } = useUserStore();
 
   const logout = () => {
     removeUser();
@@ -159,19 +159,15 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
   };
 
   useEffect(() => {
-    if (loggedIn) {
-      (async () => {
-        try {
-          await http().get("/auth/check-session");
-        } catch (error) {
-          removeUser();
-          router.push("/login");
-        }
-      })();
-    } else {
-      router.push("/login");
-    }
-  }, [loggedIn, removeUser, router]);
+    (async () => {
+      try {
+        await http().get("/auth/check-session");
+      } catch (error) {
+        removeUser();
+        router.push("/login");
+      }
+    })();
+  }, [removeUser, router]);
 
   if (ROLE.includes(user.role)) {
     return (
