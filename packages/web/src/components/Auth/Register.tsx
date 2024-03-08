@@ -20,10 +20,10 @@ export const Register = () => {
     const { confirmPassword, ...informations } = information;
     try {
       await http().post("/auth/register", informations);
-      route.push('/login');
+      route.push("/login");
     } catch (error) {
-      if(error instanceof AxiosError) {
-        if(error.response?.status === 401) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
           notifications.show({
             title: "Error",
             message: "Information is aready used",
@@ -61,18 +61,18 @@ export const Register = () => {
     <>
       <form onSubmit={form.onSubmit((values) => register(values))}>
         <Stack w={400} px={20} py={10}>
-          <Text fz={24}>Please enter your information.</Text>
           <TextInput
             withAsterisk
             label="Usename"
             placeholder="Usename"
+            name="username"
             {...form.getInputProps("username")}
           />
-          <TextInput
+          <PasswordInput
             withAsterisk
             label="Password"
             placeholder="Password"
-            type="password"
+            name="password"
             {...form.getInputProps("password")}
           />
           <PasswordInput
@@ -85,12 +85,14 @@ export const Register = () => {
             withAsterisk
             label="Name"
             placeholder="Name"
+            name="name"
             {...form.getInputProps("name")}
           />
           <TextInput
             withAsterisk
             label="Email"
             placeholder="Email"
+            name="email"
             {...form.getInputProps("email")}
           />
           <TextInput
@@ -98,6 +100,7 @@ export const Register = () => {
             label="Telephone"
             placeholder="Telephone"
             type="number"
+            name="telephone"
             {...form.getInputProps("telephone")}
           />
           <Button type="submit">Create account</Button>
