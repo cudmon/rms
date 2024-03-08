@@ -96,7 +96,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
   return (
     <>
       <Container my="md">
-        <Title order={3} size="h1" fw={900} ta="center" c="black">
+        <Title order={3} size="h1" fw={900} ta="center" >
           MENU
         </Title>
         <Text ta="center" my="md" fw={750}>
@@ -183,7 +183,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
                 label="Food Name"
                 placeholder="Name..."
                 mt="sm"
-                c="black"
+                
                 leftSection={<IconSalad size={16} />}
                 withAsterisk
                 {...form.getInputProps("name")}
@@ -194,7 +194,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
                 placeholder="Prices..."
                 hideControls
                 mt="sm"
-                c="black"
+                
                 leftSection={<IconCoins size={16} />}
                 withAsterisk
                 {...form.getInputProps("price")}
@@ -208,7 +208,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
               description="Description"
               placeholder="Detail..."
               mt="sm"
-              c="black"
+              
               leftSection={<IconAlignBoxLeftTop size={16} />}
             />
 

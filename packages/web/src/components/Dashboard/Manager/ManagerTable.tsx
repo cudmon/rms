@@ -328,7 +328,7 @@ export const ManagerTable = () => {
   return (
     <>
       <Container my="md">
-        <Title order={3} size="h1" fw={900} ta="center" c="black">
+        <Title order={3} size="h1" fw={900} ta="center" >
           TABLE
         </Title>
         <Text ta="center" mt="md" fw={750}>

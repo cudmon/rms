@@ -315,7 +315,7 @@ export const ManagerUser = () => {
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
       <Container my="md">
         <Group justify="space-between">
-          <Title order={3} size="h2" fw={900} ta="center" c="black">
+          <Title order={3} size="h2" fw={900} ta="center" >
             Users
           </Title>
           <ActionIcon
@@ -357,7 +357,7 @@ export const ManagerUser = () => {
         title="Edit Profile"
         size="50%"
       >
-        <Title order={2} size="h2" fw={900} ta="center" c="black">
+        <Title order={2} size="h2" fw={900} ta="center" >
           Profile
         </Title>
 
@@ -372,7 +372,7 @@ export const ManagerUser = () => {
           />
         </Group>
         <form onSubmit={handleSubmitEdit}>
-          <Box mx="xl" c="black">
+          <Box mx="xl" >
             <SimpleGrid cols={{ base: 1, sm: 2 }}>
               <TextInput
                 mt="sm"

@@ -166,7 +166,7 @@ export const ChefOrder = () => {
 
   return (
     <Container>
-      <Title order={3} size="h2" fw={900} ta="start" c="black" my="md">
+      <Title order={3} size="h2" fw={900} ta="start"  my="md">
         Chef Order
       </Title>
 
