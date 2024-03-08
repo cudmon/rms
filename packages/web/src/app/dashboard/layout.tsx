@@ -35,10 +35,11 @@ const links = {
     { to: "/dashboard/users", label: "Users" },
   ],
 
-  CHEF: [
-    { to: "/dashboard", label: "Dashboard" },
-    { to: "/dashboard/orders", label: "Orders" },
-  ],
+  CHEF: [{ to: "/dashboard", label: "Dashboard" }],
+
+  STAFF: [{ to: "/dashboard", label: "Dashboard" }],
+
+  CUSTOMER: [{ to: "/dashboard", label: "Dashboard" }],
 };
 
 const Base = ({
@@ -58,6 +59,10 @@ const Base = ({
         return "MANAGER";
       case "CHEF":
         return "CHEF";
+      case "STAFF":
+        return "STAFF";
+      case "CUSTOMER":
+        return "CUSTOMER";
       default:
         return "MANAGER";
     }
@@ -124,14 +129,6 @@ const Base = ({
   );
 };
 
-const Fail = () => {
-  return (
-    <Center py={64} fz={28} c="red" fw={500}>
-      Something went wrong. Please try again later
-    </Center>
-  );
-};
-
 export default function Layout({ chef, staff, manager, customer }: Props) {
   const router = useRouter();
   const { user, loggedIn, removeUser } = useUserStore();
@@ -156,7 +153,5 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
         {user.role === "CUSTOMER" && customer}
       </Base>
     );
-  } else {
-    return <Fail />;
   }
 }
