@@ -10,7 +10,7 @@ import {
   Post,
   Get,
   UnauthorizedException,
-  Req,
+  Headers,
 } from "@nestjs/common";
 
 @Controller("auth")
@@ -26,10 +26,8 @@ export class AuthController {
   }
 
   @Get("check-session")
-  async checkSession(@Req() req: Request) {
-    const header = req.headers.get("Authorization");
-
-    const token = header?.split(" ")[1];
+  async checkSession(@Headers("Authorization") authorization: string) {
+    const token = authorization?.split(" ")[1];
 
     if (!token) {
       throw new UnauthorizedException("INVALID_SESSION");
