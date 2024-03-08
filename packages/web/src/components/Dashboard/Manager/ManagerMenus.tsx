@@ -5,7 +5,7 @@ import { Menu } from "@/types/entity";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
-import classes from "@/styles/ManagerMenus.module.css";
+import classes from "@/styles/manager-menus.module.css";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import {
   IconEdit,
