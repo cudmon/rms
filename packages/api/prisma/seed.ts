@@ -20,7 +20,7 @@ async function main() {
         password: hashSync("manager", 10),
         name: "Elon Musk",
         role: "MANAGER",
-        email: "email@email.com",
+        email: "manager@email.com",
         telephone: "1234567890",
       },
       {
@@ -28,7 +28,7 @@ async function main() {
         password: hashSync("chef", 10),
         name: "Bill Gates",
         role: "CHEF",
-        email: "email@email.com",
+        email: "chef@email.com",
         telephone: "1234567890",
       },
       {
@@ -36,7 +36,7 @@ async function main() {
         password: hashSync("staff", 10),
         name: "Steve Jobs",
         role: "STAFF",
-        email: "email@email.com",
+        email: "staff@email.com",
         telephone: "1234567890",
       },
       {
@@ -44,7 +44,7 @@ async function main() {
         password: hashSync("customer", 10),
         name: "Jeff Bezos",
         role: "CUSTOMER",
-        email: "email@email.com",
+        email: "customer@email.com",
         telephone: "1234567890",
       },
     ],
