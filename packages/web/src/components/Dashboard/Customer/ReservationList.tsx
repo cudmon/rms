@@ -31,7 +31,7 @@ export const ReservationList = ({ table }: { table: TableEntity[] }) => {
       <Title order={3} size="h1" fw={900} ta="center" c="black">
         Reservation
       </Title>
-      <Text ta="center" c="dimmed" mt="md" fw={750} mb={10}>
+      <Text ta="center" mt="md" fw={750} mb={10}>
         Table List
       </Text>
 

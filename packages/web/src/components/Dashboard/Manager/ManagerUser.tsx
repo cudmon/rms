@@ -149,7 +149,6 @@ export const ManagerUser = () => {
         role: formDataAdd.role.toLocaleUpperCase(),
         email: formDataAdd.email,
         telephone: formDataAdd.telephone,
-      
       });
       if (res_add.status === 201) {
         notifications.show({
@@ -178,7 +177,6 @@ export const ManagerUser = () => {
         role: formDataEdit.role.toLocaleUpperCase(),
         email: formDataEdit.email,
         telephone: formDataEdit.telephone,
-      
       });
       if (res.status === 200) {
         notifications.show({
@@ -196,7 +194,6 @@ export const ManagerUser = () => {
             role: formDataEdit.role.toLocaleUpperCase(),
             email: formDataEdit.email,
             telephone: formDataEdit.telephone,
-          
           };
           setusers([...users]);
         }
@@ -359,7 +356,6 @@ export const ManagerUser = () => {
         onClose={() => setIsModalOpenEdit(false)}
         title="Edit Profile"
         size="50%"
-        c="dimmed"
       >
         <Title order={2} size="h2" fw={900} ta="center" c="black">
           Profile
@@ -411,7 +407,10 @@ export const ManagerUser = () => {
               leftSection={<IconBuildingStore size={16} />}
               comboboxProps={{ shadow: "md" }}
               {...form.getInputProps("role")}
-              defaultValue={formDataEdit.role.charAt(0).toUpperCase() + formDataEdit.role.slice(1).toLowerCase()}
+              defaultValue={
+                formDataEdit.role.charAt(0).toUpperCase() +
+                formDataEdit.role.slice(1).toLowerCase()
+              }
               onChange={(e) =>
                 setFormDataEdit({ ...formDataEdit, role: e || "" })
               }

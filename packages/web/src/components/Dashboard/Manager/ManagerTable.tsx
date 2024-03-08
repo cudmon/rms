@@ -331,7 +331,7 @@ export const ManagerTable = () => {
         <Title order={3} size="h1" fw={900} ta="center" c="black">
           TABLE
         </Title>
-        <Text ta="center" c="dimmed" mt="md" fw={750}>
+        <Text ta="center" mt="md" fw={750}>
           Table List
         </Text>
 

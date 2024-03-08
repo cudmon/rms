@@ -79,13 +79,9 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
           </Tooltip>
         </Group>
 
-        <Text size="sm" c="dimmed">
-          {food.detail}
-        </Text>
+        <Text size="sm">{food.detail}</Text>
 
-        <Text size="sm" c="dimmed">
-          {food.price}
-        </Text>
+        <Text size="sm">{food.price}</Text>
       </Card>
     </div>
   ));
@@ -103,7 +99,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
         <Title order={3} size="h1" fw={900} ta="center" c="black">
           MENU
         </Title>
-        <Text ta="center" c="dimmed" my="md" fw={750}>
+        <Text ta="center" my="md" fw={750}>
           Menu List
         </Text>
 
@@ -127,13 +123,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
 
       {/*-------------------------------------------- Modal Edit Menus ------------------------------------------------*/}
 
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Edit Menu"
-        c="dimmed"
-        size="lg"
-      >
+      <Modal opened={opened} onClose={close} title="Edit Menu" size="lg">
         <Container>
           <Dropzone
             onDrop={(files) => console.log("accepted files", files)}
