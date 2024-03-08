@@ -21,7 +21,7 @@ async function main() {
         name: "Elon Musk",
         role: "MANAGER",
         email: "manager@email.com",
-        telephone: "1234567890",
+        telephone: "1234567891",
       },
       {
         username: "chef",
@@ -29,7 +29,7 @@ async function main() {
         name: "Bill Gates",
         role: "CHEF",
         email: "chef@email.com",
-        telephone: "1234567890",
+        telephone: "1234567892",
       },
       {
         username: "staff",
@@ -37,7 +37,7 @@ async function main() {
         name: "Steve Jobs",
         role: "STAFF",
         email: "staff@email.com",
-        telephone: "1234567890",
+        telephone: "1234567893",
       },
       {
         username: "customer",
@@ -45,7 +45,7 @@ async function main() {
         name: "Jeff Bezos",
         role: "CUSTOMER",
         email: "customer@email.com",
-        telephone: "1234567890",
+        telephone: "1234567894",
       },
     ],
   });
