@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { User } from "@/types/entity";
+import { http } from "@/modules/http";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
 import { ReactNode, useEffect } from "react";
@@ -63,7 +64,7 @@ const Base = ({
       case "CUSTOMER":
         return "CUSTOMER";
       default:
-        return "MANAGER";
+        return "CUSTOMER";
     }
   };
 
@@ -138,10 +139,19 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
   };
 
   useEffect(() => {
-    if (loggedIn === false) {
+    if (loggedIn) {
+      (async () => {
+        try {
+          await http().get("/auth/check-session");
+        } catch (error) {
+          removeUser();
+          router.push("/login");
+        }
+      })();
+    } else {
       router.push("/login");
     }
-  }, [loggedIn, router]);
+  }, [loggedIn, removeUser, router]);
 
   if (ROLE.includes(user.role)) {
     return (
