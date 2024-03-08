@@ -12,6 +12,7 @@ import {
   UnauthorizedException,
   Req,
 } from "@nestjs/common";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 @Controller("auth")
 export class AuthController {
@@ -77,6 +78,14 @@ export class AuthController {
   @Public()
   @Post("register")
   async register(@Body() data: RegisterDto) {
-    return await this.authService.register(data);
+    try {
+      return await this.authService.register(data);
+    } catch(error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if(error.code === "P2002") {
+          throw new UnauthorizedException("Already used information")
+        }
+      }
+    }
   }
 }
