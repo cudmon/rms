@@ -144,7 +144,15 @@ export const ManagerUser = () => {
   async function handleSubmitAdd(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const res_add = await http().post("/users", formDataAdd);
+      const res_add = await http().post("/users", {
+        username: formDataAdd.username,
+        password: formDataAdd.password,
+        name: formDataAdd.name,
+        role: formDataAdd.role.toLocaleUpperCase(),
+        email: formDataAdd.email,
+        telephone: formDataAdd.telephone,
+      
+      });
       if (res_add.status === 201) {
         notifications.show({
           title: "Success",
@@ -166,7 +174,14 @@ export const ManagerUser = () => {
   const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await http().patch(`/users/${formDataEdit.id}`, formDataEdit);
+      const res = await http().patch(`/users/${formDataEdit.id}`, {
+        username: formDataEdit.username,
+        name: formDataEdit.name,
+        role: formDataEdit.role.toLocaleUpperCase(),
+        email: formDataEdit.email,
+        telephone: formDataEdit.telephone,
+      
+      });
       if (res.status === 200) {
         notifications.show({
           title: "Success",
@@ -176,7 +191,15 @@ export const ManagerUser = () => {
 
         const index = users.findIndex((user) => user.id === formDataEdit.id);
         if (index !== -1) {
-          users[index] = formDataEdit;
+          users[index] = {
+            ...users[index],
+            username: formDataEdit.username,
+            name: formDataEdit.name,
+            role: formDataEdit.role.toLocaleUpperCase(),
+            email: formDataEdit.email,
+            telephone: formDataEdit.telephone,
+          
+          };
           setusers([...users]);
         }
 
@@ -391,7 +414,7 @@ export const ManagerUser = () => {
               leftSection={<IconBuildingStore size={16} />}
               comboboxProps={{ shadow: "md" }}
               {...form.getInputProps("role")}
-              defaultValue={formDataEdit.role}
+              defaultValue={formDataEdit.role.charAt(0).toUpperCase() + formDataEdit.role.slice(1).toLowerCase()}
               onChange={(e) =>
                 setFormDataEdit({ ...formDataEdit, role: e || "" })
               }
