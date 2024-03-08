@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 
 import "@mantine/core/styles.css";
+import "@mantine/dropzone/styles.css";
 import "@mantine/notifications/styles.css";
 
 type Props = {

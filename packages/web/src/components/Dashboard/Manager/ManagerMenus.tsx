@@ -1,7 +1,21 @@
 "use client";
-import React from "react";
-import { useState } from "react";
 
+import { useState } from "react";
+import { Menu } from "@/types/entity";
+import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
+import { IconSearch } from "@tabler/icons-react";
+import classes from "@/styles/ManagerMenus.module.css";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import {
+  IconEdit,
+  IconCoins,
+  IconUpload,
+  IconX,
+  IconPhotoDown,
+  IconSalad,
+  IconAlignBoxLeftTop,
+} from "@tabler/icons-react";
 import {
   Container,
   Group,
@@ -17,28 +31,9 @@ import {
   Tooltip,
   Title,
   NumberInput,
-  Divider,
   Modal,
   Box,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
-import {
-  IconEdit,
-  IconCoins,
-  IconUpload,
-  IconX,
-  IconPhotoDown,
-  IconSalad,
-  IconAlignBoxLeftTop,
-} from "@tabler/icons-react";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import "@mantine/dropzone/styles.css";
-import classes from "@/styles/HeaderSimple.module.css";
-import Link from "next/link";
-
-import { Menu } from "@/types/entity";
-import { IconSearch } from "@tabler/icons-react";
 
 export const ManagerMenus = ({ food }: { food: Menu[] }) => {
   const [search, setSearch] = useState("");
@@ -47,10 +42,8 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
     setSearch(event.target.value);
   };
 
-  const filteredRows = food.filter(
-    (food) => food.name.toLowerCase().includes(search.toLowerCase())
-    // ||
-    // food.detail.toLowerCase().includes(search.toLowerCase())
+  const filteredRows = food.filter((food) =>
+    food.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const [opened, { open, close }] = useDisclosure(false);

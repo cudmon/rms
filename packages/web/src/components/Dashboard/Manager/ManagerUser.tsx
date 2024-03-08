@@ -1,4 +1,25 @@
 "use client";
+
+import { AxiosError } from "axios";
+import { User } from "@/types/entity";
+import { http } from "@/modules/http";
+import { useForm } from "@mantine/form";
+import { modals } from "@mantine/modals";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { IconSearch } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import {
+  IconEdit,
+  IconAt,
+  IconPhone,
+  IconBuildingStore,
+  IconUserEdit,
+  IconTrash,
+  IconSquareRoundedPlus,
+  IconUserPlus,
+  IconLockSquareRounded,
+} from "@tabler/icons-react";
 import {
   Container,
   Group,
@@ -15,34 +36,11 @@ import {
   Tooltip,
   Text,
   SimpleGrid,
-  Grid,
   rem,
   Flex,
   Center,
-  PasswordInput
+  PasswordInput,
 } from "@mantine/core";
-import {
-  IconEdit,
-  IconAt,
-  IconPhone,
-  IconBuildingStore,
-  IconUserEdit,
-  IconTrash,
-  IconSquareRoundedPlus,
-  IconUserPlus,
-  IconLockSquareRounded
-} from "@tabler/icons-react";
-import { useForm } from "@mantine/form";
-import "@mantine/notifications/styles.css";
-import { User } from "@/types/entity";
-import { http } from "@/modules/http";
-import { modals } from "@mantine/modals";
-import { IconSearch } from "@tabler/icons-react";
-import { notifications } from "@mantine/notifications";
-import { useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-
-import { useState, useEffect } from "react";
 
 export const ManagerUser = () => {
   const [search, setSearch] = useState("");
@@ -179,7 +177,6 @@ export const ManagerUser = () => {
           users[index] = formDataEdit;
           setusers([...users]);
         }
-
       }
 
       setIsModalOpenEdit(false);
@@ -228,7 +225,6 @@ export const ManagerUser = () => {
             color: "red",
           });
         }
-
       },
     });
   };
@@ -297,8 +293,8 @@ export const ManagerUser = () => {
   return (
     <>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
-      <Container my='md'>
-        <Group justify='space-between'>
+      <Container my="md">
+        <Group justify="space-between">
           <Title order={3} size="h2" fw={900} ta="center" c="black">
             Users
           </Title>
@@ -353,10 +349,11 @@ export const ManagerUser = () => {
             size="xl"
             src=""
             alt="no image here"
-            mt="sm" />
+            mt="sm"
+          />
         </Group>
         <form onSubmit={handleSubmitEdit}>
-          <Box mx="xl" c='black'>
+          <Box mx="xl" c="black">
             <SimpleGrid cols={{ base: 1, sm: 2 }}>
               <TextInput
                 mt="sm"
@@ -422,12 +419,7 @@ export const ManagerUser = () => {
             />
 
             <Group justify="center" mt="md">
-              <Button
-                type="submit"
-                variant="filled"
-                radius="lg"
-                color="green"
-              >
+              <Button type="submit" variant="filled" radius="lg" color="green">
                 Save
               </Button>
               <Button
@@ -462,11 +454,11 @@ export const ManagerUser = () => {
             size="xl"
             src=""
             alt="no image here"
-            mt="sm" />
+            mt="sm"
+          />
         </Group>
         <form onSubmit={handleSubmitAdd}>
           <SimpleGrid cols={{ base: 1, sm: 2 }}>
-
             <TextInput
               autoFocus
               label="Username"
@@ -553,7 +545,7 @@ export const ManagerUser = () => {
               mt="sm"
               color="green"
             >
-              Add 
+              Add
             </Button>
             <Button
               variant="filled"

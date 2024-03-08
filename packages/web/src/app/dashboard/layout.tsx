@@ -1,22 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode, useEffect } from "react";
 import { User } from "@/types/entity";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
+import { ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { IconUserSquareRounded } from "@tabler/icons-react";
 import {
   AppShell,
   Button,
-  Center,
   Container,
   Group,
   Menu,
   Text,
   ActionIcon,
 } from "@mantine/core";
-import { IconUserSquareRounded } from "@tabler/icons-react";
 
 type Props = {
   chef: ReactNode;

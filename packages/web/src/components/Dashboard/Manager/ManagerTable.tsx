@@ -1,6 +1,19 @@
 "use client";
 
+import { AxiosError } from "axios";
+import { http } from "@/modules/http";
+import { modals } from "@mantine/modals";
 import { useEffect, useState } from "react";
+import { TableEntity } from "@/types/entity";
+import { useDisclosure } from "@mantine/hooks";
+import { useQuery } from "@tanstack/react-query";
+import { notifications } from "@mantine/notifications";
+import {
+  IconEdit,
+  IconTrash,
+  IconSquareRoundedPlus,
+  IconSearch,
+} from "@tabler/icons-react";
 import {
   Container,
   Table,
@@ -19,20 +32,6 @@ import {
   rem,
   Center,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import {
-  IconEdit,
-  IconTrash,
-  IconSquareRoundedPlus,
-  IconSearch,
-} from "@tabler/icons-react";
-import { modals } from "@mantine/modals";
-import { TableEntity } from "@/types/entity";
-import { http } from "@/modules/http";
-import { table } from "console";
-import { useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { notifications } from "@mantine/notifications";
 
 export const ManagerTable = () => {
   const [opened, { open, close }] = useDisclosure(false);
