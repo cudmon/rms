@@ -1,4 +1,4 @@
-import { Table } from "@/types/entity";
+import { TableEntity } from "@/types/entity";
 import { Reservation } from "@/components/Reservation/Reservation";
 
 export const metadata = {
@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 export default function Page() {
-  const tables: Table[] = [
+  const tables: Omit<TableEntity, "passcode">[] = [
     {
       id: "1",
       name: "Table A",

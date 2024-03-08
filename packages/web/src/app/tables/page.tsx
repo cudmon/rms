@@ -1,6 +1,6 @@
 import { http } from "@/modules/http";
 import { cookies } from "next/headers";
-import { Table } from "@/types/entity";
+import { TableEntity } from "@/types/entity";
 import { Center, Stack } from "@mantine/core";
 import { TableSelector } from "@/components/Table/TableSelector";
 
@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function Page() {
-  let tables: Table[] = [];
+  let tables: TableEntity[] = [];
 
   try {
     const res = await http(cookies().get("token")?.value).get("/tables");

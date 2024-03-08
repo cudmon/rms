@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Card, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { Table } from "@/types/entity";
+import { TableEntity } from "@/types/entity";
 import { notifications } from "@mantine/notifications";
 
 type Props = {
-  table: Table;
+  table: Omit<TableEntity, "passcode">;
 };
 
 export const Tables = ({ table }: Props) => {
@@ -34,7 +34,9 @@ export const Tables = ({ table }: Props) => {
         }),
       onConfirm: () => unavailable("RESERVED"),
     });
-  const [background, setBackGround] = useState(table.status === "IDLE" ? "green": "red");
+  const [background, setBackGround] = useState(
+    table.status === "IDLE" ? "green" : "red"
+  );
   return (
     <>
       <Card

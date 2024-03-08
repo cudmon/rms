@@ -1,7 +1,7 @@
 import { http } from "@/modules/http";
 import { Center } from "@mantine/core";
-import { TableEntity } from "@/types/entity";
 import { cookies } from "next/headers";
+import { TableEntity } from "@/types/entity";
 import { ReservationList } from "@/components/Dashboard/Customer/ReservationList";
 
 export const metadata = {

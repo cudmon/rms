@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { http } from "@/modules/http";
-import { Table } from "@/types/entity";
+import { TableEntity } from "@/types/entity";
 import { useRouter } from "next/navigation";
 import { useTableStore } from "@/store/table";
 import { notifications } from "@mantine/notifications";
 import { Button, Grid, PinInput, Stack, Title } from "@mantine/core";
 
 type Props = {
-  tables: Table[];
+  tables: Omit<TableEntity, "passcode">[];
 };
 
 export const TableSelector = ({ tables }: Props) => {
@@ -18,7 +18,10 @@ export const TableSelector = ({ tables }: Props) => {
   const { setTable } = useTableStore();
   const [passcode, setPasscode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [selected, setSelected] = useState<Table | null>(null);
+  const [selected, setSelected] = useState<Omit<
+    TableEntity,
+    "passcode"
+  > | null>(null);
 
   const connect = async () => {
     setLoading(true);

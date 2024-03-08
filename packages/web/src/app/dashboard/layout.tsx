@@ -1,22 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode, useEffect } from "react";
 import { User } from "@/types/entity";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
+import { ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { IconUserSquareRounded } from "@tabler/icons-react";
 import {
   AppShell,
   Button,
-  Center,
   Container,
   Group,
   Menu,
   Text,
-  ActionIcon
+  ActionIcon,
 } from "@mantine/core";
-import { IconUserSquareRounded } from '@tabler/icons-react';
 
 type Props = {
   chef: ReactNode;
@@ -35,10 +34,11 @@ const links = {
     { to: "/dashboard/users", label: "Users" },
   ],
 
-  CHEF: [
-    { to: "/dashboard", label: "Dashboard" },
-    { to: "/dashboard/orders", label: "Orders" },
-  ],
+  CHEF: [{ to: "/dashboard", label: "Dashboard" }],
+
+  STAFF: [{ to: "/dashboard", label: "Dashboard" }],
+
+  CUSTOMER: [{ to: "/dashboard", label: "Dashboard" }],
 };
 
 const Base = ({
@@ -47,7 +47,7 @@ const Base = ({
   logout,
 }: {
   children: ReactNode;
-  user: User;
+  user: Pick<User, "role">;
   logout: () => void;
 }) => {
   const pathname = usePathname();
@@ -58,19 +58,27 @@ const Base = ({
         return "MANAGER";
       case "CHEF":
         return "CHEF";
+      case "STAFF":
+        return "STAFF";
+      case "CUSTOMER":
+        return "CUSTOMER";
       default:
         return "MANAGER";
     }
   };
 
   return (
-    <AppShell padding="md" header={{ height: 60 }} >
-      <AppShell.Header withBorder style={{ boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)' }}>
-        <Group h={60} px={32} justify="space-between" >
+    <AppShell padding="md" header={{ height: 60 }}>
+      <AppShell.Header
+        withBorder
+        style={{ boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}
+      >
+        <Group h={60} px={32} justify="space-between">
           <Text
-            fz={24} fw={600}
+            fz={24}
+            fw={600}
             variant="gradient"
-            gradient={{ from: 'green.7', to: 'lime.5' }}
+            gradient={{ from: "green.7", to: "lime.5" }}
           >
             RMS
           </Text>
@@ -84,7 +92,7 @@ const Base = ({
                   href={link.to}
                   size="compact-lg"
                   variant="subtle"
-                  radius='sm'
+                  radius="sm"
                   color={pathname === link.to ? "lime.7" : "gray"}
                 >
                   {link.label}
@@ -93,17 +101,23 @@ const Base = ({
             )}
           </Group>
           <Menu>
-
             <Menu.Target>
-              <ActionIcon variant="subtle" aria-label="Settings" size={42} color="lime.7" radius="xl" >
+              <ActionIcon
+                variant="subtle"
+                aria-label="Settings"
+                size={42}
+                color="lime.7"
+                radius="xl"
+              >
                 <IconUserSquareRounded size={30} />
               </ActionIcon>
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item onClick={logout} color="red" fw={900} >Logout</Menu.Item>
+              <Menu.Item onClick={logout} color="red" fw={900}>
+                Logout
+              </Menu.Item>
             </Menu.Dropdown>
-
           </Menu>
         </Group>
       </AppShell.Header>
@@ -111,14 +125,6 @@ const Base = ({
         <Container>{children}</Container>
       </AppShell.Main>
     </AppShell>
-  );
-};
-
-const Fail = () => {
-  return (
-    <Center py={64} fz={28} c="red" fw={500}>
-      Something went wrong. Please try again later
-    </Center>
   );
 };
 
@@ -146,7 +152,5 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
         {user.role === "CUSTOMER" && customer}
       </Base>
     );
-  } else {
-    return <Fail />;
   }
 }
