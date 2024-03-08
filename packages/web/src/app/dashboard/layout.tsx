@@ -14,9 +14,9 @@ import {
   Group,
   Menu,
   Text,
-  ActionIcon
+  ActionIcon,
 } from "@mantine/core";
-import { IconUserSquareRounded } from '@tabler/icons-react';
+import { IconUserSquareRounded } from "@tabler/icons-react";
 
 type Props = {
   chef: ReactNode;
@@ -47,7 +47,7 @@ const Base = ({
   logout,
 }: {
   children: ReactNode;
-  user: User;
+  user: Pick<User, "role">;
   logout: () => void;
 }) => {
   const pathname = usePathname();
@@ -64,13 +64,17 @@ const Base = ({
   };
 
   return (
-    <AppShell padding="md" header={{ height: 60 }} >
-      <AppShell.Header withBorder style={{ boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)' }}>
-        <Group h={60} px={32} justify="space-between" >
+    <AppShell padding="md" header={{ height: 60 }}>
+      <AppShell.Header
+        withBorder
+        style={{ boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}
+      >
+        <Group h={60} px={32} justify="space-between">
           <Text
-            fz={24} fw={600}
+            fz={24}
+            fw={600}
             variant="gradient"
-            gradient={{ from: 'green.7', to: 'lime.5' }}
+            gradient={{ from: "green.7", to: "lime.5" }}
           >
             RMS
           </Text>
@@ -84,7 +88,7 @@ const Base = ({
                   href={link.to}
                   size="compact-lg"
                   variant="subtle"
-                  radius='sm'
+                  radius="sm"
                   color={pathname === link.to ? "lime.7" : "gray"}
                 >
                   {link.label}
@@ -93,17 +97,23 @@ const Base = ({
             )}
           </Group>
           <Menu>
-
             <Menu.Target>
-              <ActionIcon variant="subtle" aria-label="Settings" size={42} color="lime.7" radius="xl" >
+              <ActionIcon
+                variant="subtle"
+                aria-label="Settings"
+                size={42}
+                color="lime.7"
+                radius="xl"
+              >
                 <IconUserSquareRounded size={30} />
               </ActionIcon>
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item onClick={logout} color="red" fw={900} >Logout</Menu.Item>
+              <Menu.Item onClick={logout} color="red" fw={900}>
+                Logout
+              </Menu.Item>
             </Menu.Dropdown>
-
           </Menu>
         </Group>
       </AppShell.Header>

@@ -3,7 +3,7 @@ import { User } from "@/types/entity";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 type Store = {
-  user: User;
+  user: Pick<User, "id" | "username" | "role">;
   loggedIn: boolean | null;
 
   setUser: (user: Store["user"]) => void;

@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { Table } from "@/types/entity";
+import { TableEntity } from "@/types/entity";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 type Store = {
-  table: Table;
-  setTable: (table: Table) => void;
+  table: Pick<TableEntity, "id" | "name">;
+  setTable: (table: Pick<TableEntity, "id" | "name">) => void;
   clearTable: () => void;
 };
 

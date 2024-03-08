@@ -62,7 +62,7 @@ export const ManagerTable = () => {
   {
     /* ---------------------------------------- Get Table ------------------------------------------------------- */
   }
-  console.log("table : ", formDataAdd)
+  console.log("table : ", formDataAdd);
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -118,7 +118,6 @@ export const ManagerTable = () => {
         seat: parseInt(formDataAdd.seat),
         passcode: formDataAdd.passcode,
         status: formDataAdd.status,
-      
       });
       if (resTableAdd.status === 201) {
         notifications.show({
@@ -464,7 +463,7 @@ export const ManagerTable = () => {
             onChange={(e) =>
               setFormDataAdd({
                 ...formDataAdd,
-                seat: e.currentTarget.value
+                seat: e.currentTarget.value,
               })
             }
           />

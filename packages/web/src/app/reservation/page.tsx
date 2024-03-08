@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 export default function Page() {
-  const tables: TableEntity[] = [
+  const tables: Omit<TableEntity, "passcode">[] = [
     {
       id: "1",
       name: "Table A",

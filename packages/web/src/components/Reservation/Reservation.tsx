@@ -1,9 +1,9 @@
 import { Tables } from "./Table";
-import { Table } from "@/types/entity";
+import { TableEntity } from "@/types/entity";
 import { Center, Card, Flex, Grid, GridCol, Text, Stack } from "@mantine/core";
 
 type Props = {
-  tables: Table[];
+  tables: Omit<TableEntity, "passcode">[];
 };
 
 export const Reservation = ({ tables }: Props) => {
