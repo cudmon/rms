@@ -51,12 +51,12 @@ model Reservation {
 }
 
 model Menu {
-  id    String  @id @default(uuid())
-  name  String  @unique
-  detail String
-  price Float
-  image String
-  order Order[]
+  id     String  @id @default(uuid())
+  name   String  @unique
+  detail String?
+  price  Float
+  image  String
+  order  Order[]
 }
 
 model Billing {
