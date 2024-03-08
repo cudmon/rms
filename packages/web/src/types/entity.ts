@@ -3,7 +3,7 @@ export type TableEntity = {
   name: string;
   seat: number;
   status: string;
-  passcode: string;
+  passcode?: string;
 };
 
 export type Menu = {
