@@ -41,7 +41,6 @@ model Order {
 
 model Reservation {
   id      String            @id @default(uuid())
-  seat    Int
   status  ReservationStatus @default(CONFIRMED)
   when    DateTime
   user    User              @relation(fields: [userId], references: [id], onDelete: Cascade)

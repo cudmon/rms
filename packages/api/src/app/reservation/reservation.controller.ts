@@ -41,12 +41,11 @@ export class ReservationController {
   @Post()
   async makeReservation(
     @Client() client: CurrentClient,
-    @Body() { seat, when, tableId }: MakeReservationDto
+    @Body() { when, tableId }: MakeReservationDto
   ) {
     try {
       return await this.reservationService.makeReservation(
         when,
-        seat,
         client.id,
         tableId
       );

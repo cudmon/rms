@@ -39,7 +39,6 @@ export class ReservationService {
 
   async makeReservation(
     when: string,
-    seat: number,
     userId: string,
     tableId: string
   ) {
@@ -86,7 +85,6 @@ export class ReservationService {
 
     const re = await this.prisma.reservation.create({
       data: {
-        seat,
         when: new Date(when),
         userId,
         tableId,
