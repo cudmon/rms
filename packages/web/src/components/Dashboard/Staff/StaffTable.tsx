@@ -1,41 +1,57 @@
 "use client";
 
 import { TableEntity, Order } from "@/types/entity";
-import { IconArmchair, IconTags, IconUserEdit, IconCheck, IconCreditCard, IconBuildingBank } from "@tabler/icons-react";
+import { IconArmchair, IconTags, IconUserEdit, IconCheck, IconCreditCard, IconBuildingBank, IconChevronDown, IconPackage, IconReceipt2, IconXboxX } from "@tabler/icons-react";
 import {
   Badge, Card, Center, Container, Text, Grid, Button, rem, Title, Modal, TextInput, Box, SimpleGrid, Table, Tooltip,
-  ActionIcon, Paper, Radio, CheckIcon, UnstyledButton, Checkbox, Divider
+  ActionIcon, Paper, Radio, CheckIcon, UnstyledButton, Checkbox, Divider, Menu, useMantineTheme
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
+import { OrderModal } from "@/components/Dashboard/Staff/StaffModal/OrderModal";
 
 const Ordersz = [
   {
-    id: 1,
-    name: "ข้าวมันไก่",
+    id: "1",
+    menu: ["ข้าวไก่ย่าง"],
+    price: 150,
     quantity: 2,
-    price: 10000,
     status: "PENDING",
   },
   {
-    id: 2,
-    name: "ข้าวเป็ดย่าง",
-    quantity: 3,
-    price: 15000,
-    status: "FINISHED",
-  },
-  {
-    id: 3,
-    quantity: 1,
-    price: 5000,
+    id: "2",
+    menu: ["ข้าวหมูกระเทียม", "ข้าวหมูกระเทียม"],
+    price: 205,
+    quantity: 2,
     status: "SERVED",
   },
   {
-    id: 4,
-    name: "ข้าวเป็ดย่าง",
-    quantity: 1,
-    price: 5000,
+    id: "3",
+    menu: ["ข้าวมันไก่"],
+    price: 100,
+    quantity: 2,
+    status: "FINISHED",
+  },
+  {
+    id: "4",
+    menu: ["ข้าวหน้าเป็ด"],
+    price: 100,
+    quantity: 3,
     status: "CANCELED",
+  },
+  {
+    id: "5",
+    menu: ["ข้าวหน้าเนื้อ"],
+    price: 150,
+    quantity: 1,
+    status: "FINISHED",
+  },
+  {
+    id: "6",
+    menu: ["ข้าวหมูทอด"],
+    price: 100,
+    quantity: 2,
+    status: "COMPLETED",
   },
 ];
 
@@ -68,24 +84,18 @@ export const TableStaff = ({
   const [value, setValue] = useState('react');
   const [ModalBilled, setModalBilled] = useState(false);
   const [values, onChange] = useState(true);
+  const theme = useMantineTheme();
+  
 
-  const FinishOrder = (status: string) => {
-    if (status === "FINISHED") {
+  const CheckCancelOrder = (status: string) => {
+    if (status === "RESERVED") {
       return true;
     }
     return false;
   };
+ 
 
-  const head = (
-    <Table.Tr>
-      <Table.Th ta="center">ID Order</Table.Th>
-      <Table.Th ta="center">Menu Name</Table.Th>
-      <Table.Th ta="center">Quantity</Table.Th>
-      <Table.Th ta="center">Price</Table.Th>
-      <Table.Th ta="center">Status</Table.Th>
-      <Table.Th ta="center"></Table.Th>
-    </Table.Tr>
-  );
+  
 
   const headbilled = (
     <Table.Tr>
@@ -106,50 +116,7 @@ export const TableStaff = ({
   ));
 
 
-  const rowsOrder = Ordersz.map((item) => {
-    let badgeColor = "gray";
-
-    switch (item.status) {
-      case "PENDING":
-        badgeColor = "green";
-        break;
-      case "FINISHED":
-        badgeColor = "red";
-        break;
-      case "SERVED":
-        badgeColor = "orange";
-        break;
-      case "CANCELED":
-        badgeColor = "gray";
-        break;
-
-      default:
-        break;
-    }
-
-    return (
-      <Table.Tr key={item.id} ta="center">
-        <Table.Td>{item.id}</Table.Td>
-        <Table.Td>{item.quantity}</Table.Td>
-        <Table.Td>{item.price}</Table.Td>
-        <Table.Td>
-          <Badge color={badgeColor} ta="center">
-            {item.status}
-          </Badge>
-        </Table.Td>
-        <Table.Td>
-          {FinishOrder(item.status) === true && (
-            <ActionIcon   >
-              <IconCheck radius="md" />{" "}
-            </ActionIcon>
-
-          )}
-        </Table.Td>
-        <Table.Td>{item.id}</Table.Td>
-      </Table.Tr>
-    );
-  });
-
+  
   return (
     // --------------------------------------------------Table list--------------------------------------------------------
     <Container >
@@ -195,30 +162,96 @@ export const TableStaff = ({
                     </Badge>
                   </Center>
                 </Grid.Col>
-
-                <Grid.Col span={5}>
-                  <Grid columns={4}>
-                    <Grid.Col span={2}>
-                      <Center>
+                <Grid.Col span={4}>
+                    <div style={{ display: 'grid', placeItems: 'center', }}>
+                    <Menu
+                      transitionProps={{ transition: "pop-top-right" }}
+                      
+                      position="bottom-start"
+                      width={220}
+                      withinPortal
+                      
+                    >
+                      <Menu.Target>
                         <Button
-                          variant="filled"
-                          color="blue.5"
-                          radius="md"
+                         radius={12}
+                         color={theme.colors. blue[6]}
+                          rightSection={
+                            <IconChevronDown
+                              style={{ width: rem(18), height: rem(18) }}
+                              stroke={1.5}
+
+                            />
+                          }
+                          pr={12}
+                        >
+                        Options
+                        </Button>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Item
+                          leftSection={
+                            <IconPackage
+                            style={{ width: rem(16), height: rem(16) }}
+                            color={theme.colors. blue[9]}
+                              stroke={1.5}
+                            />
+                          }
+                          rightSection={
+                            <Text size="xs"  fw={700} c="dimmed">
+                              Order list
+                            </Text>
+                          }
+                          color="blue.9"
                           onClick={() => setModalOpenOrder(true)}
                         >
-                          Order
-                        </Button>
-                      </Center>
+                          ORDER
+                        </Menu.Item>
+                        <Menu.Item
+                          leftSection={
+                            <IconReceipt2
+                              style={{ width: rem(16), height: rem(16) }}
+                              color={theme.colors.green[6]}
+                              stroke={1.5}
+                            />
+                          }
+                          rightSection={
+                            <Text size="xs"  fw={700} c="dimmed">
+                              Bill list
+                            </Text>
+                          }
+                          color="green.6"
+                          onClick={() => setModalBilled(true) }
+                        >
+                          BILL
+                        </Menu.Item>
+                        
+                        {CheckCancelOrder(table.status) && 
+          (
+                        <Menu.Item
+                          leftSection={
+                            <IconXboxX
+                              style={{ width: rem(16), height: rem(16) }}
+                              color={theme.colors.red[6]}
+                              stroke={1.5}
+                            />
+                          }
+                          rightSection={
+                            <Text size="xs"  fw={700} c="dimmed" >
+                             Reservation
+                            </Text>
+                          }
+                          color="red.6"
+                          // onClick={close}
+                        >
+                          CANCEL
+                        </Menu.Item>
+                         )}
+                      </Menu.Dropdown>
+                    </Menu>
+                    </div>
                     </Grid.Col>
-                    <Grid.Col span={2}>
-                      <Center>
-                        <Button variant="filled" color="blue.5" radius="md" onClick={() => setModalBilled(true)}>
-                          Bill
-                        </Button>
-                      </Center>
-                    </Grid.Col>
-                  </Grid>
-                </Grid.Col>
+                
               </Grid>
             </Card>
           </Grid.Col>
@@ -226,21 +259,17 @@ export const TableStaff = ({
         ))}
       </Grid>
       {/* -------------------------------------------------- modal order-------------------------------------------------------- */}
-      <Modal
-        opened={ModalOpenOrder}
+      <OrderModal
+        isOpen={ModalOpenOrder}
         onClose={() => setModalOpenOrder(false)}
-        title="Order"
-        centered
-        size="55%"
-      >
-        <Card shadow="md" padding="lg" radius="md" withBorder>
-          <Table stickyHeader verticalSpacing="sm" highlightOnHover>
-            <Table.Thead>{head}</Table.Thead>
-            <Table.Tbody>{rowsOrder}</Table.Tbody>
-          </Table>
-        </Card>
-      </Modal>
+        Ordersz={Ordersz}
+      />
       {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
+
+
+
+
+
 
       {/* -------------------------------------------------- Modal Billed-------------------------------------------------------- */}
       <Modal opened={ModalBilled} onClose={() => setModalBilled(false)} title="" size="80%" centered >

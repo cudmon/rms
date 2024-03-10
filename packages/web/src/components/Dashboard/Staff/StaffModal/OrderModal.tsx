@@ -30,8 +30,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({
     return false;
   };
  
- 
-  const rowsOrder = Ordersz?.map((item) => {
+
+  const rowsOrder = Ordersz.map((item) => {
     let badgeColor = "gray";
 
     switch (item.status) {
@@ -91,7 +91,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   );
 
   return (
-    <Modal opened={isOpen} onClose={onClose} title="Order" centered size="80%">
+    <Modal opened={isOpen} onClose={onClose} title="Order" size="80%" centered>
       <Card shadow="md" padding="lg" radius="md" withBorder>
         <Table stickyHeader verticalSpacing="sm" highlightOnHover>
           <Table.Thead>{head}</Table.Thead>
