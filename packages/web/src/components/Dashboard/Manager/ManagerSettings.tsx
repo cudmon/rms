@@ -2,9 +2,10 @@
 
 import { http } from "@/modules/http";
 import { useEffect, useState } from "react";
-import { Card, Table, TextInput, Title } from "@mantine/core";
+import { Card, NumberInput, Table, TextInput, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { log } from "console";
+import { TimeInput } from "@mantine/dates";
 
 function toNormalCase(str: string) {
   return (str.at(0)?.toUpperCase() + str.slice(1).toLowerCase()).replace(
@@ -33,32 +34,10 @@ export function ManagerSettings() {
     })();
   }, []);
 
-  const updateSetting = async (name: string, value: string, type: string) => {
-    let invalid = false;
-
-    if (type === "NUMBER" && (value === "" || isNaN(Number(value)))) {
-      invalid = true;
-      notifications.show({
-        title: "Invalid value",
-        message: "Value must be a number",
-        color: "red",
-      });
-    }
-
-    if (type === "TIME" && !/^\d{2}:\d{2}$/.test(value)) {
-      invalid = true;
-      notifications.show({
-        title: "Invalid value",
-        message: "Value must be in HH:MM format",
-        color: "red",
-      });
-    }
-
+  const updateSetting = async (name: string, value: string) => {
     setSettings((prev) =>
       prev.map((s) => (s.name === name ? { ...s, value } : s))
     );
-
-    if (invalid) return;
 
     try {
       await http().patch(`/settings/${name}`, { value });
@@ -82,18 +61,28 @@ export function ManagerSettings() {
             {settings.map((setting) => (
               <Table.Tr key={setting.id}>
                 <Table.Td>{toNormalCase(setting.name)}</Table.Td>
-                <Table.Td>
-                  <TextInput
-                    value={setting.value}
-                    onChange={({ currentTarget }) => {
-                      updateSetting(
-                        setting.name,
-                        currentTarget.value,
-                        setting.type
-                      );
-                    }}
-                  />
-                </Table.Td>
+                {setting.type === "TIME" && (
+                  <Table.Td>
+                    <TimeInput
+                      value={setting.value}
+                      onChange={({ currentTarget }) => {
+                        updateSetting(setting.name, currentTarget.value);
+                      }}
+                    />
+                  </Table.Td>
+                )}
+                {setting.type === "NUMBER" && (
+                  <Table.Td>
+                    <TextInput
+                      type="number"
+                      value={setting.value}
+                      placeholder="0 will be used if empty"
+                      onChange={(v) => {
+                        updateSetting(setting.name, v.currentTarget.value);
+                      }}
+                    />
+                  </Table.Td>
+                )}
               </Table.Tr>
             ))}
           </Table.Tbody>
