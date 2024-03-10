@@ -28,10 +28,10 @@ const getStatusColor = (status: string) => {
 export const ReservationList = ({ table }: { table: TableEntity[] }) => {
   return (
     <Container>
-      <Title order={3} size="h1" fw={900} ta="center" c="black">
+      <Title order={3} size="h1" fw={900} ta="center" >
         Reservation
       </Title>
-      <Text ta="center" c="dimmed" mt="md" fw={750} mb={10}>
+      <Text ta="center" mt="md" fw={750} mb={10}>
         Table List
       </Text>
 

@@ -56,11 +56,6 @@ export class AuthService {
   }
 
   async register(data: RegisterDto) {
-    try {
-      return await this.usersService.create({
-        ...data,
-        password: await hash(data.password, 10),
-      });
-    } catch (error) {}
+    return await this.usersService.create(data);
   }
 }

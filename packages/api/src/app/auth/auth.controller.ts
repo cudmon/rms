@@ -10,8 +10,9 @@ import {
   Post,
   Get,
   UnauthorizedException,
-  Req,
+  Headers,
 } from "@nestjs/common";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 @Controller("auth")
 export class AuthController {
@@ -26,10 +27,8 @@ export class AuthController {
   }
 
   @Get("check-session")
-  async checkSession(@Req() req: Request) {
-    const header = req.headers.get("Authorization");
-
-    const token = header?.split(" ")[1];
+  async checkSession(@Headers("Authorization") authorization: string) {
+    const token = authorization?.split(" ")[1];
 
     if (!token) {
       throw new UnauthorizedException("INVALID_SESSION");
@@ -77,6 +76,14 @@ export class AuthController {
   @Public()
   @Post("register")
   async register(@Body() data: RegisterDto) {
-    return await this.authService.register(data);
+    try {
+      return await this.authService.register(data);
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
+          throw new UnauthorizedException("Already used information");
+        }
+      }
+    }
   }
 }

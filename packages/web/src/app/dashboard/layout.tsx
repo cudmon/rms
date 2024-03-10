@@ -1,12 +1,15 @@
 "use client";
 
+import cx from "clsx";
 import Link from "next/link";
 import { User } from "@/types/entity";
+import { http } from "@/modules/http";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
 import { ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { IconUserSquareRounded } from "@tabler/icons-react";
+import classes from "@/styles/dark-mode.module.css";
+import { IconMoon, IconSun, IconUserSquareRounded } from "@tabler/icons-react";
 import {
   AppShell,
   Button,
@@ -15,6 +18,8 @@ import {
   Menu,
   Text,
   ActionIcon,
+  useMantineColorScheme,
+  useComputedColorScheme,
 } from "@mantine/core";
 
 type Props = {
@@ -51,6 +56,10 @@ const Base = ({
   logout: () => void;
 }) => {
   const pathname = usePathname();
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   const selector = (role: string) => {
     switch (role) {
@@ -63,7 +72,7 @@ const Base = ({
       case "CUSTOMER":
         return "CUSTOMER";
       default:
-        return "MANAGER";
+        return "CUSTOMER";
     }
   };
 
@@ -100,25 +109,37 @@ const Base = ({
               )
             )}
           </Group>
-          <Menu>
-            <Menu.Target>
-              <ActionIcon
-                variant="subtle"
-                aria-label="Settings"
-                size={42}
-                color="lime.7"
-                radius="xl"
-              >
-                <IconUserSquareRounded size={30} />
-              </ActionIcon>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              <Menu.Item onClick={logout} color="red" fw={900}>
-                Logout
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+          <Group>
+            <ActionIcon
+              variant="transparent"
+              size="xl"
+              radius="xl"
+              aria-label="Toggle color scheme"
+              onClick={() =>
+                setColorScheme(
+                  computedColorScheme === "light" ? "dark" : "light"
+                )
+              }
+            >
+              <IconSun className={cx(classes.icon, classes.light)} />
+              <IconMoon className={cx(classes.icon, classes.dark)} />
+            </ActionIcon>
+            <Menu>
+              <Menu.Target>
+                <ActionIcon variant="transparent" size="xl" radius="xl">
+                  <IconUserSquareRounded />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item component={Link} href="/dashboard/profile">
+                  Profile
+                </Menu.Item>
+                <Menu.Item onClick={logout} color="red" fw={900}>
+                  Logout
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Main>
@@ -130,7 +151,7 @@ const Base = ({
 
 export default function Layout({ chef, staff, manager, customer }: Props) {
   const router = useRouter();
-  const { user, loggedIn, removeUser } = useUserStore();
+  const { user, removeUser } = useUserStore();
 
   const logout = () => {
     removeUser();
@@ -138,10 +159,15 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
   };
 
   useEffect(() => {
-    if (loggedIn === false) {
-      router.push("/login");
-    }
-  }, [loggedIn, router]);
+    (async () => {
+      try {
+        await http().get("/auth/check-session");
+      } catch (error) {
+        removeUser();
+        router.push("/login");
+      }
+    })();
+  }, [removeUser, router]);
 
   if (ROLE.includes(user.role)) {
     return (

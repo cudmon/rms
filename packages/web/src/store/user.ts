@@ -4,7 +4,6 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 type Store = {
   user: Pick<User, "id" | "username" | "role">;
-  loggedIn: boolean | null;
 
   setUser: (user: Store["user"]) => void;
   removeUser: () => void;
@@ -18,15 +17,13 @@ export const useUserStore = create<Store>()(
         username: "",
         role: "",
       },
-      loggedIn: null,
 
       setUser: (user) => {
-        set({ user, loggedIn: true });
+        set({ user });
       },
 
       removeUser: () => {
         set({
-          loggedIn: false,
           user: { id: "", username: "", role: "" },
         });
       },

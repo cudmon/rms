@@ -5,7 +5,7 @@ import { Menu } from "@/types/entity";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
-import classes from "@/styles/ManagerMenus.module.css";
+import classes from "@/styles/manager-menus.module.css";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import {
   IconEdit,
@@ -79,13 +79,9 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
           </Tooltip>
         </Group>
 
-        <Text size="sm" c="dimmed">
-          {food.detail}
-        </Text>
+        <Text size="sm">{food.detail}</Text>
 
-        <Text size="sm" c="dimmed">
-          {food.price}
-        </Text>
+        <Text size="sm">{food.price}</Text>
       </Card>
     </div>
   ));
@@ -100,10 +96,10 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
   return (
     <>
       <Container my="md">
-        <Title order={3} size="h1" fw={900} ta="center" c="black">
+        <Title order={3} size="h1" fw={900} ta="center" >
           MENU
         </Title>
-        <Text ta="center" c="dimmed" my="md" fw={750}>
+        <Text ta="center" my="md" fw={750}>
           Menu List
         </Text>
 
@@ -127,13 +123,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
 
       {/*-------------------------------------------- Modal Edit Menus ------------------------------------------------*/}
 
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Edit Menu"
-        c="dimmed"
-        size="lg"
-      >
+      <Modal opened={opened} onClose={close} title="Edit Menu" size="lg">
         <Container>
           <Dropzone
             onDrop={(files) => console.log("accepted files", files)}
@@ -193,7 +183,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
                 label="Food Name"
                 placeholder="Name..."
                 mt="sm"
-                c="black"
+                
                 leftSection={<IconSalad size={16} />}
                 withAsterisk
                 {...form.getInputProps("name")}
@@ -204,7 +194,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
                 placeholder="Prices..."
                 hideControls
                 mt="sm"
-                c="black"
+                
                 leftSection={<IconCoins size={16} />}
                 withAsterisk
                 {...form.getInputProps("price")}
@@ -218,7 +208,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
               description="Description"
               placeholder="Detail..."
               mt="sm"
-              c="black"
+              
               leftSection={<IconAlignBoxLeftTop size={16} />}
             />
 
