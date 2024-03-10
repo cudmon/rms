@@ -17,6 +17,10 @@ export class CreateMenuDto {
   @IsNotEmpty()
   name: string;
 
+  @IsString()
+  @IsNotEmpty()
+  details: string;
+
   @Min(0.01)
   @Max(1000)
   @IsNumber()
