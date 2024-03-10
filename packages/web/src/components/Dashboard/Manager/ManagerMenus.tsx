@@ -14,7 +14,7 @@ import {
   IconX,
   IconPhotoDown,
   IconSalad,
-  IconAlignBoxLeftTop,
+  IconAlignBoxLeftTop, IconSquareRoundedPlus, IconTrash
 } from "@tabler/icons-react";
 import {
   Container,
@@ -73,15 +73,30 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
               aria-label="Settings"
               size={22}
               onClick={open}
+              radius="md"
             >
               <IconEdit style={{ width: "75%", height: "75%" }} />
             </ActionIcon>
           </Tooltip>
         </Group>
 
+        <Group justify="space-between" mb="xs">
+          <Text size="sm">{food.price}</Text>
+          <Tooltip label="Delete">
+            <ActionIcon
+              variant="filled"
+              aria-label="Delete"
+              size={22}
+              color="#f03e3e"
+              radius="md"
+            >
+              <IconTrash style={{ width: "80%", height: "80%" }} />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
+
         <Text size="sm">{food.detail}</Text>
 
-        <Text size="sm">{food.price}</Text>
       </Card>
     </div>
   ));
@@ -96,16 +111,27 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
   return (
     <>
       <Container my="md">
-        <Title order={3} size="h1" fw={900} ta="center" >
-          MENU
-        </Title>
-        <Text ta="center" my="md" fw={750}>
-          Menu List
-        </Text>
+        <Group justify="space-between">
+          <Title order={3} size="h2" fw={900} ta="center" >
+            Menus
+          </Title>
+          <Tooltip label='Add' position="top" offset={5}>
+            <ActionIcon
+              variant="subtle"
+              color="lime.6"
+              size="lg"
+              radius="xl"
+              aria-label="add"
+            // onClick={() => setModalOpenAdd(true)}
+            >
+              <IconSquareRoundedPlus stroke={1.5} size={32} />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
 
         <TextInput
           placeholder="Search by any field"
-          mb="md"
+          m="md"
           leftSection={
             <IconSearch
               style={{ width: rem(16), height: rem(16) }}
@@ -176,14 +202,14 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
             </Group>
           </Dropzone>
 
-          <Box component="form" onSubmit={form.onSubmit(() => {})}>
+          <Box component="form" onSubmit={form.onSubmit(() => { })}>
             <SimpleGrid cols={{ base: 1, sm: 2 }}>
               <TextInput
                 radius="md"
                 label="Food Name"
                 placeholder="Name..."
                 mt="sm"
-                
+
                 leftSection={<IconSalad size={16} />}
                 withAsterisk
                 {...form.getInputProps("name")}
@@ -194,7 +220,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
                 placeholder="Prices..."
                 hideControls
                 mt="sm"
-                
+
                 leftSection={<IconCoins size={16} />}
                 withAsterisk
                 {...form.getInputProps("price")}
@@ -208,7 +234,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
               description="Description"
               placeholder="Detail..."
               mt="sm"
-              
+
               leftSection={<IconAlignBoxLeftTop size={16} />}
             />
 
@@ -229,7 +255,7 @@ export const ManagerMenus = ({ food }: { food: Menu[] }) => {
                 mt="sm"
                 onClick={close}
               >
-                Delete
+                Cancel
               </Button>
             </Group>
           </Box>
