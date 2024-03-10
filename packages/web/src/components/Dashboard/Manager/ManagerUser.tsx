@@ -11,14 +11,8 @@ import { IconSearch } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import {
   IconEdit,
-  IconAt,
-  IconPhone,
-  IconBuildingStore,
-  IconUserEdit,
   IconTrash,
   IconSquareRoundedPlus,
-  IconUserPlus,
-  IconLockSquareRounded,
 } from "@tabler/icons-react";
 import {
   Container,
@@ -26,64 +20,32 @@ import {
   ActionIcon,
   Table,
   Card,
-  Modal,
   TextInput,
-  Button,
-  Box,
-  Avatar,
-  Select,
   Title,
   Tooltip,
   Text,
-  SimpleGrid,
   rem,
-  Flex,
   Center,
-  PasswordInput,
 } from "@mantine/core";
+
+import React from "react";
+
+import { AddUserModal } from "@/components/Dashboard/Manager/ManagerUserModal/AddUserModal";
+import { EditUserModal } from "@/components/Dashboard/Manager/ManagerUserModal/EditUserModal";
 
 export const ManagerUser = () => {
   const [search, setSearch] = useState("");
   const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
   const [ModalOpenAdd, setModalOpenAdd] = useState(false);
   const [users, setusers] = useState<User[]>([]);
-
-  const [formDataAdd, setFormDataAdd] = useState({
-    username: "",
-    password: "",
-    name: "",
-    role: "STAFF",
-    email: "",
-    telephone: "",
-  });
-
-  const [formDataEdit, setFormDataEdit] = useState({
+  const [EditUser, setEditUser] = useState<User>({
     id: "",
     username: "",
+    password: "",
     name: "",
     role: "",
     email: "",
     telephone: "",
-  });
-
-  const form = useForm({
-    initialValues: {
-      username: "",
-      name: "",
-      roles: "",
-      email: "",
-      telephone: "",
-    },
-
-    validate: {
-      username: (value) => (value.length < 2 ? "Username is too short" : null),
-      name: (value) =>
-        value.length < 4 ? "Name must have at least 4 letters" : null,
-      roles: (value) => (value.length < 2 ? "Select your Roles" : null),
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      telephone: (value) =>
-        value.length < 10 ? "Phonenumber must have at least 10 numbers" : null,
-    },
   });
 
   const { isError, data } = useQuery({
@@ -123,24 +85,7 @@ export const ManagerUser = () => {
     );
   }
 
-  const handleEdit = (id: string) => {
-    const data = users.find((user) => user.id === id);
-
-    if (data !== undefined) {
-      setFormDataEdit({
-        id: data.id,
-        username: data.username,
-        name: data.name,
-        role: data.role,
-        email: data.email,
-        telephone: data.telephone,
-      });
-      setIsModalOpenEdit(true);
-    }
-  };
-
-  async function handleSubmitAdd(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSubmitAdd(formDataAdd: User) {
     try {
       const res_add = await http().post("/users", {
         username: formDataAdd.username,
@@ -168,44 +113,45 @@ export const ManagerUser = () => {
     }
   }
 
-  const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  async function handleSubmitEdit(formDataEdit: User) {
+    console.log(formDataEdit);
     try {
-      const res = await http().patch(`/users/${formDataEdit.id}`, {
+      const res_edit = await http().patch(`/users/${formDataEdit.id}`, {
         username: formDataEdit.username,
+        password: formDataEdit.password,
         name: formDataEdit.name,
         role: formDataEdit.role.toLocaleUpperCase(),
         email: formDataEdit.email,
         telephone: formDataEdit.telephone,
       });
-      if (res.status === 200) {
+      if (res_edit.status === 200) {
         notifications.show({
           title: "Success",
-          message: "User updated successfully",
+          message: "User edited successfully",
           color: "green",
         });
-
-        const index = users.findIndex((user) => user.id === formDataEdit.id);
-        if (index !== -1) {
-          users[index] = {
-            ...users[index],
-            username: formDataEdit.username,
-            name: formDataEdit.name,
-            role: formDataEdit.role.toLocaleUpperCase(),
-            email: formDataEdit.email,
-            telephone: formDataEdit.telephone,
-          };
-          setusers([...users]);
-        }
+        setIsModalOpenEdit(false);
+        setusers(
+          users.map((user) =>
+            user.id === formDataEdit.id ? formDataEdit : user
+          )
+        );
       }
-
-      setIsModalOpenEdit(false);
     } catch (e) {
-      console.log(e);
+      notifications.show({
+        title: "Error",
+        message: "Something went wrong. Please try again later",
+        color: "red",
+      });
     }
+  }
+
+  const handleEditclick = (user: User) => {
+    setEditUser(user);
+    setIsModalOpenEdit(true);
   };
 
-  const remove = (id: string) => {
+  const remove = (id: string, username: string) => {
     modals.openConfirmModal({
       title: (
         <Text fz={18} fw={500}>
@@ -224,7 +170,7 @@ export const ManagerUser = () => {
         color: "red",
       },
 
-      children: <Text>Are you sure you want to Delete this user?</Text>,
+      children: <Text>Are you sure you want to delete {username} ?</Text>,
 
       onConfirm: async () => {
         try {
@@ -263,7 +209,7 @@ export const ManagerUser = () => {
   );
 
   const rows = filteredRows.map((users) => (
-    <Table.Tr key={users.username} ta="center">
+    <Table.Tr key={users.id} ta="center">
       <Table.Td>{users.username}</Table.Td>
       <Table.Td>{users.name}</Table.Td>
       <Table.Td>{users.role}</Table.Td>
@@ -276,7 +222,7 @@ export const ManagerUser = () => {
             variant="default"
             aria-label="Settings"
             size={32}
-            onClick={() => handleEdit(users.id)}
+            onClick={() => handleEditclick(users)}
             mr="md"
           >
             <IconEdit style={{ width: "80%", height: "80%" }} />
@@ -289,7 +235,7 @@ export const ManagerUser = () => {
             aria-label="Delete"
             size={32}
             color="#f03e3e"
-            onClick={() => remove(users.id)}
+            onClick={() => remove(users.id, users.username)}
             disabled={users.role == "MANAGER"}
           >
             <IconTrash style={{ width: "80%", height: "80%" }} />
@@ -306,7 +252,7 @@ export const ManagerUser = () => {
       <Table.Th ta="center">Roles</Table.Th>
       <Table.Th ta="center">Email</Table.Th>
       <Table.Th ta="center">Telephone</Table.Th>
-      <Table.Th ta="center"></Table.Th>
+      <Table.Th ta="center">Action</Table.Th>
     </Table.Tr>
   );
 
@@ -350,238 +296,18 @@ export const ManagerUser = () => {
       </Container>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
 
-      {/*-------------------------------------------------------Modal Edit--------------------------------------------------------------*/}
-      <Modal
-        opened={isModalOpenEdit}
-        onClose={() => setIsModalOpenEdit(false)}
-        title="Edit Profile"
-        size="50%"
-      >
-        <Title order={2} size="h2" fw={900} ta="center" >
-          Profile
-        </Title>
-
-        <Group justify="center">
-          <Avatar
-            variant="light"
-            radius="xl"
-            size="xl"
-            src=""
-            alt="no image here"
-            mt="sm"
-          />
-        </Group>
-        <form onSubmit={handleSubmitEdit}>
-          <Box mx="xl" >
-            <SimpleGrid cols={{ base: 1, sm: 2 }}>
-              <TextInput
-                mt="sm"
-                label="Username"
-                placeholder="Your Username"
-                withAsterisk
-                leftSection={<IconUserEdit size={16} />}
-                {...form.getInputProps("username")}
-                value={formDataEdit.username}
-                onChange={(e) =>
-                  setFormDataEdit({ ...formDataEdit, username: e.target.value })
-                }
-              />
-              <TextInput
-                mt="sm"
-                label="Name"
-                placeholder="Your Name"
-                withAsterisk
-                leftSection={<IconUserEdit size={16} />}
-                {...form.getInputProps("name")}
-                value={formDataEdit.name}
-                onChange={(e) =>
-                  setFormDataEdit({ ...formDataEdit, name: e.target.value })
-                }
-              />
-            </SimpleGrid>
-            <Select
-              mt="sm"
-              label="Roles"
-              placeholder="Your roles"
-              data={["Manager", "Chef", "Staff", "Customer"]}
-              leftSection={<IconBuildingStore size={16} />}
-              comboboxProps={{ shadow: "md" }}
-              {...form.getInputProps("role")}
-              defaultValue={
-                formDataEdit.role.charAt(0).toUpperCase() +
-                formDataEdit.role.slice(1).toLowerCase()
-              }
-              onChange={(e) =>
-                setFormDataEdit({ ...formDataEdit, role: e || "" })
-              }
-            />
-            <TextInput
-              mt="sm"
-              label="Email"
-              placeholder="Your Email"
-              withAsterisk
-              leftSection={<IconAt size={16} />}
-              {...form.getInputProps("email")}
-              value={formDataEdit.email}
-              onChange={(e) =>
-                setFormDataEdit({ ...formDataEdit, email: e.target.value })
-              }
-            />
-            <TextInput
-              mt="sm"
-              label="Telephone"
-              placeholder="Your Phone number"
-              withAsterisk
-              leftSection={<IconPhone size={16} />}
-              {...form.getInputProps("telephone")}
-              value={formDataEdit.telephone}
-              onChange={(e) =>
-                setFormDataEdit({ ...formDataEdit, telephone: e.target.value })
-              }
-            />
-
-            <Group justify="center" mt="md">
-              <Button type="submit" variant="filled" radius="lg" color="green">
-                Save
-              </Button>
-              <Button
-                variant="filled"
-                color="red"
-                radius="lg"
-                onClick={() => setIsModalOpenEdit(false)}
-              >
-                Cancel
-              </Button>
-            </Group>
-          </Box>
-        </form>
-      </Modal>
-      {/*----------------------------------------------------END Modal Edit---------------------------------------------------------*/}
-
-      {/*------------------------------------------------------Modal Add--------------------------------------------------------------*/}
-      <Modal
-        opened={ModalOpenAdd}
+      <AddUserModal
+        isOpen={ModalOpenAdd}
         onClose={() => setModalOpenAdd(false)}
-        title="Add Users"
-        styles={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.1)", // Adjust the last value (0.5) to change opacity
-          },
-        }}
-      >
-        <Group justify="center">
-          <Avatar
-            variant="light"
-            radius="xl"
-            size="xl"
-            src=""
-            alt="no image here"
-            mt="sm"
-          />
-        </Group>
-        <form onSubmit={handleSubmitAdd}>
-          <SimpleGrid cols={{ base: 1, sm: 2 }}>
-            <TextInput
-              autoFocus
-              label="Username"
-              placeholder="Username"
-              withAsterisk
-              mt="sm"
-              leftSection={<IconUserPlus size={16} />}
-              value={formDataAdd.username}
-              onChange={(e) =>
-                setFormDataAdd({ ...formDataAdd, username: e.target.value })
-              }
-            />
-            <TextInput
-              label="Name"
-              placeholder="Name"
-              withAsterisk
-              mt="sm"
-              leftSection={<IconUserPlus size={16} />}
-              value={formDataAdd.name}
-              onChange={(e) =>
-                setFormDataAdd({ ...formDataAdd, name: e.target.value })
-              }
-            />
-          </SimpleGrid>
-          <PasswordInput
-            autoFocus
-            label="Password"
-            placeholder="Password"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconLockSquareRounded size={16} />}
-            value={formDataAdd.password}
-            onChange={(e) =>
-              setFormDataAdd({ ...formDataAdd, password: e.target.value })
-            }
-          />
-          <Select
-            label="Role"
-            placeholder="Pick role"
-            mt="sm"
-            leftSection={<IconBuildingStore size={16} />}
-            data={["Manager", "Chef", "Staff", "Customer"]}
-            value={formDataAdd.role}
-            onChange={(e) => {
-              setFormDataAdd({ ...formDataAdd, role: e || "" });
-            }}
-          />
-          <TextInput
-            label="Email"
-            placeholder="Email"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconAt size={16} />}
-            value={formDataAdd.email}
-            onChange={(e) =>
-              setFormDataAdd({ ...formDataAdd, email: e.target.value })
-            }
-          />
-          <TextInput
-            label="Telephone"
-            placeholder="Telephone"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconPhone size={16} />}
-            value={formDataAdd.telephone}
-            onChange={(e) =>
-              setFormDataAdd({ ...formDataAdd, telephone: e.target.value })
-            }
-          />
+        onAddUser={handleSubmitAdd}
+      />
 
-          <Flex
-            mih={50}
-            mt="md"
-            gap="xl"
-            justify="center"
-            align="flex-start"
-            direction="row"
-            wrap="wrap"
-          >
-            <Button
-              type="submit"
-              variant="filled"
-              radius="lg"
-              mt="sm"
-              color="green"
-            >
-              Add
-            </Button>
-            <Button
-              variant="filled"
-              radius="lg"
-              mt="sm"
-              color="red"
-              onClick={() => setModalOpenAdd(false)}
-            >
-              Cancel
-            </Button>
-          </Flex>
-        </form>
-      </Modal>
-      {/*---------------------------------------------------- END Modal Add--------------------------------------------------------------*/}
+      <EditUserModal
+        isOpen={isModalOpenEdit}
+        onClose={() => setIsModalOpenEdit(false)}
+        onEditUser={handleSubmitEdit}
+        user={EditUser}
+      />
     </>
   );
 };

@@ -16,6 +16,7 @@ export type Menu = {
 
 export type User = {
   id: string;
+  password?: string;
   username: string;
   name: string;
   role: string;
