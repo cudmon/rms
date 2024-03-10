@@ -17,6 +17,7 @@ export class TablesService {
         name: true,
         seat: true,
         status: true,
+        
       },
     });
   }
@@ -51,12 +52,16 @@ export class TablesService {
   async updateById(id: string, data: UpdateTableDto) {
     return this.prisma.table.update({
       where: { id },
-      data,
+      data:{
+        ...data,
+        passcode: data.passcode ? await hash(data.passcode, 10) : undefined,
+      },
       select: {
         id: true,
         name: true,
         seat: true,
         status: true,
+        passcode: true,
       },
     });
   }

@@ -15,6 +15,7 @@ import {
   IconBuildingStore,
   IconPhone,
   IconAt,
+  IconUserEdit
 } from "@tabler/icons-react";
 import { z } from "zod";
 import { useForm } from "@mantine/form";
@@ -96,7 +97,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       opened={isOpen}
       onClose={onClose}
       title="Edit Users"
-      size="lg"
       styles={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.1)",
@@ -127,7 +127,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             placeholder="Username"
             withAsterisk
             mt="sm"
-            leftSection={<IconUserPlus size={16} />}
+            leftSection={<IconUserEdit size={16} />}
             {...form.getInputProps("username")}
           />
           <TextInput
@@ -135,33 +135,33 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             placeholder="Name"
             withAsterisk
             mt="sm"
-            leftSection={<IconUserPlus size={16} />}
+            leftSection={<IconUserEdit size={16} />}
             {...form.getInputProps("name")}
           />
         </SimpleGrid>
-        <SimpleGrid cols={{ base: 1, sm: 2 }}>
-          <Select
-            label="Role"
-            placeholder="Pick role"
-            mt="sm"
-            leftSection={<IconBuildingStore size={16} />}
-            data={[
-              { value: "MANAGER", label: "Manager" },
-              { value: "CHEF", label: "Chef" },
-              { value: "STAFF", label: "Staff" },
-              { value: "CUSTOMER", label: "Customer" },
-            ]}
-            {...form.getInputProps("role")}
-          />
-          <TextInput
-            label="Telephone"
-            placeholder="Telephone"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconPhone size={16} />}
-            {...form.getInputProps("telephone")}
-          />
-        </SimpleGrid>
+
+        <Select
+          label="Role"
+          placeholder="Pick role"
+          mt="sm"
+          leftSection={<IconBuildingStore size={16} />}
+          data={[
+            { value: "MANAGER", label: "Manager" },
+            { value: "CHEF", label: "Chef" },
+            { value: "STAFF", label: "Staff" },
+            { value: "CUSTOMER", label: "Customer" },
+          ]}
+          {...form.getInputProps("role")}
+        />
+        <TextInput
+          label="Telephone"
+          placeholder="Telephone"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconPhone size={16} />}
+          {...form.getInputProps("telephone")}
+        />
+
         <TextInput
           label="Email"
           placeholder="Email"

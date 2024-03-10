@@ -18,20 +18,19 @@ import {
   Container,
   Table,
   ActionIcon,
-  Modal,
   TextInput,
   Text,
   Tooltip,
   Badge,
-  Select,
-  Button,
-  Flex,
   Card,
   Grid,
   Title,
   rem,
-  Center,
+  Center,Group
 } from "@mantine/core";
+
+import { AddTableModal } from "@/components/Dashboard/Manager/ManagerTableModal/AddTableModal";
+import { EditTableModal } from "@/components/Dashboard/Manager/ManagerTableModal/EditTableModal";
 
 export const ManagerTable = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -43,25 +42,13 @@ export const ManagerTable = () => {
 
   const [search, setSearch] = useState("");
 
-  const [formDataAdd, setFormDataAdd] = useState({
-    name: "",
-    seat: "",
-    passcode: "",
-    status: "IDLE",
-  });
-
-  const [formDataEdit, setFormDataEdit] = useState({
+  const [EditTable, setEditTable] = useState<TableEntity>({
     id: "",
     name: "",
     seat: 0,
+    status: "",
     passcode: "",
-    status: "IDLE",
   });
-
-  {
-    /* ---------------------------------------- Get Table ------------------------------------------------------- */
-  }
-  console.log("table : ", formDataAdd);
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -100,32 +87,21 @@ export const ManagerTable = () => {
     );
   }
 
-  {
-    /* ---------------------------------------- END Get Table ------------------------------------------------------- */
-  }
-
-  {
-    /* ---------------------------------------- Add Table ------------------------------------------------------- */
-  }
-
-  const handleSubmitAdd = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  async function handleSubmitAdd(formDataAdd: TableEntity) {
     try {
-      //seat is a number
-      const resTableAdd = await http().post("/tables", {
+      const res_add = await http().post("/tables", {
         name: formDataAdd.name,
-        seat: parseInt(formDataAdd.seat),
+        seat: formDataAdd.seat,
         passcode: formDataAdd.passcode,
-        status: formDataAdd.status,
       });
-      if (resTableAdd.status === 201) {
+      if (res_add.status === 201) {
         notifications.show({
           title: "Success",
           message: "Table added successfully",
           color: "green",
         });
         setModalOpenAdd(false);
-        setTables([...tables, resTableAdd.data]);
+        setTables([...tables, res_add.data]);
       }
     } catch (e) {
       notifications.show({
@@ -134,66 +110,50 @@ export const ManagerTable = () => {
         color: "red",
       });
     }
-  };
-
-  {
-    /* ---------------------------------------- END Add Table ------------------------------------------------------- */
   }
 
-  {
-    /* ---------------------------------------- Edit Table ------------------------------------------------------- */
-  }
-  const handleEdit = (id: string) => {
-    const data = tables.find((table) => table.id === id);
-
-    if (data !== undefined) {
-      setFormDataEdit({
-        id: data.id,
-        name: data.name,
-        seat: data.seat,
-        passcode: data.passcode,
-        status: data.status,
-      });
-      setModalOpenEdit(true);
-    }
-  };
-
-  const handleSubmitEdit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  async function handleSubmitEdit(formDataEdit: TableEntity) {
+    console.log(formDataEdit);
     try {
-      const res = await http().patch(
-        `/tables/${formDataEdit.id}`,
-        formDataEdit
-      );
-      if (res.status === 200) {
+      const res_edit = await http().patch(`/tables/${formDataEdit.id}`, {
+        name: formDataEdit.name,
+        seat: formDataEdit.seat,
+        passcode: formDataEdit.passcode,
+      });
+      if (res_edit.status === 200) {
         notifications.show({
           title: "Success",
-          message: "Table updated successfully",
+          message: "Table edited successfully",
           color: "green",
         });
-
-        const index = tables.findIndex((table) => table.id === formDataEdit.id);
-        if (index !== -1) {
-          tables[index] = formDataEdit;
-          setTables([...tables]);
-        }
+        setModalOpenEdit(false);
+        setTables(
+          tables.map((table) =>
+            table.id === formDataEdit.id ? formDataEdit : table
+          )
+        );
       }
-
-      setModalOpenEdit(false);
     } catch (e) {
-      console.log(e);
+      notifications.show({
+        title: "Error",
+        message: "Something went wrong. Please try again later",
+        color: "red",
+      });
     }
+  }
+
+  const handleEditclick = (table: TableEntity) => {
+    setEditTable({
+      id: table.id,
+      name: table.name,
+      seat: table.seat,
+      status: table.status,
+      passcode: "",
+    });
+    setModalOpenEdit(true);
   };
 
-  {
-    /* ---------------------------------------- END Edit Table ------------------------------------------------------- */
-  }
-
-  {
-    /* ---------------------------------------- Remove Table Modal ------------------------------------------------------- */
-  }
-
-  const remove = (id: string) => {
+  const remove = (id: string, name: string) => {
     modals.openConfirmModal({
       title: (
         <Text fz={18} fw={500}>
@@ -212,7 +172,11 @@ export const ManagerTable = () => {
         color: "red",
       },
 
-      children: <Text>Are you sure you want to Delete this Table?</Text>,
+      children: (
+        <Text>
+          Are you sure you want to delete <strong>{name}</strong> ?
+        </Text>
+      ),
 
       onConfirm: async () => {
         try {
@@ -237,28 +201,18 @@ export const ManagerTable = () => {
     });
   };
 
-  {
-    /* ---------------------------------------- END Remove Table Modal ------------------------------------------------------- */
-  }
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
 
-  {
-    /* ---------------------------------------- Search ------------------------------------------------------- */
-  }
-  // const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearch(event.target.value);
-  // };
+  const tablelist = tables.filter(
+    (table) =>
+      table.status?.toLowerCase().includes(search.toLowerCase()) ||
+      table.name.toLowerCase().includes(search.toLowerCase()) ||
+      table.seat?.toString().includes(search.toLowerCase())
+  );
 
-  // const tablelist = tables.filter(
-  //   (table) =>
-  //     table.status?.toLowerCase().includes(search.toLowerCase()) ||
-  //     table.name.toLowerCase().includes(search.toLowerCase()) ||
-  //     table.seat?.toString().includes(search.toLowerCase())
-  // );
-  {
-    /* ---------------------------------------- END Search ------------------------------------------------------- */
-  }
-
-  const rows = tables.map((tablelist) => {
+  const rows = tablelist.map((tablelist) => {
     let badgeColor = "gray";
 
     switch (tablelist.status) {
@@ -293,7 +247,7 @@ export const ManagerTable = () => {
               variant="default"
               aria-label="Edit"
               size={32}
-              onClick={() => handleEdit(tablelist.id)}
+              onClick={() => handleEditclick(tablelist)}
               radius="md"
             >
               <IconEdit style={{ width: "80%", height: "80%" }} />
@@ -304,7 +258,7 @@ export const ManagerTable = () => {
               variant="filled"
               aria-label="Delete"
               size={32}
-              onClick={() => remove(tablelist.id)}
+              onClick={() => remove(tablelist.id, tablelist.name)}
               color="#f03e3e"
               radius="md"
             >
@@ -328,200 +282,55 @@ export const ManagerTable = () => {
   return (
     <>
       <Container my="md">
-        <Title order={3} size="h1" fw={900} ta="center" >
-          TABLE
-        </Title>
-        <Text ta="center" mt="md" fw={750}>
-          Table List
-        </Text>
+        <Group justify="space-between">
+          <Title order={3} size="h2" fw={900} ta="center" >
+            Tables
+          </Title>
+          <ActionIcon
+            variant="subtle"
+            color="lime.6"
+            size="lg"
+            radius="xl"
+            aria-label="add"
+            onClick={() => setModalOpenAdd(true)}
+          >
+            <IconSquareRoundedPlus stroke={1.5} size={32} />
+          </ActionIcon>
+        </Group>
 
         <TextInput
-          placeholder="Search by any field"
-          mb="md"
+          placeholder="Search for table information..."
+          my="md"
           leftSection={
             <IconSearch
               style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
           }
-          // value={search}
-          // onChange={handleSearchChange}
+          value={search}
+          onChange={handleSearchChange}
         />
 
-        <Card shadow="md" padding="lg" radius="md" withBorder>
+        <Card padding="lg" radius="md" withBorder mt="md">
           <Table stickyHeader verticalSpacing="sm" highlightOnHover>
             <Table.Thead>{head}</Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
-          <Grid justify="flex-end">
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              size="lg"
-              radius="xl"
-              aria-label="add"
-              onClick={() => setModalOpenAdd(true)}
-            >
-              <IconSquareRoundedPlus stroke={1.5} size={28} />
-            </ActionIcon>
-          </Grid>
         </Card>
       </Container>
 
-      {/* ---------------------------------------- Edit Table Modal ------------------------------------------------------- */}
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Edit Table"
-        styles={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.1)",
-          },
-        }}
-      >
-        <TextInput
-          ata-autofocus
-          label="Tablenumber"
-          placeholder="Table numbers"
-          value="wait for api"
-        />
-        <Select
-          mt="md"
-          label="Status"
-          placeholder="Pick table status"
-          data={["idle", "eating", "reserve"]}
-          defaultValue="wait for api"
-        />
-        <Select
-          mt="md"
-          label="seat"
-          placeholder="Pick seat"
-          data={["2", "4", "6"]}
-          defaultValue="wait for api"
-        />
-
-        <Flex
-          mih={50}
-          mt="md"
-          gap="xl"
-          justify="center"
-          align="flex-start"
-          direction="row"
-          wrap="wrap"
-        >
-          <Button
-            variant="filled"
-            radius="lg"
-            mt="sm"
-            color="green"
-            onClick={close}
-          >
-            Save
-          </Button>
-          <Button
-            variant="filled"
-            radius="lg"
-            mt="sm"
-            color="red"
-            onClick={close}
-          >
-            Cancel
-          </Button>
-        </Flex>
-      </Modal>
-      {/* ---------------------------------------- END Edit Table Modal ------------------------------------------------------- */}
-
-      {/* ---------------------------------------- Add Table Modal ------------------------------------------------------- */}
-      <Modal
-        opened={ModalOpenAdd}
+      <AddTableModal
+        isOpen={ModalOpenAdd}
         onClose={() => setModalOpenAdd(false)}
-        title="Add Table"
-        styles={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.1)", // Adjust the last value (0.5) to change opacity
-          },
-        }}
-      >
-        <form onSubmit={handleSubmitAdd}>
-          <TextInput
-            mt="md"
-            ata-autofocus
-            label="Table name"
-            placeholder="Table name"
-            value={formDataAdd.name}
-            onChange={(e) =>
-              setFormDataAdd({ ...formDataAdd, name: e.currentTarget.value })
-            }
-          />
-          <TextInput
-            mt="md"
-            ata-autofocus
-            label="Seat"
-            placeholder="Seat"
-            value={formDataAdd.seat}
-            onChange={(e) =>
-              setFormDataAdd({
-                ...formDataAdd,
-                seat: e.currentTarget.value,
-              })
-            }
-          />
-          <TextInput
-            mt="md"
-            ata-autofocus
-            label="Passcode"
-            placeholder="Passcode"
-            value={formDataAdd.passcode}
-            onChange={(e) =>
-              setFormDataAdd({
-                ...formDataAdd,
-                passcode: e.currentTarget.value,
-              })
-            }
-          />
-          <Select
-            mt="md"
-            label="Status"
-            placeholder="Pick table status"
-            data={["idle", "eating", "reserve"]}
-            defaultValue={formDataAdd.status}
-            value={formDataAdd.status}
-            onChange={(e) => {
-              setFormDataAdd({ ...formDataAdd, status: e || "" });
-            }}
-          />
+        onAddTable={handleSubmitAdd}
+      />
 
-          <Flex
-            mih={50}
-            mt="md"
-            gap="xl"
-            justify="center"
-            align="flex-start"
-            direction="row"
-            wrap="wrap"
-          >
-            <Button
-              variant="filled"
-              radius="lg"
-              type="submit"
-              mt="sm"
-              color="green"
-            >
-              Save
-            </Button>
-            <Button
-              variant="filled"
-              radius="lg"
-              mt="sm"
-              color="red"
-              onClick={() => setModalOpenAdd(false)}
-            >
-              Cancel
-            </Button>
-          </Flex>
-        </form>
-      </Modal>
-      {/* ---------------------------------------- END Add Table Modal ------------------------------------------------------- */}
+      <EditTableModal
+        isOpen={ModalOpenEdit}
+        onClose={() => setModalOpenEdit(false)}
+        onEditTable={handleSubmitEdit}
+        table={EditTable}
+      />
     </>
   );
 };
