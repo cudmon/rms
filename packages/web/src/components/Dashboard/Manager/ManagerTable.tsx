@@ -26,7 +26,7 @@ import {
   Grid,
   Title,
   rem,
-  Center,
+  Center,Group
 } from "@mantine/core";
 
 import { AddTableModal } from "@/components/Dashboard/Manager/ManagerTableModal/AddTableModal";
@@ -282,16 +282,25 @@ export const ManagerTable = () => {
   return (
     <>
       <Container my="md">
-        <Title order={3} size="h1" fw={900} ta="center">
-          TABLE
-        </Title>
-        <Text ta="center" mt="md" fw={750}>
-          Table List
-        </Text>
+        <Group justify="space-between">
+          <Title order={3} size="h2" fw={900} ta="center" >
+            Tables
+          </Title>
+          <ActionIcon
+            variant="subtle"
+            color="lime.6"
+            size="lg"
+            radius="xl"
+            aria-label="add"
+            onClick={() => setModalOpenAdd(true)}
+          >
+            <IconSquareRoundedPlus stroke={1.5} size={32} />
+          </ActionIcon>
+        </Group>
 
         <TextInput
-          placeholder="Search by any field"
-          mb="md"
+          placeholder="Search for table information..."
+          my="md"
           leftSection={
             <IconSearch
               style={{ width: rem(16), height: rem(16) }}
@@ -302,23 +311,11 @@ export const ManagerTable = () => {
           onChange={handleSearchChange}
         />
 
-        <Card shadow="md" padding="lg" radius="md" withBorder>
+        <Card padding="lg" radius="md" withBorder mt="md">
           <Table stickyHeader verticalSpacing="sm" highlightOnHover>
             <Table.Thead>{head}</Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
-          <Grid justify="flex-end">
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              size="lg"
-              radius="xl"
-              aria-label="add"
-              onClick={() => setModalOpenAdd(true)}
-            >
-              <IconSquareRoundedPlus stroke={1.5} size={28} />
-            </ActionIcon>
-          </Grid>
         </Card>
       </Container>
 

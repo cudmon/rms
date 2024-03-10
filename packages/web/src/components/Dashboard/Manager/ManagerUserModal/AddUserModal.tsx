@@ -75,7 +75,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
       opened={isOpen}
       onClose={onClose}
       title="Add Users"
-      size="lg"
       styles={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.1)",
@@ -119,29 +118,29 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             {...form.getInputProps("name")}
           />
         </SimpleGrid>
-        <SimpleGrid cols={{ base: 1, sm: 2 }}>
-          <Select
-            label="Role"
-            placeholder="Pick role"
-            mt="sm"
-            leftSection={<IconBuildingStore size={16} />}
-            data={[
-              { value: "MANAGER", label: "Manager" },
-              { value: "CHEF", label: "Chef" },
-              { value: "STAFF", label: "Staff" },
-              { value: "CUSTOMER", label: "Customer" },
-            ]}
-            {...form.getInputProps("role")}
-          />
-          <TextInput
-            label="Telephone"
-            placeholder="Telephone"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconPhone size={16} />}
-            {...form.getInputProps("telephone")}
-          />
-        </SimpleGrid>
+
+        <Select
+          label="Role"
+          placeholder="Pick role"
+          mt="sm"
+          leftSection={<IconBuildingStore size={16} />}
+          data={[
+            { value: "MANAGER", label: "Manager" },
+            { value: "CHEF", label: "Chef" },
+            { value: "STAFF", label: "Staff" },
+            { value: "CUSTOMER", label: "Customer" },
+          ]}
+          {...form.getInputProps("role")}
+        />
+        <TextInput
+          label="Telephone"
+          placeholder="Telephone"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconPhone size={16} />}
+          {...form.getInputProps("telephone")}
+        />
+
         <TextInput
           label="Email"
           placeholder="Email"
