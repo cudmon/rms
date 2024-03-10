@@ -29,7 +29,7 @@ export type Order = {
   menu: Menu;
   price: number;
   quantity: number;
-  status: "pending" | "completed";
+  status: "PENDING" | "COMPLETED" | "SERVED" | "CANCELED"| "FINISHED";
 };
 
 export type Usage = {
