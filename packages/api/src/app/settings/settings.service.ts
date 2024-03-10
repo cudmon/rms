@@ -6,7 +6,11 @@ export class SettingsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.setting.findMany();
+    return this.prisma.setting.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
   }
 
   async findByName(name: string) {

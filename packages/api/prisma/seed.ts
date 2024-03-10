@@ -105,30 +105,37 @@ async function main() {
       {
         name: "OPENING_TIME",
         value: "09:00",
+        type: "TIME",
       },
       {
         name: "CLOSING_TIME",
         value: "22:00",
+        type: "TIME",
       },
       {
         name: "RESERVATION_MAX_DAY",
         value: "7",
+        type: "NUMBER",
       },
       {
         name: "RESERVATION_MIN_DAY",
         value: "1",
+        type: "NUMBER",
       },
       {
         name: "BILLING_TAX",
         value: "10",
+        type: "NUMBER",
       },
       {
         name: "SERVICE_CHARGE",
         value: "10",
+        type: "NUMBER",
       },
       {
         name: "MAX_TABLE_BOOKING",
         value: "10",
+        type: "NUMBER",
       },
     ],
   });

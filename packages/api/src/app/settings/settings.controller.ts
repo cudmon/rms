@@ -15,7 +15,7 @@ export class SettingsController {
     return this.settingsService.findByName(name);
   }
 
-  @Patch(":id")
+  @Patch(":name")
   async updateByName(
     @Param("name") name: string,
     @Body("value") value: string
