@@ -170,7 +170,7 @@ export const ManagerUser = () => {
         color: "red",
       },
 
-      children: <Text>Are you sure you want to delete {username} ?</Text>,
+      children: <Text>Are you sure you want to delete <strong>{username}</strong> ?</Text>,
 
       onConfirm: async () => {
         try {
@@ -252,7 +252,6 @@ export const ManagerUser = () => {
       <Table.Th ta="center">Roles</Table.Th>
       <Table.Th ta="center">Email</Table.Th>
       <Table.Th ta="center">Telephone</Table.Th>
-      <Table.Th ta="center">Action</Table.Th>
     </Table.Tr>
   );
 
