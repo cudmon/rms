@@ -1,28 +1,13 @@
 "use client";
 
 import { TableEntity, Order } from "@/types/entity";
-import { IconArmchair, IconTags, IconUserEdit } from "@tabler/icons-react";
+import { IconArmchair, IconTags, IconUserEdit, IconCheck, IconCreditCard, IconBuildingBank } from "@tabler/icons-react";
 import {
-  Badge,
-  Card,
-  Center,
-  Container,
-  Text,
-  Grid,
-  Button,
-  rem,
-  Title,
-  Modal,
-  TextInput,
-  Box,
-  SimpleGrid,
-  Table,
-  Tooltip,
-  ActionIcon,
+  Badge, Card, Center, Container, Text, Grid, Button, rem, Title, Modal, TextInput, Box, SimpleGrid, Table, Tooltip,
+  ActionIcon, Paper, Radio, CheckIcon, UnstyledButton, Checkbox, Divider
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
-import { IconX, IconCheck } from "@tabler/icons-react";
 
 const Ordersz = [
   {
@@ -53,7 +38,12 @@ const Ordersz = [
     status: "CANCELED",
   },
 ];
- 
+
+const bills = [
+  { id: 1, menu: 'Burger', quantity: 5, price: 20 },
+  { id: 2, menu: 'Pizza', quantity: 3, price: 25 },
+
+];
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -75,7 +65,10 @@ export const TableStaff = ({
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [ModalOpenOrder, setModalOpenOrder] = useState(false);
-  
+  const [value, setValue] = useState('react');
+  const [ModalBilled, setModalBilled] = useState(false);
+  const [values, onChange] = useState(true);
+
   const FinishOrder = (status: string) => {
     if (status === "FINISHED") {
       return true;
@@ -93,6 +86,25 @@ export const TableStaff = ({
       <Table.Th ta="center"></Table.Th>
     </Table.Tr>
   );
+
+  const headbilled = (
+    <Table.Tr>
+      <Table.Th ta="center">ID</Table.Th>
+      <Table.Th ta="center">Menu</Table.Th>
+      <Table.Th ta="center">Price</Table.Th>
+      <Table.Th ta="center">quantity</Table.Th>
+    </Table.Tr>
+  );
+
+  const rowsbilled = bills.map((bill) => (
+    <Table.Tr key={bill.id} ta="center">
+      <Table.Td>{bill.id}</Table.Td>
+      <Table.Td>{bill.menu}</Table.Td>
+      <Table.Td>{bill.price}</Table.Td>
+      <Table.Td>{bill.quantity}</Table.Td>
+    </Table.Tr>
+  ));
+
 
   const rowsOrder = Ordersz.map((item) => {
     let badgeColor = "gray";
@@ -200,7 +212,7 @@ export const TableStaff = ({
                     </Grid.Col>
                     <Grid.Col span={2}>
                       <Center>
-                        <Button variant="filled" color="blue.5" radius="md">
+                        <Button variant="filled" color="blue.5" radius="md" onClick={() => setModalBilled(true)}>
                           Bill
                         </Button>
                       </Center>
@@ -228,7 +240,53 @@ export const TableStaff = ({
           </Table>
         </Card>
       </Modal>
-       {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
+      {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
+
+      {/* -------------------------------------------------- Modal Billed-------------------------------------------------------- */}
+      <Modal opened={ModalBilled} onClose={() => setModalBilled(false)} title="" size="80%" centered >
+        <Title order={2} size="h2" fw={900} ta="center" c="black">
+          Billed
+        </Title>
+        <Grid mt='md' align="stretch">
+          <Grid.Col span='auto'>
+            <Table stickyHeader verticalSpacing="sm" highlightOnHover withTableBorder>
+              <Table.Thead>{headbilled}</Table.Thead>
+              <Table.Tbody>{rowsbilled}</Table.Tbody>
+            </Table>
+          </Grid.Col>
+          <Grid.Col span={4} >
+            <Paper p="xl" withBorder radius='md' >
+              <Text fw={900} size="lg">Total Prices</Text>
+              <Text>175.00</Text>
+
+            </Paper>
+            <Paper p="xl" mt='sm' withBorder radius='md'>
+              <Text fw={900} size="lg">Payments</Text>
+
+              <Radio.Group value={value}
+                onChange={setValue}
+                name="payment"
+                description="Select Payment Method">
+
+                <Radio icon={CheckIcon} value="cash" color="blue.5" label="Cash" mt='md' />
+                <Radio icon={CheckIcon} value="svelte" color="blue.5" label="Credit / Debit Card" mt='md' />
+                <Radio icon={CheckIcon} value="ng" color="blue.5" label="Bank" mt='md' />
+              </Radio.Group>
+
+              <Button variant="filled" color="teal" radius="md" mt='md' fullWidth>
+                Pay Now
+              </Button>
+              <Button variant="filled" color="red" radius="md" mt='sm' fullWidth onClick={() => setModalBilled(false)}>
+                Cancel
+              </Button>
+
+            </Paper>
+          </Grid.Col>
+        </Grid>
+      </Modal>
+      {/* ------------------------------------------------End Modal Billed-------------------------------------------------------- */}
+
+
     </Container>
   );
 };
