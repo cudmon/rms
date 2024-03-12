@@ -77,7 +77,7 @@ export const EditTableModal: React.FC<EditTableModalProps> = ({
     <Modal
       opened={isOpen}
       onClose={onClose}
-      title="Add Table"
+      title="Edit Table"
       size="sm"
       styles={{
         overlay: {
@@ -127,7 +127,7 @@ export const EditTableModal: React.FC<EditTableModalProps> = ({
           <PasswordInput
             autoFocus
             label="Passcode"
-            placeholder="Passcode"
+            placeholder="Create passcode for table"
             withAsterisk
             mt="sm"
             leftSection={<IconLockSquareRounded size={16} />}
