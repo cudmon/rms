@@ -71,10 +71,6 @@ export class TablesController {
     }
   }
 
-  // IDLE
-  // EATING
-  // RESERVED
-
   @Patch("/idle/:id")
   async cancel(@Param("id", ParseUUIDPipe) id: string) {
     return await this.tableService.updateStatusById(id, "IDLE");

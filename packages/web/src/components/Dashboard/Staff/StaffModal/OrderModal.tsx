@@ -1,63 +1,80 @@
 import React from "react";
-import {  } from "@/types/entity";
+import {Order } from "@/types/entity";
 import { IconCheck } from "@tabler/icons-react";
-import { Badge, Card, Modal, Table, ActionIcon } from "@mantine/core";
-interface Order {
-    id: string;
-    menu: string[];
-    price: number;
-    quantity: number;
-    status: string;
-  }
+import {
+  Badge,
+  Card,
+  Modal,
+  Table,
+  ActionIcon,
+  Tooltip,
+} from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
+import { http } from "@/modules/http";
+import { AxiosError } from "axios";
+import { notifications } from "@mantine/notifications";
+
 interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  Ordersz: Order[]; 
-
+  markAsServed: (id: string) => void;
+  order: Order[];
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({
   isOpen,
   onClose,
-  Ordersz,
+  markAsServed,
+  order,
 }) => {
   if (!isOpen) return null;
 
-  const FinishOrder = (status: string) => {
-    if (status === "FINISHED") {
-      return true;
-    }
-    return false;
-  };
- 
+  const SortOrder = (order: Order[]) => {
+    const servedOrders = order.filter((item) => item.status === "SERVED");
+    const finishOrders = order.filter((item) => item.status === "FINISHED");
+    const pendingOrders = order.filter((item) => item.status === "PENDING");
+    const canceledOrders = order.filter((item) => item.status === "CANCELED");
 
-  const rowsOrder = Ordersz.map((item) => {
+    const mixOrder = [
+      ...servedOrders,
+      ...finishOrders,
+      ...pendingOrders,
+      ...canceledOrders,
+    ];
+
+    return mixOrder;
+  };
+  const SortedOrder = SortOrder(order);
+
+  const rowsOrder = SortedOrder.map((item) => {
     let badgeColor = "gray";
 
     switch (item.status) {
       case "PENDING":
         badgeColor = "green";
+
         break;
       case "FINISHED":
         badgeColor = "red";
+
         break;
       case "SERVED":
         badgeColor = "orange";
+
         break;
       case "CANCELED":
         badgeColor = "gray";
+
         break;
-        case "COMPLETED":
-        badgeColor = "blue.7";
-        break;
+
       default:
         break;
     }
 
     return (
       <Table.Tr key={item.id} ta="center">
-        <Table.Td>{item.id}</Table.Td>
-        <Table.Td>{item.menu.join(",")}</Table.Td>    
+        <Table.Td>{SortedOrder.indexOf(item) + 1}</Table.Td>
+        <Table.Td>{item.menu.name}</Table.Td>
         <Table.Td>{item.quantity}</Table.Td>
         <Table.Td>{item.price}</Table.Td>
         <Table.Td>
@@ -66,13 +83,14 @@ export const OrderModal: React.FC<OrderModalProps> = ({
           </Badge>
         </Table.Td>
         <Table.Td>
-          {FinishOrder(item.status) && 
-          (
-            <Table.Td>
-              <ActionIcon radius="md">
-                <IconCheck  />{" "}
+          {item.status === "FINISHED" ? ( // Conditionally render ActionIcon
+            <Tooltip label="Mark order as served" position="top" offset={5}>
+              <ActionIcon radius="md" onClick={() => markAsServed(item.id)}>
+                <IconCheck />
               </ActionIcon>
-            </Table.Td>
+            </Tooltip>
+          ) : (
+            " "
           )}
         </Table.Td>
       </Table.Tr>
@@ -81,7 +99,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
 
   const head = (
     <Table.Tr>
-      <Table.Th ta="center">ID Order</Table.Th>
+      <Table.Th ta="center">No.</Table.Th>
       <Table.Th ta="center">Menu Name</Table.Th>
       <Table.Th ta="center">Quantity</Table.Th>
       <Table.Th ta="center">Price</Table.Th>

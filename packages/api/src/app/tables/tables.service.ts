@@ -67,18 +67,12 @@ export class TablesService {
   }
 
   async updateStatusById(id: string, status: TableStatus) {
-    return this.prisma.table.update({
+    return await this.prisma.table.update({
       where: {
         id,
       },
       data: {
         status,
-      },
-      select: {
-        id: true,
-        name: true,
-        seat: true,
-        status: true,
       },
     });
   }
