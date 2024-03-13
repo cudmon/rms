@@ -42,6 +42,13 @@ export class OrdersController {
     return await this.ordersService.findByStatus(status, params);
   }
 
+  @Get("/table/:id")
+  async findByTableId(
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    return await this.ordersService.findOrdersByTableId(id);
+  }
+
   @Post()
   async create(
     @Client() client: CurrentClient,
