@@ -2,55 +2,22 @@
 
 import { TableEntity, Order } from "@/types/entity";
 import {
-  IconArmchair,
-  IconTags,
-  IconUserEdit,
-  IconCheck,
-  IconCreditCard,
-  IconBuildingBank,
-  IconChevronDown,
-  IconPackage,
-  IconReceipt2,
-  IconXboxX,
-  IconPhoto,
-  IconDownload,
-  IconArrowRight,
-  IconX,
+  IconArmchair, IconTags, IconPackage, IconReceipt2, 
+  IconX, IconChecks
 } from "@tabler/icons-react";
 import {
-  Badge,
-  Card,
-  Center,
-  Container,
-  Text,
-  Grid,
-  Button,
-  rem,
-  Title,
-  Modal,
-  TextInput,
-  Box,
-  SimpleGrid,
-  Table,
-  Tooltip,
-  ActionIcon,
-  Paper,
-  Radio,
-  CheckIcon,
-  UnstyledButton,
-  Checkbox,
-  Divider,
-  Menu,
-  useMantineTheme,
-  Group,
-  Flex,
+  Badge, Card, Center, Container, Text, Grid, Button, rem, Title, Modal, 
+  Table, Tooltip, ActionIcon, Paper, Radio, CheckIcon,
+  useMantineTheme, Flex, ScrollArea
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { OrderModal } from "@/components/Dashboard/Staff/StaffModal/OrderModal";
 import { http } from "@/modules/http";
-import { Notifications } from '@mantine/notifications';
+import { Notifications,notifications } from '@mantine/notifications';
 import { modals } from "@mantine/modals";
+import '@mantine/notifications/styles.css';
+
 const Ordersz = [
   {
     id: "1",
@@ -335,88 +302,53 @@ export const TableStaff = ({
       {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
 
       {/* -------------------------------------------------- Modal Billed-------------------------------------------------------- */}
-      <Modal
-        opened={ModalBilled}
-        onClose={() => setModalBilled(false)}
-        title=""
-        size="80%"
-        centered
-      >
-        <Title order={2} size="h2" fw={910} ta="center" c="black">
+      <Modal opened={ModalBilled} onClose={() => setModalBilled(false)} title="" size="80%" centered >
+        <Title order={2} size="h2" fw={900} ta="center" c="black">
           Billed
         </Title>
-        <Grid mt="md" align="stretch">
-          <Grid.Col span="auto">
-            <Table
-              stickyHeader
-              verticalSpacing="sm"
-              highlightOnHover
-              withTableBorder
-            >
-              <Table.Thead>{headbilled}</Table.Thead>
-              <Table.Tbody>{rowsbilled}</Table.Tbody>
+        <Grid mt='md' align="stretch">
+          <Grid.Col span='auto'>
+                    
+            <Table stickyHeader verticalSpacing="sm" highlightOnHover withTableBorder >
+              <ScrollArea h={400} type="always" offsetScrollbars scrollbarSize={12} scrollHideDelay={3000}>
+                <Table.Thead>{headbilled}</Table.Thead>
+                <Table.Tbody>{rowsbilled}</Table.Tbody>
+              </ScrollArea>
             </Table>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Paper p="xl" withBorder radius="md">
-              <Text fw={900} size="lg">
-                Total Prices
-              </Text>
-              <Text>175.00</Text>
-            </Paper>
-            <Paper p="xl" mt="sm" withBorder radius="md">
-              <Text fw={900} size="lg">
-                Payments
-              </Text>
 
-              <Radio.Group
-                value={value}
+          </Grid.Col>
+          <Grid.Col span={4} >
+            <Paper p="xl" withBorder radius='md' >
+              <Text fw={900} size="lg">Total Prices</Text>
+              <Text>175.00</Text>
+
+            </Paper>
+            <Paper p="xl" mt='sm' withBorder radius='md'>
+              <Text fw={900} size="lg">Payments</Text>
+
+              <Radio.Group value={value}
                 onChange={setValue}
                 name="payment"
-                description="Select Payment Method"
-              >
-                <Radio
-                  icon={CheckIcon}
-                  value="cash"
-                  color="blue.5"
-                  label="Cash"
-                  mt="md"
-                />
-                <Radio
-                  icon={CheckIcon}
-                  value="svelte"
-                  color="blue.5"
-                  label="Credit / Debit Card"
-                  mt="md"
-                />
-                <Radio
-                  icon={CheckIcon}
-                  value="ng"
-                  color="blue.5"
-                  label="Bank"
-                  mt="md"
-                />
+                description="Select Payment Method">
+
+                <Radio icon={CheckIcon} value="cash" color="blue.5" label="Cash" mt='md' />
+                <Radio icon={CheckIcon} value="ng" color="blue.5" label="Bank" mt='md' />
               </Radio.Group>
 
-              <Button
-                variant="filled"
-                color="teal"
-                radius="md"
-                mt="md"
-                fullWidth
-              >
+              <Button variant="filled" color="teal" radius="md" mt='md' fullWidth
+                onClick={() =>
+                  notifications.show({
+                    title: 'Confirm payment successful !!',
+                    message: 'Thank you for ordering food',
+                    icon: <IconChecks style={{ width: rem(18), height: rem(18) }} />
+                  })
+                }>
                 Pay Now
               </Button>
-              <Button
-                variant="filled"
-                color="red"
-                radius="md"
-                mt="sm"
-                fullWidth
-                onClick={() => setModalBilled(false)}
-              >
+              <Button variant="filled" color="red" radius="md" mt='sm' fullWidth onClick={() => setModalBilled(false)}>
                 Cancel
               </Button>
+
             </Paper>
           </Grid.Col>
         </Grid>
