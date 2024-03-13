@@ -69,8 +69,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({
           {FinishOrder(item.status) && 
           (
             <Table.Td>
-              <ActionIcon>
-                <IconCheck radius="md" />{" "}
+              <ActionIcon radius="md">
+                <IconCheck  />{" "}
               </ActionIcon>
             </Table.Td>
           )}
@@ -91,7 +91,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   );
 
   return (
-    <Modal opened={isOpen} onClose={onClose} title="Order" size="80%" centered>
+    <Modal opened={isOpen} onClose={onClose} title="Order" size="100%" centered>
       <Card shadow="md" padding="lg" radius="md" withBorder>
         <Table stickyHeader verticalSpacing="sm" highlightOnHover>
           <Table.Thead>{head}</Table.Thead>
