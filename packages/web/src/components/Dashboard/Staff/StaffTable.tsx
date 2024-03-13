@@ -29,12 +29,16 @@ import {
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { OrderModal } from "@/components/Dashboard/Staff/StaffModal/OrderModal";
+import { BillModal } from "@/components/Dashboard/Staff/StaffModal/BillModal";
+
 import { http } from "@/modules/http";
+
 import { Notifications, notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+
 
 
 const getStatusColor = (status: string) => {
@@ -108,6 +112,23 @@ export const TableStaff = () => {
       });
     }
   };
+
+  const handleBill = async (tableId: string) => {
+    try {
+      const res = await http().get(`/usages/active/bill/${tableId}`);
+      const usage = res.data as Usage;
+      setOrders(usage.order);
+      setModalBilled(true);
+      console.log(usage.order);
+    } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: "Something went wrong. Please try again later",
+        color: "red",
+      });
+    }
+  }
+
 
 
   const markAsServed = async (id: string) => {
@@ -266,7 +287,9 @@ export const TableStaff = () => {
                         </Button>
                       </Tooltip>
                       <Tooltip label="Bill List" position="top" offset={5}>
-                        <Button variant="default" px={"sm"} radius={"md"}>
+                        <Button variant="default" px={"sm"} radius={"md"}
+                        onClick={() => handleBill(table.id)}
+                        >
                           <IconReceipt2
                             size={140}
                             color={theme.colors.green[9]}
@@ -317,7 +340,14 @@ export const TableStaff = () => {
       {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
 
       {/* -------------------------------------------------- Modal Billed-------------------------------------------------------- */}
-  
+      <BillModal
+        isOpen={ModalBilled}
+        onClose={() => setModalBilled(false)}
+        ServedOrder={orders}
+        CreateBill={handleBill}
+        
+    
+      />
       {/* ------------------------------------------------End Modal Billed-------------------------------------------------------- */}
     </Container>
   );
