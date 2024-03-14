@@ -8,6 +8,7 @@ import {
   Table,
   ActionIcon,
   Tooltip,
+  Center,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { http } from "@/modules/http";
@@ -110,7 +111,15 @@ export const OrderModal: React.FC<OrderModalProps> = ({
     </Table.Tr>
   );
 
-
+  if (rowsOrder.length === 0) {
+    return (
+        <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="100%" centered>
+        <Center py={64} fz={28} c="red" fw={500}>
+          No order to show
+        </Center>
+      </Modal>
+    );
+  }
 
   return (
     <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="100%" centered>
