@@ -87,6 +87,8 @@ export class MenuController {
           throw new ConflictException("Menu with this name already exists.");
         }
       }
+
+      throw e;
     }
   }
 

@@ -48,6 +48,31 @@ export class UsagesService {
     });
   }
 
+  async findActiveToCreateBill(tableId: string) {
+    return await this.prisma.usage.findFirst({
+      where: {
+        tableId,
+        end: null,
+        order: {
+          some: {
+            status: "SERVED",
+          },
+        },
+      },
+      include: {
+        order: {
+          where: {
+            status: "SERVED",
+          },
+          include: {
+            menu: true,
+          },
+        },
+      },
+    });
+  }
+  
+
   async create(tableId: string) {
     await this.tablesService.updateStatusById(tableId, "EATING");
 

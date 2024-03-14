@@ -89,4 +89,22 @@ export class OrdersService {
       },
     });
   }
+
+  async findOrdersByTableId( tableId: string) {
+    return await this.prisma.order.findMany({
+      where: {
+        usage: {
+          tableId,
+        },
+      },
+      include: {
+        menu: true,
+        usage: {
+          include: {
+            table: true,
+          },
+        },
+      },
+    });
+  }
 }

@@ -71,6 +71,23 @@ export class TablesController {
     }
   }
 
+  @Patch("/idle/:id")
+  async cancel(@Param("id", ParseUUIDPipe) id: string) {
+    return await this.tableService.updateStatusById(id, "IDLE");
+  }
+  
+  @Patch("/eating/:id")
+  async eating(@Param("id", ParseUUIDPipe) id: string) {
+    return await this.tableService.updateStatusById(id, "EATING");
+  }
+
+  @Patch("/reserved/:id")
+  async reserved(@Param("id", ParseUUIDPipe) id: string) {
+    return await this.tableService.updateStatusById(id, "RESERVED");
+  }
+
+  
+
   @Delete(":id")
   async deleteById(@Param("id", ParseUUIDPipe) id: string) {
     await this.findById(id);

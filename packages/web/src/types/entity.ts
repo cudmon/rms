@@ -47,3 +47,12 @@ export type Cart = {
   menuId: string;
   quantity: number;
 };
+
+export type Bill = {
+  id: string;
+  time : string;
+  price : number;
+  usage : Usage;
+  status : "PAID" | "UNPAID" | "CANCELED";
+};
+

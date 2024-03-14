@@ -1,63 +1,84 @@
 import React from "react";
-import {  } from "@/types/entity";
+import {Order } from "@/types/entity";
 import { IconCheck } from "@tabler/icons-react";
-import { Badge, Card, Modal, Table, ActionIcon } from "@mantine/core";
-interface Order {
-    id: string;
-    menu: string[];
-    price: number;
-    quantity: number;
-    status: string;
-  }
+import {
+  Badge,
+  Card,
+  Modal,
+  Table,
+  ActionIcon,
+  Tooltip,
+  Center,
+  ScrollArea,
+} from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
+import { http } from "@/modules/http";
+import { AxiosError } from "axios";
+import { notifications } from "@mantine/notifications";
+
 interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  Ordersz: Order[]; 
-
+  markAsServed: (id: string) => void;
+  tableName : string;
+  order: Order[];
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({
   isOpen,
   onClose,
-  Ordersz,
+  markAsServed,
+  order,
+  tableName
 }) => {
   if (!isOpen) return null;
 
-  const FinishOrder = (status: string) => {
-    if (status === "FINISHED") {
-      return true;
-    }
-    return false;
-  };
- 
+  const SortOrder = (order: Order[]) => {
+    const servedOrders = order.filter((item) => item.status === "SERVED");
+    const finishOrders = order.filter((item) => item.status === "FINISHED");
+    const pendingOrders = order.filter((item) => item.status === "PENDING");
+    const canceledOrders = order.filter((item) => item.status === "CANCELED");
 
-  const rowsOrder = Ordersz.map((item) => {
+    const mixOrder = [
+      ...servedOrders,
+      ...finishOrders,
+      ...pendingOrders,
+      ...canceledOrders,
+    ];
+
+    return mixOrder;
+  };
+  const SortedOrder = SortOrder(order);
+
+  const rowsOrder = SortedOrder.map((item) => {
     let badgeColor = "gray";
 
     switch (item.status) {
       case "PENDING":
         badgeColor = "green";
+
         break;
       case "FINISHED":
         badgeColor = "red";
+
         break;
       case "SERVED":
         badgeColor = "orange";
+
         break;
       case "CANCELED":
         badgeColor = "gray";
+
         break;
-        case "COMPLETED":
-        badgeColor = "blue.7";
-        break;
+
       default:
         break;
     }
 
     return (
       <Table.Tr key={item.id} ta="center">
-        <Table.Td>{item.id}</Table.Td>
-        <Table.Td>{item.menu.join(",")}</Table.Td>    
+        <Table.Td>{SortedOrder.indexOf(item) + 1}</Table.Td>
+        <Table.Td>{item.menu.name}</Table.Td>
         <Table.Td>{item.quantity}</Table.Td>
         <Table.Td>{item.price}</Table.Td>
         <Table.Td>
@@ -66,13 +87,14 @@ export const OrderModal: React.FC<OrderModalProps> = ({
           </Badge>
         </Table.Td>
         <Table.Td>
-          {FinishOrder(item.status) && 
-          (
-            <Table.Td>
-              <ActionIcon>
-                <IconCheck radius="md" />{" "}
+          {item.status === "FINISHED" ? ( // Conditionally render ActionIcon
+            <Tooltip label="Mark order as served" position="top" offset={5}>
+              <ActionIcon radius="md" onClick={() => markAsServed(item.id)}>
+                <IconCheck />
               </ActionIcon>
-            </Table.Td>
+            </Tooltip>
+          ) : (
+            " "
           )}
         </Table.Td>
       </Table.Tr>
@@ -81,7 +103,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
 
   const head = (
     <Table.Tr>
-      <Table.Th ta="center">ID Order</Table.Th>
+      <Table.Th ta="center">No.</Table.Th>
       <Table.Th ta="center">Menu Name</Table.Th>
       <Table.Th ta="center">Quantity</Table.Th>
       <Table.Th ta="center">Price</Table.Th>
@@ -90,12 +112,25 @@ export const OrderModal: React.FC<OrderModalProps> = ({
     </Table.Tr>
   );
 
+  if (rowsOrder.length === 0) {
+    return (
+        <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="70%" centered>
+        <Center py={64} fz={28} c="red" fw={500}>
+          No order to show
+        </Center>
+      </Modal>
+    );
+  }
+
   return (
-    <Modal opened={isOpen} onClose={onClose} title="Order" size="80%" centered>
+    <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="70%" centered>
       <Card shadow="md" padding="lg" radius="md" withBorder>
         <Table stickyHeader verticalSpacing="sm" highlightOnHover>
+        <ScrollArea h={400} type="always" offsetScrollbars scrollbarSize={12} scrollHideDelay={3000}>
+
           <Table.Thead>{head}</Table.Thead>
           <Table.Tbody>{rowsOrder}</Table.Tbody>
+          </ScrollArea>
         </Table>
       </Card>
     </Modal>
