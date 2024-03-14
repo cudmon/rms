@@ -95,7 +95,7 @@ export const TableStaff = () => {
   if (isError) {
     return (
       <Center py={64} fz={28} c="red" fw={500}>
-        Error fetching users
+        Error fetching Tables
       </Center>
     );
   }
@@ -108,28 +108,46 @@ export const TableStaff = () => {
       setTableName(tableName);
       setModalOpenOrder(true);
     } catch (error) {
-      notifications.show({
-        title: "Error",
-        message: "Something went wrong. Please try again later",
-        color: "red",
-      });
+      if (error instanceof AxiosError) {
+        setOrders([]);
+        setTableName(tableName);
+        setModalOpenOrder(true);
+      }
     }
   };
 
-  const handleBill = async (tableId: string) => {
+  const handleBill = async (tableId: string , tableName : string) => {
     try {
       const res = await http().get(`/usages/active/bill/${tableId}`);
       const usage = res.data as Usage;
-      setBill(usage.order);
-      setModalBilled(true);
-      console.log(usage.order);
-    } catch (error) {
-      notifications.show({
-        title: "Error",
-        message: "Something went wrong. Please try again later",
-        color: "red",
+      const order = usage.order;
+      const sumOrder : Order[] = [];
+      order.forEach((item) => {
+        const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
+        if (existing) {
+          existing.quantity += item.quantity;
+          existing.price += item.price;
+        } else {
+          sumOrder.push({ ...item });
+        }
       });
+      setBill(sumOrder);
+      setTableName(tableName);
+      setModalBilled(true);
+
+
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setBill([]);
+        setTableName(tableName);
+        setModalBilled(true);
+      }
     }
+  }
+
+  const ConfirmPayment = (id: string) => {
+
+    console.log(id);
   }
 
 
@@ -291,7 +309,7 @@ export const TableStaff = () => {
                       </Tooltip>
                       <Tooltip label="Bill List" position="top" offset={5}>
                         <Button variant="default" px={"sm"} radius={"md"}
-                        onClick={() => handleBill(table.id)}
+                        onClick={() => handleBill(table.id , table.name)}
                         >
                           <IconReceipt2
                             size={140}
@@ -348,7 +366,8 @@ export const TableStaff = () => {
         isOpen={ModalBilled}
         onClose={() => setModalBilled(false)}
         ServedOrder={bill}
-        CreateBill={handleBill}
+        CreateBill={ConfirmPayment}
+        tableName={tableName}
         
     
       />

@@ -14,6 +14,7 @@ import {
   Button,
   CheckIcon,
   useSafeMantineTheme,
+  Center,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { http } from "@/modules/http";
@@ -25,6 +26,7 @@ interface BillModalProps {
   onClose: () => void;
   CreateBill: (id: string) => void;
   ServedOrder: Order[];
+    tableName: string;
 }
 
 export const BillModal: React.FC<BillModalProps> = ({
@@ -32,9 +34,11 @@ export const BillModal: React.FC<BillModalProps> = ({
   onClose,
   CreateBill,
   ServedOrder,
+    tableName
 }) => {
   const [value, setValue] = useState("cash");
   if (!isOpen) return null;
+  
 
   const headbilled = (
     <Table.Tr>
@@ -54,11 +58,20 @@ export const BillModal: React.FC<BillModalProps> = ({
     </Table.Tr>
   ));
 
+  if (rowsbilled.length === 0) {
+    return (
+        <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="100%" centered>
+        <Center py={64} fz={28} c="red" fw={500}>
+          No order to billed
+        </Center>
+      </Modal>
+    );
+  }
+
+ 
+
   return (
-    <Modal opened={isOpen} onClose={onClose} title="" size="80%" centered>
-      <Title order={2} size="h2" fw={910} ta="center" c="black">
-        Billed
-      </Title>
+    <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="100%" centered>
       <Grid mt="md" align="stretch">
         <Grid.Col span="auto">
           <Table
