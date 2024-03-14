@@ -1,32 +1,29 @@
 import React, { useState } from "react";
 import { Order } from "@/types/entity";
-import { IconCheck } from "@tabler/icons-react";
 import {
   Modal,
   Table,
-  ActionIcon,
-  Tooltip,
   Grid,
   Paper,
-  Text,
-  Title,
-  Radio,
-  Button,
-  CheckIcon,
-  useSafeMantineTheme,
-  Center,
+  Text, rem,
+  Button, Title, Group,
+  Center, ScrollArea, Divider
 } from "@mantine/core";
+import {
+  IconChecks
+} from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { http } from "@/modules/http";
 import { AxiosError } from "axios";
-import { notifications } from "@mantine/notifications";
+import { Notifications,notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 
 interface BillModalProps {
   isOpen: boolean;
   onClose: () => void;
   CreateBill: (id: string) => void;
   ServedOrder: Order[];
-    tableName: string;
+  tableName: string;
 }
 
 export const BillModal: React.FC<BillModalProps> = ({
@@ -34,11 +31,11 @@ export const BillModal: React.FC<BillModalProps> = ({
   onClose,
   CreateBill,
   ServedOrder,
-    tableName
+  tableName
 }) => {
   const [value, setValue] = useState("cash");
   if (!isOpen) return null;
-  
+
 
   const headbilled = (
     <Table.Tr>
@@ -60,7 +57,7 @@ export const BillModal: React.FC<BillModalProps> = ({
 
   if (rowsbilled.length === 0) {
     return (
-        <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="100%" centered>
+      <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="100%" centered>
         <Center py={64} fz={28} c="red" fw={500}>
           No order to billed
         </Center>
@@ -68,11 +65,11 @@ export const BillModal: React.FC<BillModalProps> = ({
     );
   }
 
- 
+
 
   return (
     <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="100%" centered>
-      <Grid mt="md" align="stretch">
+      <Grid mt="sm" align="stretch">
         <Grid.Col span="auto">
           <Table
             stickyHeader
@@ -80,65 +77,64 @@ export const BillModal: React.FC<BillModalProps> = ({
             highlightOnHover
             withTableBorder
           >
-            <Table.Thead>{headbilled}</Table.Thead>
-            <Table.Tbody>{rowsbilled}</Table.Tbody>
+              <Table.Thead>{headbilled}</Table.Thead>
+              <Table.Tbody>{rowsbilled}</Table.Tbody>
           </Table>
         </Grid.Col>
         <Grid.Col span={4}>
           <Paper p="xl" withBorder radius="md">
-            <Text fw={900} size="lg">
-              Total Prices
+            <Title order={3} ta='center'>
+              RMS
+            </Title>
+
+            <Text fw={500} size="sm" c="dimmed" ta='center'>
+              Bill/Payment System
             </Text>
-            <Text>175.00</Text>
+            <Divider size="xs"  my='sm' />
+            <Grid mt='md'>
+              <Grid.Col span={6} py={0}>
+                <Text size="sm">
+                  Table :
+                </Text>
+              </Grid.Col>
+              <Grid.Col span={12} py={0}>
+                <Text size="sm">
+                  Date/Time :
+                </Text>
+              </Grid.Col>
+              <Grid.Col span={12} py={0}>
+                <Divider size="xs"  my='sm' />
+              </Grid.Col>
+              <Grid.Col span={6} py={0}>
+                <Text size="sm">
+                  Total :
+                </Text>
+              </Grid.Col>
+              <Grid.Col span={6} py={0}>
+                  <Title order={3} ta='right'> $ 190.00 </Title>
+              </Grid.Col>
+            </Grid>
+
           </Paper>
-          <Paper p="xl" mt="sm" withBorder radius="md">
-            <Text fw={900} size="lg">
-              Payments
-            </Text>
-
-            <Radio.Group
-              value={value}
-              onChange={setValue}
-              name="payment"
-              description="Select Payment Method"
-            >
-              <Radio
-                icon={CheckIcon}
-                value="cash"
-                color="blue.5"
-                label="Cash"
-                mt="md"
-              />
-              <Radio
-                icon={CheckIcon}
-                value="svelte"
-                color="blue.5"
-                label="Credit / Debit Card"
-                mt="md"
-              />
-              <Radio
-                icon={CheckIcon}
-                value="ng"
-                color="blue.5"
-                label="Bank"
-                mt="md"
-              />
-            </Radio.Group>
-
-            <Button variant="filled" color="teal" radius="md" mt="md" fullWidth>
-              Pay Now
+          <Group justify="center" gap="xl" grow>
+            <Button variant="filled" color="teal" radius="md" mt="md" onClick={() =>
+                  notifications.show({
+                    title: 'Confirm payment successful !!',
+                    message: 'Thank you for ordering food',
+                    icon: <IconChecks style={{ width: rem(18), height: rem(18) }} />
+                  })
+                }>
+              Confirm
             </Button>
             <Button
               variant="filled"
               color="red"
               radius="md"
               mt="sm"
-              fullWidth
-              onClick={onClose}
-            >
+              onClick={onClose}>
               Cancel
             </Button>
-          </Paper>
+          </Group>
         </Grid.Col>
       </Grid>
     </Modal>
