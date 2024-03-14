@@ -60,6 +60,8 @@ export const TableStaff = () => {
 
   const [tables, setTables] = useState<TableEntity[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [bill, setBill] = useState<Order[]>([]);
+  const [tableName, setTableName] = useState<string>("");
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -98,11 +100,12 @@ export const TableStaff = () => {
     );
   }
 
-  const handleOrder = async (tableId: string) => {
+  const handleOrder = async (tableId: string , tableName : string) => {
     try {
       const res = await http().get(`/usages/active/${tableId}`);
       const usage = res.data as Usage;
       setOrders(usage.order);
+      setTableName(tableName);
       setModalOpenOrder(true);
     } catch (error) {
       notifications.show({
@@ -117,7 +120,7 @@ export const TableStaff = () => {
     try {
       const res = await http().get(`/usages/active/bill/${tableId}`);
       const usage = res.data as Usage;
-      setOrders(usage.order);
+      setBill(usage.order);
       setModalBilled(true);
       console.log(usage.order);
     } catch (error) {
@@ -277,7 +280,7 @@ export const TableStaff = () => {
                           variant="default"
                           px="sm"
                           radius="md"
-                          onClick={() => handleOrder(table.id)}
+                          onClick={() => handleOrder(table.id , table.name)}
                         >
                           <IconNotes
                             size={140}
@@ -335,6 +338,7 @@ export const TableStaff = () => {
         isOpen={ModalOpenOrder}
         onClose={() => setModalOpenOrder(false)}
         order={orders}
+        tableName={tableName}
         markAsServed={markAsServed}
       />
       {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
@@ -343,7 +347,7 @@ export const TableStaff = () => {
       <BillModal
         isOpen={ModalBilled}
         onClose={() => setModalBilled(false)}
-        ServedOrder={orders}
+        ServedOrder={bill}
         CreateBill={handleBill}
         
     

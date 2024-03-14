@@ -18,6 +18,7 @@ interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
   markAsServed: (id: string) => void;
+  tableName : string;
   order: Order[];
 }
 
@@ -26,6 +27,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   onClose,
   markAsServed,
   order,
+  tableName
 }) => {
   if (!isOpen) return null;
 
@@ -108,8 +110,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
     </Table.Tr>
   );
 
+
+
   return (
-    <Modal opened={isOpen} onClose={onClose} title="Order" size="100%" centered>
+    <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="100%" centered>
       <Card shadow="md" padding="lg" radius="md" withBorder>
         <Table stickyHeader verticalSpacing="sm" highlightOnHover>
           <Table.Thead>{head}</Table.Thead>

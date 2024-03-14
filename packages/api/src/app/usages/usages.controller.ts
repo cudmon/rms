@@ -41,4 +41,15 @@ export class UsagesController {
 
     return activeUsage;
   }
+
+  @Get("active/bill/:id")
+  async findActiveToCreateBill(@Param("id", ParseUUIDPipe) tableId: string) {
+    const activeUsage = await this.usagesService.findActiveToCreateBill(tableId);
+
+    if (!activeUsage) {
+      throw new NotFoundException();
+    }
+
+    return activeUsage;
+  }
 }
