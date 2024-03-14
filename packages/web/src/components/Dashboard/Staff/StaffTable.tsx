@@ -239,7 +239,7 @@ export const TableStaff = () => {
   return (
     // --------------------------------------------------Table list--------------------------------------------------------
     <Container>
-      <Title my="md" order={3} size="h1" fw={900} ta="center">
+      <Title my="md" order={3} size="h2" fw={900} >
         Table List
       </Title>
 

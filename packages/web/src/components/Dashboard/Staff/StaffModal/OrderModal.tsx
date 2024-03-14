@@ -9,6 +9,7 @@ import {
   ActionIcon,
   Tooltip,
   Center,
+  ScrollArea,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { http } from "@/modules/http";
@@ -113,7 +114,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
 
   if (rowsOrder.length === 0) {
     return (
-        <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="100%" centered>
+        <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="70%" centered>
         <Center py={64} fz={28} c="red" fw={500}>
           No order to show
         </Center>
@@ -122,11 +123,14 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   }
 
   return (
-    <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="100%" centered>
+    <Modal opened={isOpen} onClose={onClose} title={<><span>Order Table : </span><strong>{tableName}</strong></>} size="70%" centered>
       <Card shadow="md" padding="lg" radius="md" withBorder>
         <Table stickyHeader verticalSpacing="sm" highlightOnHover>
+        <ScrollArea h={400} type="always" offsetScrollbars scrollbarSize={12} scrollHideDelay={3000}>
+
           <Table.Thead>{head}</Table.Thead>
           <Table.Tbody>{rowsOrder}</Table.Tbody>
+          </ScrollArea>
         </Table>
       </Card>
     </Modal>

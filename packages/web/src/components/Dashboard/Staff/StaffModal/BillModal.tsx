@@ -57,7 +57,7 @@ export const BillModal: React.FC<BillModalProps> = ({
 
   if (rowsbilled.length === 0) {
     return (
-      <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="100%" centered>
+      <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="70%" centered>
         <Center py={64} fz={28} c="red" fw={500}>
           No order to billed
         </Center>
@@ -68,7 +68,7 @@ export const BillModal: React.FC<BillModalProps> = ({
 
 
   return (
-    <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="100%" centered>
+    <Modal opened={isOpen} onClose={onClose} title={<><span>Billed Table : </span><strong>{tableName}</strong></>} size="70%" centered>
       <Grid mt="sm" align="stretch">
         <Grid.Col span="auto">
           <Table
@@ -77,8 +77,10 @@ export const BillModal: React.FC<BillModalProps> = ({
             highlightOnHover
             withTableBorder
           >
+            <ScrollArea h={275} type="always" offsetScrollbars scrollbarSize={12} scrollHideDelay={3000}>
               <Table.Thead>{headbilled}</Table.Thead>
               <Table.Tbody>{rowsbilled}</Table.Tbody>
+              </ScrollArea>
           </Table>
         </Grid.Col>
         <Grid.Col span={4}>
