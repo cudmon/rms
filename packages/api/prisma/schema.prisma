@@ -32,7 +32,7 @@ model Order {
   id       String      @id @default(uuid())
   quantity Int
   price    Float
-  time     DateTime    @default(now())
+  createdAt     DateTime    @default(now())
   status   OrderStatus @default(PENDING)
   menu     Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
   menuId   String      @map("menu_id")
@@ -61,7 +61,7 @@ model Menu {
 
 model Billing {
   id      String     @id @default(uuid())
-  Time    DateTime   
+  createdAt    DateTime    @default(now())
   price   Float
   status  BillStatus @default(UNPAID)
   usageId String     @map("usage_id")

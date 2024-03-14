@@ -48,6 +48,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
 
     return mixOrder;
   };
+  
   const SortedOrder = SortOrder(order);
 
   const rowsOrder = SortedOrder.map((item) => {

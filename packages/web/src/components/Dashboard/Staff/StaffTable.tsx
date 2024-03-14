@@ -38,6 +38,7 @@ import { modals } from "@mantine/modals";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { set } from "zod";
 
 
 
@@ -62,6 +63,7 @@ export const TableStaff = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [bill, setBill] = useState<Order[]>([]);
   const [tableName, setTableName] = useState<string>("");
+  const [tableID, setTableID] = useState<string>("");
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -107,11 +109,13 @@ export const TableStaff = () => {
       setOrders(usage.order);
       setTableName(tableName);
       setModalOpenOrder(true);
+
     } catch (error) {
       if (error instanceof AxiosError) {
         setOrders([]);
         setTableName(tableName);
         setModalOpenOrder(true);
+       
       }
     }
   };
@@ -133,6 +137,7 @@ export const TableStaff = () => {
       });
       setBill(sumOrder);
       setTableName(tableName);
+      setTableID(tableId);
       setModalBilled(true);
 
 
@@ -145,9 +150,20 @@ export const TableStaff = () => {
     }
   }
 
-  const ConfirmPayment = (id: string) => {
-
-    console.log(id);
+  const ConfirmPayment = async (id: string) => {
+      const res = await http().patch(`/bills/${id}`);
+      if (res.status === 200) {
+        notifications.show({
+          title: "Success",
+          message: "Payment confirmed successfully",
+          color: "green",
+        });
+        // setBill(
+        //   bill.map((order) =>
+        //     order.id === id ? { ...order, status: "PAID" } : order
+        //   )
+        // );
+      }
   }
 
 
@@ -368,6 +384,7 @@ export const TableStaff = () => {
         ServedOrder={bill}
         CreateBill={ConfirmPayment}
         tableName={tableName}
+        tableID={tableID}
         
     
       />

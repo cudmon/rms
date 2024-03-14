@@ -35,7 +35,7 @@ export class BillsController {
     return bill;
   }
 
-  @Post()
+  @Post(":tableId")
   async createBill(@Body("tableId", ParseUUIDPipe) tableId: string) {
     try {
       return await this.billsService.createBill(tableId);

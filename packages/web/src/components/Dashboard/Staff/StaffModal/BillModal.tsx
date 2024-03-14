@@ -24,6 +24,7 @@ interface BillModalProps {
   CreateBill: (id: string) => void;
   ServedOrder: Order[];
   tableName: string;
+  tableID: string;
 }
 
 export const BillModal: React.FC<BillModalProps> = ({
@@ -31,7 +32,8 @@ export const BillModal: React.FC<BillModalProps> = ({
   onClose,
   CreateBill,
   ServedOrder,
-  tableName
+  tableName,
+  tableID
 }) => {
   const [value, setValue] = useState("cash");
   if (!isOpen) return null;
@@ -119,13 +121,10 @@ export const BillModal: React.FC<BillModalProps> = ({
 
           </Paper>
           <Group justify="center" gap="xl" grow>
-            <Button variant="filled" color="teal" radius="md" mt="md" onClick={() =>
-                  notifications.show({
-                    title: 'Confirm payment successful !!',
-                    message: 'Thank you for ordering food',
-                    icon: <IconChecks style={{ width: rem(18), height: rem(18) }} />
-                  })
-                }>
+            <Button variant="filled" color="teal" radius="md" mt="md" onClick={
+              () => CreateBill(tableID)
+      
+            }>
               Confirm
             </Button>
             <Button

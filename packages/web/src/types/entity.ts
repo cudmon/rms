@@ -27,6 +27,7 @@ export type User = {
 export type Order = {
   id: string;
   menu: Menu;
+  createdAt : string;
   price: number;
   quantity: number;
   status: "PENDING" | "COMPLETED" | "SERVED" | "CANCELED"| "FINISHED";
@@ -50,7 +51,7 @@ export type Cart = {
 
 export type Bill = {
   id: string;
-  time : string;
+  createdAt : string;
   price : number;
   usage : Usage;
   status : "PAID" | "UNPAID" | "CANCELED";

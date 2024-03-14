@@ -51,6 +51,7 @@ export class BillsService {
 
     return await this.prisma.billing.create({
       data: {
+        createdAt: new Date(),
         usageId: usage.id,
         price: total,
       },
