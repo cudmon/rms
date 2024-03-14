@@ -160,7 +160,7 @@ export const ChefOrder = () => {
       <Table.Th ta="center">Quantity</Table.Th>
       <Table.Th ta="center">Price</Table.Th>
       <Table.Th ta="center">Status</Table.Th>
-      <Table.Th ta="center">Action</Table.Th>
+      <Table.Th ta="center"></Table.Th>
     </Table.Tr>
   );
 
