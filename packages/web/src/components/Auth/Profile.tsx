@@ -19,7 +19,7 @@ import {
   Flex,
 } from "@mantine/core";
 import { http } from "@/modules/http";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 
@@ -44,23 +44,23 @@ interface User {
 
 export default function Profile() {
   const [user, setUser] = useState<User>();
-  try {
-    const fetch = async () => {
-      const res = await http().get("/auth/profile");
-      setUser(res.data);
-    };
-    fetch();
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response?.status === 404) {
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await http().get<User>("/auth/profile");
+
+        setUser(res.data);
+      } catch (error) {
         notifications.show({
           title: "Error",
-          message: "Not found user",
+          message: "Failed to fetch user profile",
           color: "red",
         });
       }
-    }
-  }
+    })();
+  }, []);
+
   return (
     <>
       <Center py={40}>
