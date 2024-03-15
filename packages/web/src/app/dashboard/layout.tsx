@@ -37,6 +37,7 @@ const links = {
     { to: "/dashboard/menus", label: "Menus" },
     { to: "/dashboard/tables", label: "Tables" },
     { to: "/dashboard/users", label: "Users" },
+    { to: "/dashboard/history", label: "History"},
     { to: "/dashboard/settings", label: "Settings" },
   ],
 
