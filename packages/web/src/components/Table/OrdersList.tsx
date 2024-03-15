@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AxiosError } from "axios";
 import { http } from "@/modules/http";
 import { Order } from "@/types/entity";
+import { modals } from "@mantine/modals";
 import { useTableStore } from "@/store/table";
 import { useQuery } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
@@ -19,6 +20,7 @@ import {
   Table,
   Text,
 } from "@mantine/core";
+import { useEffect, useState } from "react";
 
 const Total = ({ orders }: { orders: Order[] }) => {
   return (
@@ -30,7 +32,13 @@ const Total = ({ orders }: { orders: Order[] }) => {
         <Text c="lime" fz={28} fw={500}>
           <NumberFormatter
             prefix="$"
-            value={orders.reduce((acc, o) => acc + o.price * o.quantity, 0)}
+            value={orders.reduce((acc, o) => {
+              if (o.status !== "CANCELED") {
+                return acc + o.price * o.quantity;
+              }
+
+              return acc;
+            }, 0)}
           />
         </Text>
       </Group>
@@ -72,6 +80,71 @@ const Fail = () => {
 };
 
 const List = ({ orders }: { orders: Order[] }) => {
+  const [data, setData] = useState<Order[]>(orders);
+
+  useEffect(() => {
+    setData(orders);
+  }, [orders]);
+
+  const cancel = (id: string) => {
+    modals.openConfirmModal({
+      title: (
+        <Text fz={18} fw={500}>
+          Cancel order
+        </Text>
+      ),
+
+      centered: true,
+
+      labels: {
+        confirm: "Confirm",
+        cancel: "Cancel",
+      },
+
+      confirmProps: {
+        color: "red",
+      },
+
+      children: (
+        <Text fz={16}>
+          Are you sure you want to cancel this order? This action cannot be
+          undone.
+        </Text>
+      ),
+
+      onConfirm: async () => {
+        try {
+          await http().patch(`/orders/cancel/${id}`);
+
+          setData((prev) => {
+            return prev.map((o) => {
+              if (o.id === id) {
+                return {
+                  ...o,
+                  status: "CANCELED",
+                };
+              }
+
+              return o;
+            });
+          });
+        } catch (e) {
+          notifications.show({
+            title: "Error",
+            message: "Something went wrong. Please try again later",
+            color: "red",
+          });
+        }
+
+        notifications.show({
+          title: "Item removed",
+          message: "Item was successfully removed from cart",
+          color: "blue",
+        });
+      },
+    });
+  };
+
   return (
     <Card shadow="sm" p={0} withBorder>
       <Table fz={16} verticalSpacing="lg" horizontalSpacing="lg">
@@ -81,10 +154,11 @@ const List = ({ orders }: { orders: Order[] }) => {
             <Table.Th>Quantity</Table.Th>
             <Table.Th>Price</Table.Th>
             <Table.Th>Status</Table.Th>
+            <Table.Th>Action</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {orders.map((order) => (
+          {data.map((order) => (
             <Table.Tr key={order.id}>
               <Table.Td>{order.menu.name}</Table.Td>
               <Table.Td>{order.quantity}</Table.Td>
@@ -96,6 +170,18 @@ const List = ({ orders }: { orders: Order[] }) => {
               </Table.Td>
               <Table.Td>
                 <Badge>{order.status}</Badge>
+              </Table.Td>
+              <Table.Td>
+                {order.status === "PENDING" && (
+                  <Button
+                    color="red"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => cancel(order.id)}
+                  >
+                    Cancel
+                  </Button>
+                )}
               </Table.Td>
             </Table.Tr>
           ))}
