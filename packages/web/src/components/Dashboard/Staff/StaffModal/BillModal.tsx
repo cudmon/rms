@@ -18,11 +18,12 @@ import "@mantine/notifications/styles.css";
 interface BillModalProps {
   isOpen: boolean;
   CancelBill: (id: string) => void;
-  ConfirmBill: (id: string) => void;
+  ConfirmBill: (billId: string ,tableId : string) => void;
   onClose: () => void;
   ServedOrder: Order[];
   tableName: string;
   billID: string;
+  tableID: string;
 }
 
 export const BillModal: React.FC<BillModalProps> = ({
@@ -33,6 +34,7 @@ export const BillModal: React.FC<BillModalProps> = ({
   ServedOrder,
   tableName,
   billID,
+  tableID,
 }) => {
   if (!isOpen) return null;
 
@@ -145,7 +147,7 @@ export const BillModal: React.FC<BillModalProps> = ({
               color="teal"
               radius="md"
               mt="md"
-              onClick={() => ConfirmBill(billID)}
+              onClick={() => ConfirmBill(billID, tableID)}
             >
               Confirm
             </Button>

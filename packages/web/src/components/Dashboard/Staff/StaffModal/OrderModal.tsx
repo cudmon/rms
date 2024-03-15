@@ -1,6 +1,6 @@
 import React from "react";
 import { Order } from "@/types/entity";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import {
   Badge,
   Card,
@@ -18,6 +18,7 @@ interface OrderModalProps {
   markAsServed: (id: string) => void;
   tableName: string;
   order: Order[];
+  cancelOrder: (id: string) => void;
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({
@@ -26,6 +27,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   markAsServed,
   order,
   tableName,
+  cancelOrder,
 }) => {
   if (!isOpen) return null;
 
@@ -90,6 +92,18 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                 <IconCheck />
               </ActionIcon>
             </Tooltip>
+            
+          ) : (
+            " "
+          )}
+          &nbsp;
+            {item.status === "FINISHED" ? ( // Conditionally render ActionIcon
+            <Tooltip label="Cancel order" position="top" offset={5}>
+              <ActionIcon radius="md" onClick={() => cancelOrder(item.id)} color="red">
+                <IconX />
+              </ActionIcon>
+            </Tooltip>
+            
           ) : (
             " "
           )}

@@ -67,7 +67,7 @@ export const ManagerTable = () => {
         notifications.show({
           title: "Error",
           message: "Something went wrong. Please try again later",
-          color: "red",
+          color: "yellow",
         });
       }
     },
@@ -107,7 +107,7 @@ export const ManagerTable = () => {
       notifications.show({
         title: "Error",
         message: "Something went wrong. Please try again later",
-        color: "red",
+        color: "yellow",
       });
     }
   }

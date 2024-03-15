@@ -30,7 +30,7 @@ export type Order = {
   createdAt : string;
   price: number;
   quantity: number;
-  status: "PENDING" | "COMPLETED" | "SERVED" | "CANCELED"| "FINISHED";
+  status: "PENDING" | "SERVED" | "CANCELED"| "FINISHED";
 };
 
 export type Usage = {

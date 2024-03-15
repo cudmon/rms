@@ -25,8 +25,8 @@ import { useEffect, useState } from "react";
 import { OrderModal } from "@/components/Dashboard/Staff/StaffModal/OrderModal";
 import { BillModal } from "@/components/Dashboard/Staff/StaffModal/BillModal";
 import { http } from "@/modules/http";
-import { Notifications, notifications } from "@mantine/notifications";
-import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
+
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -44,15 +44,14 @@ const getStatusColor = (status: string) => {
 
 export const TableStaff = () => {
   const [ModalOpenOrder, setModalOpenOrder] = useState(false);
-  const [value, setValue] = useState("react");
   const [ModalBilled, setModalBilled] = useState(false);
   const theme = useMantineTheme();
-
   const [tables, setTables] = useState<TableEntity[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [billOrder, setBillOrder] = useState<Order[]>([]);
   const [tableName, setTableName] = useState<string>("");
   const [billID, setbillID] = useState<string>("");
+  const [tableID, settableID] = useState<string>("");
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -109,29 +108,50 @@ export const TableStaff = () => {
 
   const handleBill = async (tableId: string, tableName: string) => {
     try {
-      const res = await http().post(`/bills`, { tableId });
-      const bill = res.data as Bill;
       const res_usage = await http().get(`/usages/active/${tableId}`);
       const usage = res_usage.data as Usage;
       const order = usage.order;
-
       const sumOrder: Order[] = [];
-      order.forEach((item) => {
-        const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
-        if (existing) {
-          existing.quantity += item.quantity;
-          existing.price += item.price;
-        } else {
-          sumOrder.push({ ...item });
+
+      let check = 0;
+
+      order.map((item) => {
+        if (item.status === "PENDING" || item.status === "FINISHED") {
+          check++;
         }
       });
 
-      setBillOrder(sumOrder);
-      setTableName(tableName);
-      setbillID(bill.id);
-
-      setModalBilled(true);
+      if (check === 0) {
+        const res = await http().post(`/bills`, { tableId });
+        const bill = res.data as Bill;
+     
+        order.map((item) => {
+          const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
+          if (item.status === "CANCELED") {
+            return;
+          } else {
+            if (existing) {
+              existing.quantity += item.quantity;
+              existing.price += item.price;
+            } else {
+              sumOrder.push({ ...item });
+            }
+          }
+        });
+        setBillOrder(sumOrder);
+        setTableName(tableName);
+        setbillID(bill.id);
+        settableID(tableId);
+        setModalBilled(true);
+      } else {
+        notifications.show({
+          title: "Error",
+          message: "Please serve all order first",
+          color: "red",
+        });
+      }
     } catch (error) {
+      console.log(error);
       if (error instanceof AxiosError) {
         setBillOrder([]);
         setTableName(tableName);
@@ -140,9 +160,9 @@ export const TableStaff = () => {
     }
   };
 
-  const ConfirmPayment = async (id: string) => {
+  const ConfirmPayment = async (billId: string, tableId: string) => {
     try {
-      const res = await http().patch(`/bills/confirm/${id}`);
+      const res = await http().patch(`/bills/confirm/${billId}`);
       if (res.status === 200) {
         notifications.show({
           title: "Success",
@@ -150,6 +170,11 @@ export const TableStaff = () => {
           color: "green",
         });
         setModalBilled(false);
+        setTables(
+          tables.map((table) =>
+            table.id === tableId ? { ...table, status: "IDLE" } : table
+          )
+        );
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -167,7 +192,7 @@ export const TableStaff = () => {
       const res = await http().patch(`/bills/cancel/${id}`);
       if (res.status === 200) {
         notifications.show({
-          title: "Success",
+          title: "Canceled",
           message: "Payment canceled successfully",
           color: "green",
         });
@@ -200,6 +225,29 @@ export const TableStaff = () => {
       );
     }
   };
+
+  const cancelOrder = async (id: string) => {
+    const res = await http().patch(`/orders/cancel/${id}`);
+    if (res.status === 200) {
+      notifications.show({
+        title: "Canceled",
+        message: "Order canceled successfully",
+        color: "red",
+      });
+
+      setOrders(
+        orders.map((order) =>
+          order.id === id ? { ...order, status: "CANCELED" } : order
+        )
+      );
+    }
+  } 
+
+
+
+
+
+
   return (
     // --------------------------------------------------Table list--------------------------------------------------------
     <Container>
@@ -297,6 +345,8 @@ export const TableStaff = () => {
         order={orders}
         tableName={tableName}
         markAsServed={markAsServed}
+        cancelOrder={cancelOrder}
+
       />
       {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
 
@@ -309,6 +359,7 @@ export const TableStaff = () => {
         CancelBill={CancelPayment}
         tableName={tableName}
         billID={billID}
+        tableID={tableID}
       />
       {/* ------------------------------------------------End Modal Billed-------------------------------------------------------- */}
     </Container>
