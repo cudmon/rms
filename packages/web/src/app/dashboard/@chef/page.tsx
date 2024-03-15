@@ -1,7 +1,7 @@
 import { ChefOrder } from "@/components/Dashboard/Chef/ChefOrder";
 
 export const metadata = {
-  title: "Chef",
+  title: "Dashboard",
 };
 
 export default async function Page() {
