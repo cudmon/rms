@@ -71,7 +71,6 @@ export class UsagesService {
       },
     });
   }
-  
 
   async create(tableId: string) {
     await this.tablesService.updateStatusById(tableId, "EATING");
@@ -80,6 +79,25 @@ export class UsagesService {
       data: {
         tableId,
         start: new Date(),
+      },
+    });
+  }
+
+  async end(id: string) {
+    const usage = await this.findById(id);
+
+    if (!usage) {
+      throw new Error("NO_ACTIVE_USAGE");
+    }
+
+    await this.tablesService.updateStatusById(usage.tableId, "IDLE");
+
+    return await this.prisma.usage.update({
+      where: {
+        id,
+      },
+      data: {
+        end: new Date(),
       },
     });
   }

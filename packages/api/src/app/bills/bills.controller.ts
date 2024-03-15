@@ -35,7 +35,7 @@ export class BillsController {
     return bill;
   }
 
-  @Post(":tableId")
+  @Post()
   async createBill(@Body("tableId", ParseUUIDPipe) tableId: string) {
     try {
       return await this.billsService.createBill(tableId);
@@ -49,6 +49,8 @@ export class BillsController {
           throw new BadRequestException("Bill already created");
         }
       }
+
+      throw e;
     }
   }
 

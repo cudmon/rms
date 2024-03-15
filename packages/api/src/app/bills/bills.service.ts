@@ -51,7 +51,6 @@ export class BillsService {
 
     return await this.prisma.billing.create({
       data: {
-        createdAt: new Date(),
         usageId: usage.id,
         price: total,
       },
@@ -81,7 +80,11 @@ export class BillsService {
       },
     });
 
-    await this.tablesService.updateStatusById(paid.usage.tableId, "IDLE");
+    try {
+      await this.usagesService.end(paid.usageId);
+    } catch (e) {
+      throw e;
+    }
 
     return paid;
   }

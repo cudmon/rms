@@ -1,13 +1,11 @@
 "use client";
 
-import { TableEntity, Order, Usage } from "@/types/entity";
+import { TableEntity, Order, Usage, Bill } from "@/types/entity";
 import {
   IconArmchair,
   IconTags,
   IconReceipt2,
-  IconAddressBookOff,
   IconNotes,
-  IconUser,
 } from "@tabler/icons-react";
 import {
   Badge,
@@ -19,28 +17,19 @@ import {
   Button,
   rem,
   Title,
-  Modal,
-  Table,
   Tooltip,
-  Paper,
-  Radio,
-  CheckIcon,
   useMantineTheme,
+  Flex,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { OrderModal } from "@/components/Dashboard/Staff/StaffModal/OrderModal";
 import { BillModal } from "@/components/Dashboard/Staff/StaffModal/BillModal";
-
 import { http } from "@/modules/http";
-
 import { Notifications, notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { set } from "zod";
-
-
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -61,9 +50,9 @@ export const TableStaff = () => {
 
   const [tables, setTables] = useState<TableEntity[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [bill, setBill] = useState<Order[]>([]);
+  const [billOrder, setBillOrder] = useState<Order[]>([]);
   const [tableName, setTableName] = useState<string>("");
-  const [tableID, setTableID] = useState<string>("");
+  const [billID, setbillID] = useState<string>("");
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -102,30 +91,31 @@ export const TableStaff = () => {
     );
   }
 
-  const handleOrder = async (tableId: string , tableName : string) => {
+  const handleOrder = async (tableId: string, tableName: string) => {
     try {
       const res = await http().get(`/usages/active/${tableId}`);
       const usage = res.data as Usage;
       setOrders(usage.order);
       setTableName(tableName);
       setModalOpenOrder(true);
-
     } catch (error) {
       if (error instanceof AxiosError) {
         setOrders([]);
         setTableName(tableName);
         setModalOpenOrder(true);
-       
       }
     }
   };
 
-  const handleBill = async (tableId: string , tableName : string) => {
+  const handleBill = async (tableId: string, tableName: string) => {
     try {
-      const res = await http().get(`/usages/active/bill/${tableId}`);
-      const usage = res.data as Usage;
+      const res = await http().post(`/bills`, { tableId });
+      const bill = res.data as Bill;
+      const res_usage = await http().get(`/usages/active/${tableId}`);
+      const usage = res_usage.data as Usage;
       const order = usage.order;
-      const sumOrder : Order[] = [];
+
+      const sumOrder: Order[] = [];
       order.forEach((item) => {
         const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
         if (existing) {
@@ -135,38 +125,64 @@ export const TableStaff = () => {
           sumOrder.push({ ...item });
         }
       });
-      setBill(sumOrder);
+
+      setBillOrder(sumOrder);
       setTableName(tableName);
-      setTableID(tableId);
+      setbillID(bill.id);
+
       setModalBilled(true);
-
-
     } catch (error) {
       if (error instanceof AxiosError) {
-        setBill([]);
+        setBillOrder([]);
         setTableName(tableName);
         setModalBilled(true);
       }
     }
-  }
+  };
 
   const ConfirmPayment = async (id: string) => {
-      const res = await http().patch(`/bills/${id}`);
+    try {
+      const res = await http().patch(`/bills/confirm/${id}`);
       if (res.status === 200) {
         notifications.show({
           title: "Success",
           message: "Payment confirmed successfully",
           color: "green",
         });
-        // setBill(
-        //   bill.map((order) =>
-        //     order.id === id ? { ...order, status: "PAID" } : order
-        //   )
-        // );
+        setModalBilled(false);
       }
-  }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        notifications.show({
+          title: "Error",
+          message: "Something went wrong. Please try again later",
+          color: "red",
+        });
+      }
+    }
+  };
 
-
+  const CancelPayment = async (id: string) => {
+    try {
+      const res = await http().patch(`/bills/cancel/${id}`);
+      if (res.status === 200) {
+        notifications.show({
+          title: "Success",
+          message: "Payment canceled successfully",
+          color: "green",
+        });
+      }
+      setModalBilled(false);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        notifications.show({
+          title: "Error",
+          message: "Something went wrong. Please try again later",
+          color: "red",
+        });
+      }
+    }
+  };
 
   const markAsServed = async (id: string) => {
     const res = await http().patch(`/orders/serve/${id}`);
@@ -183,79 +199,11 @@ export const TableStaff = () => {
         )
       );
     }
-  }
-
-  const CancelReservation = (id: string, customer: string, table: string) => {
-    modals.openConfirmModal({
-      title: (
-        <Text fz={18} fw={500}>
-          Cancel Reservation
-        </Text>
-      ),
-
-      centered: true,
-
-      labels: {
-        confirm: "Confirm",
-        cancel: "Cancel",
-      },
-      cancelProps: {
-        radius: 15,
-        color: "white",
-      },
-
-      confirmProps: {
-        radius: 15,
-        color: "red",
-      },
-
-      children: (
-        <Text>
-          Are you sure you want to cancel reservation by{" "}
-          <strong>{customer}</strong> on table <strong>{table}</strong> ?
-        </Text>
-      ),
-
-      onConfirm: async () => {
-        try {
-          const res_cancel = await http().patch(`/tables/idle/${id}`);
-
-          if (res_cancel.status === 200) {
-            Notifications.show({
-              title: "Success",
-              message: "User cancel successfully",
-              color: "green",
-            });
-            setTables(
-              tables.map((table) =>
-                table.id === id ? { ...table, status: "IDLE" } : table
-              )
-            );
-          }
-        } catch (e) {
-          console.log(e);
-          Notifications.show({
-            title: "Error",
-            message: "Something went wrong. Please try again later",
-            color: "red",
-          });
-        }
-      },
-    });
   };
-
-  const CheckCancelOrder = (status: string) => {
-    if (status === "RESERVED") {
-      return true;
-    }
-    return false;
-  };
-
- 
   return (
     // --------------------------------------------------Table list--------------------------------------------------------
     <Container>
-      <Title my="md" order={3} size="h2" fw={900} >
+      <Title my="md" order={3} size="h2" fw={900}>
         Table List
       </Title>
 
@@ -263,19 +211,20 @@ export const TableStaff = () => {
         {tables.map((table) => (
           <Grid.Col span={4} key={table.id}>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
-              <Grid columns={6} justify="flex-start" align="center">
-                <Grid.Col span={3}>
+              <Grid columns={7} justify="flex-start" align="center">
+                <Grid.Col span={4}>
                   <Text
                     size="xl"
                     style={{ display: "flex", alignItems: "center" }}
                   >
                     <IconTags style={{ width: rem(20), height: rem(20) }} /> :{" "}
-                    {table.name}{" "}
+                    {table.name}
+                    {""}
                   </Text>
                 </Grid.Col>
 
                 <Grid.Col span={3}>
-                  <Center>
+                  <Flex justify="flex-end">
                     <Badge
                       color={getStatusColor(table.status)}
                       variant="filled"
@@ -283,17 +232,7 @@ export const TableStaff = () => {
                     >
                       {table.status}
                     </Badge>
-                  </Center>
-                </Grid.Col>
-
-                <Grid.Col span={6}>
-                  <Text
-                    size="xl"
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <IconUser style={{ width: rem(20), height: rem(20) }} /> :
-                    {table.status !== "RESERVED" ? "  " : " Pongporn"}
-                  </Text>
+                  </Flex>
                 </Grid.Col>
 
                 <Grid.Col span={2}>
@@ -306,57 +245,41 @@ export const TableStaff = () => {
                   </Text>
                 </Grid.Col>
 
-                <Grid.Col span={4}>
+                <Grid.Col span={5}>
                   <center>
                     <Button.Group>
                       <Tooltip label="Order List" position="top" offset={5}>
                         <Button
+                          size="xs"
                           variant="default"
                           px="sm"
                           radius="md"
-                          onClick={() => handleOrder(table.id , table.name)}
+                          onClick={() => handleOrder(table.id, table.name)}
+                          leftSection={
+                            <IconNotes
+                              color={theme.colors.blue[9]}
+                              stroke={1.5}
+                            />
+                          }
                         >
-                          <IconNotes
-                            size={140}
-                            color={theme.colors.blue[9]}
-                            stroke={1.5}
-                          />
+                          Order
                         </Button>
                       </Tooltip>
                       <Tooltip label="Bill List" position="top" offset={5}>
-                        <Button variant="default" px={"sm"} radius={"md"}
-                        onClick={() => handleBill(table.id , table.name)}
-                        >
-                          <IconReceipt2
-                            size={140}
-                            color={theme.colors.green[9]}
-                            stroke={1.5}
-                          />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip
-                        label="Cancel Reserved   "
-                        position="top"
-                        offset={5}
-                      >
                         <Button
+                          size="xs"
                           variant="default"
                           px={"sm"}
                           radius={"md"}
-                          onClick={() =>
-                            CancelReservation(table.id, "Pongporn", table.name)
+                          onClick={() => handleBill(table.id, table.name)}
+                          leftSection={
+                            <IconReceipt2
+                              color={theme.colors.green[9]}
+                              stroke={1.5}
+                            />
                           }
-                          disabled={!CheckCancelOrder(table.status)}
                         >
-                          <IconAddressBookOff
-                            size={140}
-                            color={
-                              CheckCancelOrder(table.status)
-                                ? theme.colors.red[9]
-                                : theme.colors.gray[5]
-                            }
-                            stroke={1.5}
-                          />
+                          Bill
                         </Button>
                       </Tooltip>
                     </Button.Group>
@@ -381,12 +304,11 @@ export const TableStaff = () => {
       <BillModal
         isOpen={ModalBilled}
         onClose={() => setModalBilled(false)}
-        ServedOrder={bill}
-        CreateBill={ConfirmPayment}
+        ServedOrder={billOrder}
+        ConfirmBill={ConfirmPayment}
+        CancelBill={CancelPayment}
         tableName={tableName}
-        tableID={tableID}
-        
-    
+        billID={billID}
       />
       {/* ------------------------------------------------End Modal Billed-------------------------------------------------------- */}
     </Container>
