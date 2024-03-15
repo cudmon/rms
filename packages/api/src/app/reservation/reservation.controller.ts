@@ -19,7 +19,14 @@ export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
   @Get()
-  async getReservations() {
+  async getReservations(@Client() client: CurrentClient) {
+    if (client.role === "CUSTOMER") {
+      return this.reservationService.getReservations({
+        where: {
+          userId: client.id,
+        },
+      });
+    }
     return this.reservationService.getReservations();
   }
 
