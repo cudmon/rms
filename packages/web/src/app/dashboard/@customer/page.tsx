@@ -1,11 +1,11 @@
 import { ReservationList } from "@/components/Dashboard/Customer/ReservationList";
 
 export const metadata = {
-  title: "Customer",
+  title: "Dashboard",
 };
 
 export default async function Page() {
-    return (
+  return (
     <div>
       <ReservationList />
     </div>
