@@ -36,7 +36,7 @@ import {
   Modal,
   Box,
 } from "@mantine/core";
-import { BASE_URL } from "@/constants";
+import { API_URL, BASE_URL } from "@/constants";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { http } from "@/modules/http";
@@ -236,8 +236,8 @@ export const ManagerMenus = () => {
             <Image
               src={
                 id === food.id && form.values.image
-                  ? `${BASE_URL}/api/menus/${food.id}/image?${Date.now()}`
-                  : `${BASE_URL}/api/menus/${food.id}/image`
+                  ? `${API_URL}/menus/${food.id}/image?${Date.now()}`
+                  : `${API_URL}/menus/${food.id}/image`
               }
               height={160}
               width={160}

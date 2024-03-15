@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { createReadStream, existsSync } from "fs";
 import { MenuService } from "@/app/menu/menu.service";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Public } from "@/app/auth/decorators/public.decorator";
 import { CreateMenuDto, UpdateMenuDto } from "@/app/menu/menu.dto";
 import {
   Body,
@@ -48,6 +49,7 @@ export class MenuController {
     }
   }
 
+  @Public()
   @Get(":id/image")
   async findImage(
     @Param("id", ParseUUIDPipe) id: string,
