@@ -37,7 +37,7 @@ const links = {
     { to: "/dashboard/menus", label: "Menus" },
     { to: "/dashboard/tables", label: "Tables" },
     { to: "/dashboard/users", label: "Users" },
-    { to: "/dashboard/settings", label: "Settings"}
+    { to: "/dashboard/settings", label: "Settings" },
   ],
 
   CHEF: [{ to: "/dashboard", label: "Dashboard" }],
@@ -132,9 +132,11 @@ const Base = ({
                 </ActionIcon>
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Item component={Link} href="/dashboard/profile">
-                  Profile
-                </Menu.Item>
+                {user.role === "CUSTOMER" && (
+                  <Menu.Item component={Link} href="/dashboard/profile">
+                    Profile
+                  </Menu.Item>
+                )}
                 <Menu.Item onClick={logout} color="red" fw={900}>
                   Logout
                 </Menu.Item>
