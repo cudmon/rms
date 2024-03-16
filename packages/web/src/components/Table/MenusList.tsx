@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { API_URL, BASE_URL } from "@/constants";
+import { API_URL } from "@/constants";
+import { useEffect, useState } from "react";
 import { Cart, Menu } from "@/types/entity";
 import { useCartsStore } from "@/store/carts";
 import { notifications } from "@mantine/notifications";
@@ -18,14 +18,28 @@ import {
   NumberInput,
   Flex,
 } from "@mantine/core";
+import { http } from "@/modules/http";
 
-type Props = {
-  menus: Menu[];
-};
-
-export const MenusList = ({ menus }: Props) => {
+export const MenusList = () => {
   const carts = useCartsStore();
+  const [menus, setMenus] = useState<Menu[]>([]);
   const [quantitys, setQuantitys] = useState<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await http.get("/menus");
+
+        setMenus(response.data);
+      } catch (e) {
+        notifications.show({
+          title: "Error",
+          message: "Failed to fetch menus",
+          color: "red",
+        });
+      }
+    })();
+  }, []);
 
   const add = (item: Cart) => {
     carts.add(item);

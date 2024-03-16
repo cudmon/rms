@@ -34,7 +34,7 @@ export const ChangeInfoModal = ({ user }: { user: User }) => {
     id: string
   ) => {
     try {
-      await http().patch(`/users/${id}`, values);
+      await http.patch(`/users/${id}`, values);
       notifications.show({
         title: "Success",
         message: "Complete change",

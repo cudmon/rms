@@ -55,7 +55,7 @@ export const ManagerTable = () => {
     queryKey: ["tables"],
     queryFn: async () => {
       try {
-        const res = await http().get("/tables");
+        const res = await http.get("/tables");
 
         return res.data as TableEntity[];
       } catch (error) {
@@ -90,7 +90,7 @@ export const ManagerTable = () => {
 
   async function handleSubmitAdd(formDataAdd: TableEntity) {
     try {
-      const res_add = await http().post("/tables", {
+      const res_add = await http.post("/tables", {
         name: formDataAdd.name,
         seat: formDataAdd.seat,
         passcode: formDataAdd.passcode,
@@ -116,7 +116,7 @@ export const ManagerTable = () => {
   async function handleSubmitEdit(formDataEdit: TableEntity) {
     console.log(formDataEdit);
     try {
-      const res_edit = await http().patch(`/tables/${formDataEdit.id}`, {
+      const res_edit = await http.patch(`/tables/${formDataEdit.id}`, {
         name: formDataEdit.name,
         seat: formDataEdit.seat,
         passcode: formDataEdit.passcode,
@@ -181,7 +181,7 @@ export const ManagerTable = () => {
 
       onConfirm: async () => {
         try {
-          const res_remove = await http().delete(`/tables/${id}`);
+          const res_remove = await http.delete(`/tables/${id}`);
 
           if (res_remove.status === 200) {
             notifications.show({

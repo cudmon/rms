@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { http } from "@/modules/http";
 import { TableEntity } from "@/types/entity";
@@ -9,19 +9,32 @@ import { useTableStore } from "@/store/table";
 import { notifications } from "@mantine/notifications";
 import { Button, Grid, PinInput, Stack, Title } from "@mantine/core";
 
-type Props = {
-  tables: Omit<TableEntity, "passcode">[];
-};
-
-export const TableSelector = ({ tables }: Props) => {
+export const TableSelector = () => {
   const router = useRouter();
   const { setTable } = useTableStore();
+  const [tables, setTables] = useState<Omit<TableEntity, "passcode">[]>([]);
   const [passcode, setPasscode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<Omit<
     TableEntity,
     "passcode"
   > | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await http.get("/tables");
+
+        setTables(data);
+      } catch (error) {
+        notifications.show({
+          title: "Something went wrong",
+          message: "Please try again",
+          color: "red",
+        });
+      }
+    })();
+  }, []);
 
   const connect = async () => {
     setLoading(true);
@@ -47,7 +60,7 @@ export const TableSelector = ({ tables }: Props) => {
     }
 
     try {
-      await http().post("/auth/table-login", {
+      await http.post("/auth/table-login", {
         id: selected.id,
         passcode,
       });

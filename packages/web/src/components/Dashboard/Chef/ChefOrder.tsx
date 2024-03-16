@@ -28,7 +28,7 @@ export const ChefOrder = () => {
     queryKey: ["orders", "PENDING"],
     queryFn: async () => {
       try {
-        const res = await http().get("/orders/status/PENDING");
+        const res = await http.get("/orders/status/PENDING");
 
         return res.data as Order[];
       } catch (error) {
@@ -70,7 +70,7 @@ export const ChefOrder = () => {
   }
 
   const finish = async (id: string) => {
-    const res = await http().patch(`/orders/finish/${id}`);
+    const res = await http.patch(`/orders/finish/${id}`);
     if (res.status === 200) {
       notifications.show({
         title: "Success",
@@ -104,7 +104,7 @@ export const ChefOrder = () => {
       children: <Text>Are you sure you want to cancel this order?</Text>,
 
       onConfirm: async () => {
-        const res = await http().patch(`/orders/cancel/${id}`);
+        const res = await http.patch(`/orders/cancel/${id}`);
         if (res.status === 200) {
           notifications.show({
             title: "Success",

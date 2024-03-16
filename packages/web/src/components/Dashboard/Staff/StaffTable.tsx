@@ -55,7 +55,7 @@ export const TableStaff = () => {
     queryKey: ["tables"],
     queryFn: async () => {
       try {
-        const res = await http().get("/tables");
+        const res = await http.get("/tables");
 
         return res.data as TableEntity[];
       } catch (error) {
@@ -90,7 +90,7 @@ export const TableStaff = () => {
 
   const handleOrder = async (tableId: string, tableName: string) => {
     try {
-      const res = await http().get(`/usages/active/${tableId}`);
+      const res = await http.get(`/usages/active/${tableId}`);
       const usage = res.data as Usage;
       setOrders(usage.order);
       setTableName(tableName);
@@ -106,7 +106,7 @@ export const TableStaff = () => {
 
   const handleBill = async (tableId: string, tableName: string) => {
     try {
-      const res_usage = await http().get(`/usages/active/${tableId}`);
+      const res_usage = await http.get(`/usages/active/${tableId}`);
       const usage = res_usage.data as Usage;
       const order = usage.order;
       const sumOrder: Order[] = [];
@@ -120,7 +120,7 @@ export const TableStaff = () => {
       });
 
       if (check === 0) {
-        const res = await http().post(`/bills`, { tableId });
+        const res = await http.post(`/bills`, { tableId });
         const bill = res.data as Bill;
 
         order.map((item) => {
@@ -160,7 +160,7 @@ export const TableStaff = () => {
 
   const ConfirmPayment = async (billId: string, tableId: string) => {
     try {
-      const res = await http().patch(`/bills/confirm/${billId}`);
+      const res = await http.patch(`/bills/confirm/${billId}`);
       if (res.status === 200) {
         notifications.show({
           title: "Success",
@@ -187,7 +187,7 @@ export const TableStaff = () => {
 
   const CancelPayment = async (id: string) => {
     try {
-      const res = await http().patch(`/bills/cancel/${id}`);
+      const res = await http.patch(`/bills/cancel/${id}`);
       if (res.status === 200) {
         notifications.show({
           title: "Canceled",
@@ -208,7 +208,7 @@ export const TableStaff = () => {
   };
 
   const markAsServed = async (id: string) => {
-    const res = await http().patch(`/orders/serve/${id}`);
+    const res = await http.patch(`/orders/serve/${id}`);
     if (res.status === 200) {
       notifications.show({
         title: "Success",
@@ -225,7 +225,7 @@ export const TableStaff = () => {
   };
 
   const cancelOrder = async (id: string) => {
-    const res = await http().patch(`/orders/cancel/${id}`);
+    const res = await http.patch(`/orders/cancel/${id}`);
     if (res.status === 200) {
       notifications.show({
         title: "Canceled",

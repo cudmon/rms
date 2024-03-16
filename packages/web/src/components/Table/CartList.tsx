@@ -81,7 +81,7 @@ export const CartList = () => {
     }
 
     try {
-      await http().post(
+      await http.post(
         "/orders",
         cart.carts.map((cart: Cart) => ({
           menuId: cart.menuId,

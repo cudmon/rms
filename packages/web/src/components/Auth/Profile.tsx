@@ -52,7 +52,7 @@ export function Profile() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await http().get<User>("/auth/profile");
+        const res = await http.get<User>("/auth/profile");
         setUser(res.data);
       } catch (error) {
         notifications.show({

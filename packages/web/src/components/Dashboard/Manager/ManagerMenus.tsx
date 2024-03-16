@@ -7,6 +7,11 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import classes from "@/styles/manager-menus.module.css";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { API_URL } from "@/constants";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
+import { http } from "@/modules/http";
+import { AxiosError } from "axios";
 import {
   IconEdit,
   IconCoins,
@@ -36,11 +41,6 @@ import {
   Modal,
   Box,
 } from "@mantine/core";
-import { API_URL, BASE_URL } from "@/constants";
-import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
-import { http } from "@/modules/http";
-import { AxiosError } from "axios";
 
 export const ManagerMenus = () => {
   const [id, setId] = useState("");
@@ -58,7 +58,7 @@ export const ManagerMenus = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await http().get("/menus");
+        const response = await http.get("/menus");
         setMenus(response.data);
       } catch (e) {
         notifications.show({
@@ -100,7 +100,7 @@ export const ManagerMenus = () => {
       formData.append("detail", form.values.detail);
       form.values.image && formData.append("image", form.values.image);
 
-      const res = await http().post("/menus", formData);
+      const res = await http.post("/menus", formData);
 
       addMenuModal[1].close();
 
@@ -145,7 +145,7 @@ export const ManagerMenus = () => {
       form.values.detail && formData.append("detail", form.values.detail);
       form.values.image && formData.append("image", form.values.image);
 
-      const res = await http().patch(`/menus/${id}`, formData);
+      const res = await http.patch(`/menus/${id}`, formData);
 
       editMenuModal[1].close();
 
@@ -208,7 +208,7 @@ export const ManagerMenus = () => {
 
       onConfirm: async () => {
         try {
-          await http().delete(`/menus/${id}`);
+          await http.delete(`/menus/${id}`);
 
           setMenus((prev) => prev.filter((food) => food.id !== id));
         } catch (e) {

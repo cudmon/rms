@@ -52,7 +52,7 @@ export const ManagerUser = () => {
     queryKey: ["users"],
     queryFn: async () => {
       try {
-        const res = await http().get("/users");
+        const res = await http.get("/users");
 
         return res.data as User[];
       } catch (error) {
@@ -87,7 +87,7 @@ export const ManagerUser = () => {
 
   async function handleSubmitAdd(formDataAdd: User) {
     try {
-      const res_add = await http().post("/users", {
+      const res_add = await http.post("/users", {
         username: formDataAdd.username,
         password: formDataAdd.password,
         name: formDataAdd.name,
@@ -116,7 +116,7 @@ export const ManagerUser = () => {
   async function handleSubmitEdit(formDataEdit: User) {
     console.log(formDataEdit);
     try {
-      const res_edit = await http().patch(`/users/${formDataEdit.id}`, {
+      const res_edit = await http.patch(`/users/${formDataEdit.id}`, {
         username: formDataEdit.username,
         password: formDataEdit.password,
         name: formDataEdit.name,
@@ -174,7 +174,7 @@ export const ManagerUser = () => {
 
       onConfirm: async () => {
         try {
-          const res_remove = await http().delete(`/users/${id}`);
+          const res_remove = await http.delete(`/users/${id}`);
 
           if (res_remove.status === 200) {
             notifications.show({

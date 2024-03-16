@@ -114,7 +114,7 @@ const List = ({ orders }: { orders: Order[] }) => {
 
       onConfirm: async () => {
         try {
-          await http().patch(`/orders/cancel/${id}`);
+          await http.patch(`/orders/cancel/${id}`);
 
           setData((prev) => {
             return prev.map((o) => {
@@ -200,7 +200,7 @@ export const OrdersList = () => {
       try {
         if (!table.id) return [];
 
-        const response = await http().get(`/usages/active/${table.id}`);
+        const response = await http.get(`/usages/active/${table.id}`);
 
         return response.data.order as Order[];
       } catch (error) {

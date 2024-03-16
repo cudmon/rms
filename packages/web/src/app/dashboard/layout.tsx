@@ -163,7 +163,7 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
   useEffect(() => {
     (async () => {
       try {
-        await http().get("/auth/check-session");
+        await http.get("/auth/check-session");
       } catch (error) {
         removeUser();
         router.push("/login");

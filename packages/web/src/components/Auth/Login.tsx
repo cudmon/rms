@@ -30,7 +30,7 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      const res = await http().post("/auth/login", {
+      const res = await http.post("/auth/login", {
         username,
         password,
       });

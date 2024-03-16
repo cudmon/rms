@@ -27,7 +27,7 @@ export function ManagerSettings() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await http().get("/settings");
+        const res = await http.get("/settings");
 
         setSettings(res.data);
       } catch (error) {}
@@ -40,7 +40,7 @@ export function ManagerSettings() {
     );
 
     try {
-      await http().patch(`/settings/${name}`, { value });
+      await http.patch(`/settings/${name}`, { value });
     } catch (error) {}
   };
 
