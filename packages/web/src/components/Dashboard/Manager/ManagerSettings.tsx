@@ -61,12 +61,12 @@ export function ManagerSettings() {
             {settings.map((setting) => (
               <Table.Tr key={setting.id}>
                 <Table.Td>{toNormalCase(setting.name)}</Table.Td>
-                {setting.type === "TIME" && (
+                {setting.type === "STRING" && (
                   <Table.Td>
-                    <TimeInput
+                    <TextInput
                       value={setting.value}
-                      onChange={({ currentTarget }) => {
-                        updateSetting(setting.name, currentTarget.value);
+                      onChange={(v) => {
+                        updateSetting(setting.name, v.currentTarget.value);
                       }}
                     />
                   </Table.Td>
