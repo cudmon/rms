@@ -1,14 +1,6 @@
 "use client";
 
 import {
-  IconAddressBook,
-  IconAt,
-  IconCrown,
-  IconPhone,
-  IconUser,
-  IconUserSquareRounded,
-} from "@tabler/icons-react";
-import {
   Grid,
   GridCol,
   Text,
@@ -17,11 +9,28 @@ import {
   Stack,
   Card,
   Flex,
+  Menu,
+  Button,
+  Modal,
 } from "@mantine/core";
+import {
+  IconAddressBook,
+  IconAt,
+  IconCrown,
+  IconEdit,
+  IconPassword,
+  IconPhone,
+  IconSettings,
+  IconUser,
+  IconUserSquareRounded,
+} from "@tabler/icons-react";
 import { http } from "@/modules/http";
+import { User } from "@/types/entity";
 import { useEffect, useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
+import { ChangePasswordModal } from "./PasswordModal";
 import { notifications } from "@mantine/notifications";
-import { AxiosError } from "axios";
+import { ChangeInfoModal } from "@/components/Auth/InfoModal";
 
 export const metadata = {
   title: "Profile",
@@ -33,23 +42,17 @@ const style = {
   },
 };
 
-interface User {
-  id: string;
-  name: string;
-  username: string;
-  role: string;
-  email: string;
-  telephone: string;
-}
-
-export default function Profile() {
+export function Profile() {
   const [user, setUser] = useState<User>();
+  const [openInformation, { open: openInfo, close: closeInfo }] =
+    useDisclosure(false);
+  const [openPassword, { open: openPass, close: closePass }] =
+    useDisclosure(false);
 
   useEffect(() => {
     (async () => {
       try {
         const res = await http().get<User>("/auth/profile");
-
         setUser(res.data);
       } catch (error) {
         notifications.show({
@@ -63,6 +66,16 @@ export default function Profile() {
 
   return (
     <>
+      <Modal
+        opened={openInformation}
+        onClose={closeInfo}
+        title="Edit information"
+      >
+        {user && <ChangeInfoModal user={user} />}
+      </Modal>
+      <Modal opened={openPassword} onClose={closePass} title="Edit password">
+        {user && <ChangePasswordModal user={user} />}
+      </Modal>
       <Center py={40}>
         <Card withBorder h={550}>
           <Stack w={250} px={20}></Stack>
@@ -71,7 +84,27 @@ export default function Profile() {
               <Grid gutter={15}>
                 <GridCol span={12}>
                   <Text fz={28} ta="center">
-                    Profile
+                    {"Profile  "}
+                    <Menu>
+                      <Menu.Target>
+                        <IconEdit />
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Label>Edit</Menu.Label>
+                        <Menu.Item
+                          leftSection={<IconSettings />}
+                          onClick={openInfo}
+                        >
+                          Information
+                        </Menu.Item>
+                        <Menu.Item
+                          leftSection={<IconPassword />}
+                          onClick={openPass}
+                        >
+                          password
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
                   </Text>
                 </GridCol>
                 <GridCol span={12}>
