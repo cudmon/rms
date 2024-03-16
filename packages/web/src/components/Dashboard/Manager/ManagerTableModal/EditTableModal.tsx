@@ -28,7 +28,7 @@ interface EditTableModalProps {
   isOpen: boolean;
   onClose: () => void;
   onEditTable: (formDataEdit: TableEntity) => void;
-  table : TableEntity;
+  table: TableEntity;
 }
 
 export const EditTableModal: React.FC<EditTableModalProps> = ({
@@ -60,8 +60,6 @@ export const EditTableModal: React.FC<EditTableModalProps> = ({
     validate: zodResolver(schema),
   });
 
-  console.log(table);
-
   useEffect(() => {
     form.setValues({
       id: table.id,
@@ -70,8 +68,7 @@ export const EditTableModal: React.FC<EditTableModalProps> = ({
       status: table.status,
       passcode: table.passcode,
     });
-  }
-  , [form, table]);
+  }, [table]);
 
   return (
     <Modal
@@ -103,49 +100,47 @@ export const EditTableModal: React.FC<EditTableModalProps> = ({
           })();
         }}
       >
-          <TextInput
-            autoFocus
-            label="Table name"
-            placeholder="Table name"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconUserPlus size={16} />}
-            {...form.getInputProps("name")}
-          />
-          <NumberInput
-            label="Seat"
-            placeholder="Seat"
+        <TextInput
+          autoFocus
+          label="Table name"
+          placeholder="Table name"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconUserPlus size={16} />}
+          {...form.getInputProps("name")}
+        />
+        <NumberInput
+          label="Seat"
+          placeholder="Seat"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconUserPlus size={16} />}
+          {...form.getInputProps("seat")}
+          min={0}
+          allowDecimal={false}
+        />
 
-            withAsterisk
-            mt="sm"
-            leftSection={<IconUserPlus size={16} />}
-            {...form.getInputProps("seat")}
-            min={0}
-            allowDecimal={false}
-          />
+        <PasswordInput
+          autoFocus
+          label="Passcode"
+          placeholder="Create passcode for table"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconLockSquareRounded size={16} />}
+          {...form.getInputProps("passcode")}
+        />
 
-          <PasswordInput
-            autoFocus
-            label="Passcode"
-            placeholder="Create passcode for table"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconLockSquareRounded size={16} />}
-            {...form.getInputProps("passcode")}
-          />
-    
-          <Select
-            label="Status"
-            placeholder="Table status"
-            mt="sm"
-            leftSection={<IconBuildingStore size={16} />}
-            data={[
-              { value: "IDLE", label: "Idle" },
-              { value: "EATING", label: "Eating" },
-              
-            ]}
-            {...form.getInputProps("status")}
-          />
+        <Select
+          label="Status"
+          placeholder="Table status"
+          mt="sm"
+          leftSection={<IconBuildingStore size={16} />}
+          data={[
+            { value: "IDLE", label: "Idle" },
+            { value: "EATING", label: "Eating" },
+          ]}
+          {...form.getInputProps("status")}
+        />
 
         <Flex
           mih={50}
