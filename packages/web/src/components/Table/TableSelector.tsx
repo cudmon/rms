@@ -7,7 +7,10 @@ import { TableEntity } from "@/types/entity";
 import { useRouter } from "next/navigation";
 import { useTableStore } from "@/store/table";
 import { notifications } from "@mantine/notifications";
-import { Button, Grid, PinInput, Stack, Title } from "@mantine/core";
+import { Button, Grid, PinInput, Stack, Title, MantineProvider } from "@mantine/core";
+import { IconChevronRight } from "@tabler/icons-react";
+import classes from "@/styles/tables.module.css";
+
 
 export const TableSelector = () => {
   const router = useRouter();
@@ -100,20 +103,28 @@ export const TableSelector = () => {
       <Grid>
         {tables.map((table) => (
           <Grid.Col span={4} key={table.id}>
-            <Button
-              size="xl"
-              fullWidth
-              key={table.id}
-              onClick={() => setSelected(table)}
-              color={selected === table ? "blue" : "gray"}
-            >
-              {table.name}
-            </Button>
+            <MantineProvider theme={{ focusClassName: classes.focus }}>
+              <Button
+                size="xl"
+                fullWidth
+                key={table.id}
+                onClick={() => setSelected(table)}
+                color={selected === table ? "blue.5" : "dark.5"}
+              >
+                {table.name}
+              </Button>
+            </MantineProvider>
           </Grid.Col>
         ))}
       </Grid>
       <PinInput length={6} mask size="xl" onComplete={(v) => setPasscode(v)} />
-      <Button loading={loading} onClick={connect} size="xl" fullWidth>
+      <Button
+        loading={loading}
+        onClick={connect}
+        size="xl" fullWidth
+        rightSection={<IconChevronRight size={26} />}
+        leftSection={<span />}
+        justify="space-between">
         Connect
       </Button>
     </Stack>

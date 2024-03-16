@@ -18,20 +18,20 @@ import {
   Skeleton,
   Stack,
   Table,
-  Text,
+  Text, ScrollArea
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 const Total = ({ orders }: { orders: Order[] }) => {
   return (
-    <Card shadow="sm" withBorder>
+    <Card>
       <Group justify="space-between">
-        <Text fz={28} fw={500}>
-          Total:
+        <Text fz={26} fw={750}>
+          Total Prices :
         </Text>
-        <Text c="lime" fz={28} fw={500}>
+        <Text c="lime" fz={28} fw={750}>
           <NumberFormatter
-            prefix="$"
+            prefix="$ "
             value={orders.reduce((acc, o) => {
               if (o.status !== "CANCELED") {
                 return acc + o.price * o.quantity;
@@ -48,10 +48,10 @@ const Total = ({ orders }: { orders: Order[] }) => {
 
 const Empty = () => {
   return (
-    <Card shadow="sm" padding="xl" withBorder>
+    <Card padding="xl" withBorder>
       <Center>
         <Stack gap={64}>
-          <Text fz={48} fw={400}>
+          <Text fz={36} fw={400}>
             No orders yet
           </Text>
           <Button
@@ -71,7 +71,7 @@ const Empty = () => {
 
 const Fail = () => {
   return (
-    <Card shadow="sm" padding="xl" withBorder>
+    <Card padding="xl" withBorder>
       <Center fz={28} c="red" fw={500}>
         Something went wrong. Please try again later
       </Center>
@@ -146,46 +146,49 @@ const List = ({ orders }: { orders: Order[] }) => {
   };
 
   return (
-    <Card shadow="sm" p={0} withBorder>
-      <Table fz={16} verticalSpacing="lg" horizontalSpacing="lg">
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Quantity</Table.Th>
-            <Table.Th>Price</Table.Th>
-            <Table.Th>Status</Table.Th>
-            <Table.Th>Action</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {data.map((order) => (
-            <Table.Tr key={order.id}>
-              <Table.Td>{order.menu.name}</Table.Td>
-              <Table.Td>{order.quantity}</Table.Td>
-              <Table.Td>
-                <NumberFormatter
-                  prefix="$"
-                  value={order.price * order.quantity}
-                />
-              </Table.Td>
-              <Table.Td>
-                <Badge>{order.status}</Badge>
-              </Table.Td>
-              <Table.Td>
-                {order.status === "PENDING" && (
-                  <Button
-                    color="red"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => cancel(order.id)}
-                  >
-                    Cancel
-                  </Button>
-                )}
-              </Table.Td>
+    <Card p={0} withBorder>
+      <Table fz={16} verticalSpacing="md" horizontalSpacing="lg" highlightOnHover ta="center">
+        <ScrollArea h={400} offsetScrollbars scrollHideDelay={2000}>
+
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th ta="center">Name</Table.Th>
+              <Table.Th ta="center">Quantity</Table.Th>
+              <Table.Th ta="center">Price</Table.Th>
+              <Table.Th ta="center">Status</Table.Th>
+              <Table.Th ta="center"></Table.Th>
             </Table.Tr>
-          ))}
-        </Table.Tbody>
+          </Table.Thead>
+          <Table.Tbody>
+            {data.map((order) => (
+              <Table.Tr key={order.id}>
+                <Table.Td>{order.menu.name}</Table.Td>
+                <Table.Td>{order.quantity}</Table.Td>
+                <Table.Td>
+                  <NumberFormatter
+                    prefix="$ "
+                    value={order.price * order.quantity}
+                  />
+                </Table.Td>
+                <Table.Td>
+                  <Badge color='green'>{order.status}</Badge>
+                </Table.Td>
+                <Table.Td>
+                  {order.status === "PENDING" && (
+                    <Button
+                      color="red"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => cancel(order.id)}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </ScrollArea>
       </Table>
     </Card>
   );

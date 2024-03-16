@@ -4,6 +4,7 @@ import { API_URL } from "@/constants";
 import { useEffect, useState } from "react";
 import { Cart, Menu } from "@/types/entity";
 import { useCartsStore } from "@/store/carts";
+import { IconShoppingCartPlus } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import {
   Grid,
@@ -16,9 +17,10 @@ import {
   Image,
   Text,
   NumberInput,
-  Flex,
+  Flex, Tooltip
 } from "@mantine/core";
 import { http } from "@/modules/http";
+import classes from "@/styles/manager-menus.module.css";
 
 export const MenusList = () => {
   const carts = useCartsStore();
@@ -55,20 +57,22 @@ export const MenusList = () => {
     <Grid gutter={16}>
       {menus.map((menu) => (
         <GridCol span={{ base: 12, sm: 4 }} key={menu.id}>
-          <Card shadow="sm" pt={0} withBorder>
+          <Card padding="lg" radius="xs" className={classes.card} withBorder>
             <CardSection>
-              <Image
-                src={`${API_URL}/menus/${menu.id}/image`}
-                height={160}
-                alt={menu.name}
-              />
+              <Tooltip label={menu.name}>
+                <Image
+                  src={`${API_URL}/menus/${menu.id}/image`}
+                  height={160}
+                  alt={menu.name}
+                />
+              </Tooltip>
             </CardSection>
             <Group justify="space-between" mt="md" mb="xs">
-              <Text fz={24} fw={500}>
+              <Text fz={18} fw={750}>
                 {menu.name}
               </Text>
-              <Badge size="lg" variant="light">
-                ${menu.price}
+              <Badge size="lg" variant="light" c='green.8' color="green.8" fw={750}>
+                $ {menu.price}
               </Badge>
             </Group>
             <Flex gap={8} align="center" justify="space-between">
@@ -83,7 +87,10 @@ export const MenusList = () => {
                 }}
               />
               <Button
+                leftSection={<IconShoppingCartPlus size={18} />}
                 fullWidth
+                variant="gradient"
+                gradient={{ from: 'green', to: 'lime', deg: 270 }}
                 onClick={() =>
                   add({
                     id: new Date().getTime().toString(),

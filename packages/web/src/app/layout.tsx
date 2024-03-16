@@ -25,7 +25,7 @@ const jost = Jost({
 const theme = createTheme({
   primaryColor: "lime",
   primaryShade: 7,
-  defaultRadius: "xs",
+  defaultRadius: "md",
   fontFamily: "Jost, sans-serif",
   headings: {
     fontFamily: "Jost, sans-serif",

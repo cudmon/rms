@@ -4,7 +4,7 @@ import { Cart } from "@/types/entity";
 import { http } from "@/modules/http";
 import { modals } from "@mantine/modals";
 import { useCartsStore } from "@/store/carts";
-import { IconTrash } from "@tabler/icons-react";
+import { IconTrash , IconArrowBigDown} from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 
 import {
@@ -15,16 +15,16 @@ import {
   Stack,
   Text,
   Box,
-  Button,
+  Button, ScrollArea
 } from "@mantine/core";
 
 const Empty = () => {
   return (
-    <Card shadow="sm" padding="xl" withBorder>
+    <Card padding="xl" withBorder>
       <Center>
         <Stack gap={64}>
-          <Text fz={36} fw={400}>
-            No items in cart
+          <Text fz={28} fw={500} >
+           <IconArrowBigDown size={26}/>  No items in cart
           </Text>
         </Stack>
       </Center>
@@ -38,7 +38,7 @@ export const CartList = () => {
   const remove = (id: string) =>
     modals.openConfirmModal({
       title: (
-        <Text fz={18} fw={500}>
+        <Text fz={18} fw={750}>
           Remove item
         </Text>
       ),
@@ -110,44 +110,47 @@ export const CartList = () => {
       {cart.carts.length > 0 ? (
         <Card withBorder>
           <Table
-            fz={18}
-            verticalSpacing="lg"
+            fz={16}
+            verticalSpacing="md"
             horizontalSpacing="lg"
             highlightOnHover
+            ta="center"
           >
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Item</Table.Th>
-                <Table.Th>Quantity</Table.Th>
-                <Table.Th>Price</Table.Th>
-                <Table.Th ta="center">Actions</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {cart.carts.map((cart) => (
-                <Table.Tr key={cart.id}>
-                  <Table.Td>{cart.name}</Table.Td>
-                  <Table.Td>{cart.quantity}</Table.Td>
-                  <Table.Td>{cart.price}</Table.Td>
-                  <Table.Td ta="center">
-                    <ActionIcon
-                      color="red"
-                      radius="xl"
-                      size="lg"
-                      onClick={() => remove(cart.id)}
-                    >
-                      <IconTrash />
-                    </ActionIcon>
-                  </Table.Td>
+            <ScrollArea h={400} offsetScrollbars scrollHideDelay={2000}>
+              <Table.Thead>
+                <Table.Tr >
+                  <Table.Th ta="center">Item</Table.Th>
+                  <Table.Th ta="center">Quantity</Table.Th>
+                  <Table.Th ta="center">Price</Table.Th>
+                  <Table.Th ta="center"></Table.Th>
                 </Table.Tr>
-              ))}
-            </Table.Tbody>
+              </Table.Thead>
+
+              <Table.Tbody>
+                {cart.carts.map((cart) => (
+                  <Table.Tr key={cart.id}>
+                    <Table.Td>{cart.name}</Table.Td>
+                    <Table.Td>{cart.quantity}</Table.Td>
+                    <Table.Td>{cart.price}</Table.Td>
+                    <Table.Td ta="center">
+                      <ActionIcon
+                        color="red"
+                        size="lg"
+                        onClick={() => remove(cart.id)}
+                      >
+                        <IconTrash />
+                      </ActionIcon>
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </ScrollArea>
           </Table>
         </Card>
       ) : (
         <Empty />
       )}
-      <Button onClick={order} mt={32} fullWidth size="lg">
+      <Button onClick={order} mt={32} fullWidth size="md" color="lime">
         Order Now
       </Button>
     </Box>

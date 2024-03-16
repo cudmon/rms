@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import cx from "clsx";
 import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import { CartList } from "@/components/Table/CartList";
-import { IconShoppingCartFilled } from "@tabler/icons-react";
+import { IconShoppingCart, IconSun, IconMoon } from "@tabler/icons-react";
 import {
   ActionIcon,
   AppShell,
@@ -14,8 +15,10 @@ import {
   Container,
   Group,
   Text,
-  Title,
+  Title, useMantineColorScheme,
+  useComputedColorScheme,
 } from "@mantine/core";
+import classes from "@/styles/dark-mode.module.css";
 
 type Props = {
   children: ReactNode;
@@ -24,6 +27,10 @@ type Props = {
 export default function Layout({ children }: Props) {
   const pathname = usePathname();
   const [opened, handlers] = useDisclosure();
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   return (
     <AppShell
@@ -38,11 +45,17 @@ export default function Layout({ children }: Props) {
       padding="md"
       header={{ height: 60 }}
     >
-      <AppShell.Header withBorder>
+      <AppShell.Header withBorder style={{ boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}
+      >
         <Group h={60} px={32} justify="space-between">
-          <Title order={1} fz={24} fw={600}>
+          <Text
+            fz={24}
+            fw={600}
+            variant="gradient"
+            gradient={{ from: "green.7", to: "lime.5" }}
+          >
             RMS
-          </Title>
+          </Text>
           <Group justify="space-evenly">
             <Button
               component={Link}
@@ -72,9 +85,25 @@ export default function Layout({ children }: Props) {
               Orders
             </Button>
           </Group>
-          <ActionIcon onClick={handlers.toggle} size="lg">
-            <IconShoppingCartFilled />
-          </ActionIcon>
+          <Group>
+            <ActionIcon
+              variant="transparent"
+              size="xl"
+              radius="xl"
+              aria-label="Toggle color scheme"
+              onClick={() =>
+                setColorScheme(
+                  computedColorScheme === "light" ? "dark" : "light"
+                )
+              }
+            >
+              <IconSun className={cx(classes.icon, classes.light)} />
+              <IconMoon className={cx(classes.icon, classes.dark)} />
+            </ActionIcon>
+            <ActionIcon onClick={handlers.toggle} size="lg">
+              <IconShoppingCart />
+            </ActionIcon>
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Aside p={32}>
