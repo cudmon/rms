@@ -90,7 +90,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       email: user.email,
       telephone: user.telephone,
     });
-  }, [user]);
+  }, [form, user]);
 
   return (
     <Modal

@@ -71,7 +71,7 @@ export const EditTableModal: React.FC<EditTableModalProps> = ({
       passcode: table.passcode,
     });
   }
-  , [table]);
+  , [form, table]);
 
   return (
     <Modal

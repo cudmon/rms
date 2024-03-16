@@ -71,10 +71,8 @@ const Base = ({
         return "CHEF";
       case "STAFF":
         return "STAFF";
-      case "CUSTOMER":
-        return "CUSTOMER";
       default:
-        return "CUSTOMER";
+        return "STAFF";
     }
   };
 
