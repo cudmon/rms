@@ -1,7 +1,7 @@
 "use client";
 
 import { http } from "@/modules/http";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
 import { notifications } from "@mantine/notifications";
@@ -19,10 +19,16 @@ import { AxiosError } from "axios";
 
 export const Login = () => {
   const router = useRouter();
-  const { setUser } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user.id) {
+      router.push("/dashboard");
+    }
+  }, [router, user]);
 
   const login = async (e: FormEvent) => {
     e.preventDefault();
@@ -36,9 +42,9 @@ export const Login = () => {
       });
 
       setUser({
-        id: res.data.client.id,
-        username: res.data.client.username,
-        role: res.data.client.role,
+        id: res.data.id,
+        username: res.data.username,
+        role: res.data.role,
       });
       setLoading(false);
 
