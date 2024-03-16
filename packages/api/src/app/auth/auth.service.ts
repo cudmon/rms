@@ -1,16 +1,25 @@
 import { compare, hash } from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { Injectable } from "@nestjs/common";
+import {
+  Injectable,
+} from "@nestjs/common";
 import { UsersService } from "@/app/users/users.service";
 import { TablesService } from "@/app/tables/tables.service";
-import { LogInDto, RegisterDto, TableLoginDto } from "@/app/auth/auth.dto";
+import {
+  ChangePasswordDto,
+  LogInDto,
+  RegisterDto,
+  TableLoginDto,
+} from "@/app/auth/auth.dto";
+import { PrismaService } from "@/providers/prisma.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
-    private tablesService: TablesService
+    private tablesService: TablesService,
+    private prisma: PrismaService
   ) {}
 
   async checkSession(token: string) {
@@ -57,5 +66,29 @@ export class AuthService {
 
   async register(data: RegisterDto) {
     return await this.usersService.create(data);
+  }
+
+  async changePassword(id: string, data: ChangePasswordDto) {
+    const user = await this.usersService.findById(id);
+    if (!user) {
+      throw new Error("INVALID_CREDENTIALS");
+    }
+    const match = await compare(data.password, user.password);
+
+    if (!match) {
+      throw new Error("NOT_MATCH");
+    }
+    console.log(data.newPassword);
+    return await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: { password: await hash(data.newPassword, 10)},
+      select: {
+        id: true,
+        username: true,
+        password: true,
+      },
+    });
   }
 }

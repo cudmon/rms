@@ -27,14 +27,6 @@ export class UsersService {
       where: {
         id,
       },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        role: true,
-        email: true,
-        telephone: true,
-      },
     });
   }
 

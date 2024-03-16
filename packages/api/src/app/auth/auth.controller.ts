@@ -3,7 +3,7 @@ import { Public } from "./decorators/public.decorator";
 import { UsersService } from "@/app/users/users.service";
 import { CurrentClient } from "@/app/auth/types/auth.type";
 import { Client } from "@/app/auth/decorators/client.decorator";
-import { LogInDto, RegisterDto, TableLoginDto } from "@/app/auth/auth.dto";
+import { ChangePasswordDto, LogInDto, RegisterDto, TableLoginDto } from "@/app/auth/auth.dto";
 import {
   Body,
   Controller,
@@ -11,6 +11,10 @@ import {
   Get,
   UnauthorizedException,
   Headers,
+  BadRequestException,
+  Patch,
+  Param,
+  ParseUUIDPipe,
 } from "@nestjs/common";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
@@ -84,6 +88,18 @@ export class AuthController {
           throw new UnauthorizedException("Already used information");
         }
       }
+    }
+  }
+  
+
+  @Patch(":id")
+  async changePassword(
+    @Param("id", ParseUUIDPipe) id: string,
+    @Body() data: ChangePasswordDto) {
+    try {
+      return await this.authService.changePassword(id, data);
+    } catch (error) {
+      throw new BadRequestException("Password not match");
     }
   }
 }
