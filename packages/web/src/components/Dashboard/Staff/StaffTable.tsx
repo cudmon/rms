@@ -30,6 +30,7 @@ import { notifications } from "@mantine/notifications";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { modals } from "@mantine/modals";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -105,57 +106,86 @@ export const TableStaff = () => {
   };
 
   const handleBill = async (tableId: string, tableName: string) => {
-    try {
-      const res_usage = await http.get(`/usages/active/${tableId}`);
-      const usage = res_usage.data as Usage;
-      const order = usage.order;
-      const sumOrder: Order[] = [];
+    modals.openConfirmModal({
+      title: (
+        <Text fz={18} fw={500}>
+          Create Bill
+        </Text>
+      ),
 
-      let check = 0;
+      centered: true,
 
-      order.map((item) => {
-        if (item.status === "PENDING" || item.status === "FINISHED") {
-          check++;
-        }
-      });
+      labels: {
+        confirm: "Confirm",
+        cancel: "Cancel",
+      },
 
-      if (check === 0) {
-        const res = await http.post(`/bills`, { tableId });
-        const bill = res.data as Bill;
+      confirmProps: {
+        color: "green",
+      },
 
-        order.map((item) => {
-          const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
-          if (item.status === "CANCELED") {
-            return;
-          } else {
-            if (existing) {
-              existing.quantity += item.quantity;
-              existing.price += item.price;
-            } else {
-              sumOrder.push({ ...item });
+      children: (
+        <Text>
+          Are you sure you want to create bill for <strong>table {tableName}</strong>{" "}
+          ?
+        </Text>
+      ),
+
+      onConfirm: async () => {
+        try {
+          const res_usage = await http.get(`/usages/active/${tableId}`);
+          const usage = res_usage.data as Usage;
+          const order = usage.order;
+          const sumOrder: Order[] = [];
+
+          let check = 0;
+
+          order.map((item) => {
+            if (item.status === "PENDING" || item.status === "FINISHED") {
+              check++;
             }
+          });
+
+          if (check === 0) {
+            const res = await http.post(`/bills`, { tableId });
+            const bill = res.data as Bill;
+
+            order.map((item) => {
+              const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
+              if (item.status === "CANCELED") {
+                return;
+              } else {
+                if (existing) {
+                  existing.quantity += item.quantity;
+                  existing.price += item.price;
+                } else {
+                  sumOrder.push({ ...item });
+                }
+              }
+            });
+            setBillOrder(sumOrder);
+            setTableName(tableName);
+            setbillID(bill.id);
+            settableID(tableId);
+            setModalBilled(true);
+          } else {
+            notifications.show({
+              title: "Error",
+              message: "Please serve all order first",
+              color: "red",
+            });
           }
-        });
-        setBillOrder(sumOrder);
-        setTableName(tableName);
-        setbillID(bill.id);
-        settableID(tableId);
-        setModalBilled(true);
-      } else {
-        notifications.show({
-          title: "Error",
-          message: "Please serve all order first",
-          color: "red",
-        });
-      }
-    } catch (error) {
-    
-      if (error instanceof AxiosError) {
-        setBillOrder([]);
-        setTableName(tableName);
-        setModalBilled(true);
-      }
-    }
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            setBillOrder([]);
+            setTableName(tableName);
+            setModalBilled(true);
+          }
+        }
+      },
+    });
+
+    //-----------------------------------------------------------------------------
   };
 
   const ConfirmPayment = async (billId: string, tableId: string) => {

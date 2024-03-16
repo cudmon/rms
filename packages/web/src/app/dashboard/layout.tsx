@@ -42,7 +42,8 @@ const links = {
 
   CHEF: [{ to: "/dashboard", label: "Dashboard" }],
 
-  STAFF: [{ to: "/dashboard", label: "Dashboard" }],
+  STAFF: [{ to: "/dashboard", label: "Dashboard" },
+  { to: "/dashboard/history", label: "History" }],
 };
 
 const Base = ({
