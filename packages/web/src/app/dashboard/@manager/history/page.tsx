@@ -1,5 +1,4 @@
-// import { ManagerMenus } from "@/components/Dashboard/Manager/ManagerMenus";
-
+import {ManagerHistory} from "@/components/Dashboard/Manager/ManagerHistory"
 export const metadata = {
   title: "Manager",
 };
@@ -7,8 +6,8 @@ export const metadata = {
 export default async function Page() {
   return (
     <div>
-      {/* <ManagerMenus /> */}
-      hello history manager
+   
+      <ManagerHistory />
     </div>
   );
 }
