@@ -8,7 +8,6 @@ async function main() {
   await prisma.billing.deleteMany({});
   await prisma.menu.deleteMany({});
   await prisma.order.deleteMany({});
-  await prisma.reservation.deleteMany({});
   await prisma.usage.deleteMany({});
   await prisma.table.deleteMany({});
   await prisma.setting.deleteMany({});
@@ -38,34 +37,6 @@ async function main() {
         role: "STAFF",
         email: "staff@email.com",
         telephone: "1234567893",
-      },
-      {
-        username: "customer",
-        password: hashSync("customer", 10),
-        name: "Jeff Bezos",
-        role: "CUSTOMER",
-        email: "customer@email.com",
-        telephone: "1234567894",
-      },
-    ],
-  });
-
-  await prisma.menu.createMany({
-    data: [
-      {
-        name: "Burger",
-        price: 10,
-        image: "burger.png",
-      },
-      {
-        name: "Pizza",
-        price: 20,
-        image: "pizza.png",
-      },
-      {
-        name: "Pasta",
-        price: 15,
-        image: "pasta.png",
       },
     ],
   });
@@ -103,24 +74,9 @@ async function main() {
   await prisma.setting.createMany({
     data: [
       {
-        name: "OPENING_TIME",
-        value: "09:00",
-        type: "TIME",
-      },
-      {
-        name: "CLOSING_TIME",
-        value: "22:00",
-        type: "TIME",
-      },
-      {
-        name: "RESERVATION_MAX_DAY",
-        value: "7",
-        type: "NUMBER",
-      },
-      {
-        name: "RESERVATION_MIN_DAY",
-        value: "1",
-        type: "NUMBER",
+        name: "NAME",
+        value: "RMS",
+        type: "STRING",
       },
       {
         name: "BILLING_TAX",
@@ -129,11 +85,6 @@ async function main() {
       },
       {
         name: "SERVICE_CHARGE",
-        value: "10",
-        type: "NUMBER",
-      },
-      {
-        name: "MAX_TABLE_BOOKING",
         value: "10",
         type: "NUMBER",
       },

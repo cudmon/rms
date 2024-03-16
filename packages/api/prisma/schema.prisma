@@ -8,46 +8,34 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(uuid())
-  username    String        @unique
-  password    String
-  name        String
-  role        UserRole      @default(CUSTOMER)
-  email       String        @unique
-  telephone   String        @unique
-  reservation Reservation[]
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  name      String?
+  role      UserRole @default(STAFF)
+  email     String?  @unique
+  telephone String?  @unique
 }
 
 model Table {
-  id          String        @id @default(uuid())
-  name        String        @unique
-  status      TableStatus   @default(IDLE)
-  seat        Int
-  passcode    String
-  usage       Usage[]
-  reservation Reservation[]
+  id       String      @id @default(uuid())
+  name     String      @unique
+  status   TableStatus @default(IDLE)
+  seat     Int
+  passcode String
+  usage    Usage[]
 }
 
 model Order {
-  id       String      @id @default(uuid())
-  quantity Int
-  price    Float
-  createdAt     DateTime    @default(now())
-  status   OrderStatus @default(PENDING)
-  menu     Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
-  menuId   String      @map("menu_id")
-  usage    Usage       @relation(fields: [usageId], references: [id], onDelete: Cascade)
-  usageId  String      @map("usage_id")
-}
-
-model Reservation {
-  id      String            @id @default(uuid())
-  status  ReservationStatus @default(CONFIRMED)
-  when    DateTime
-  user    User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String            @map("user_id")
-  table   Table             @relation(fields: [tableId], references: [id], onDelete: Cascade)
-  tableId String            @map("table_id")
+  id        String      @id @default(uuid())
+  quantity  Int         @default(1)
+  price     Float
+  status    OrderStatus @default(PENDING)
+  menu      Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  menuId    String      @map("menu_id")
+  usage     Usage       @relation(fields: [usageId], references: [id], onDelete: Cascade)
+  usageId   String      @map("usage_id")
+  createdAt DateTime    @default(now())
 }
 
 model Menu {
@@ -55,17 +43,17 @@ model Menu {
   name   String  @unique
   detail String?
   price  Float
-  image  String
+  image  String?
   order  Order[]
 }
 
 model Billing {
-  id      String     @id @default(uuid())
-  createdAt    DateTime    @default(now())
-  price   Float
-  status  BillStatus @default(UNPAID)
-  usageId String     @map("usage_id")
-  usage   Usage?
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  price     Float
+  status    BillStatus @default(UNPAID)
+  usageId   String     @map("usage_id")
+  usage     Usage?
 }
 
 model Usage {
@@ -80,17 +68,15 @@ model Usage {
 }
 
 model Setting {
-  id    String @id @default(uuid())
-  name  String @unique
+  id    String      @id @default(uuid())
+  name  String      @unique
   value String
-  type  String
-
+  type  SettingType @default(STRING)
 }
 
 enum TableStatus {
   IDLE
   EATING
-  RESERVED
 }
 
 enum BillStatus {
@@ -106,14 +92,14 @@ enum OrderStatus {
   CANCELED
 }
 
-enum ReservationStatus {
-  CONFIRMED
-  CANCELED
+enum SettingType {
+  STRING
+  NUMBER
+  BOOLEAN
 }
 
 enum UserRole {
   MANAGER
   CHEF
   STAFF
-  CUSTOMER
 }
