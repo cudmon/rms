@@ -272,7 +272,13 @@ export const ManagerMenus = () => {
         </Group>
 
         <Group justify="space-between" mb="xs">
-          <Text size="sm">{food.price}</Text>
+          <Text size="sm">
+            {// format to currency
+            new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(food.price)
+            }</Text>
           <Tooltip label="Delete">
             <ActionIcon
               variant="filled"
