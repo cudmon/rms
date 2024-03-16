@@ -3,7 +3,7 @@
 import { http } from "@/modules/http";
 import { Order } from "@/types/entity";
 import { modals } from "@mantine/modals";
-import { IconX, IconCheck } from "@tabler/icons-react";
+import { IconX, IconCheck ,IconChefHat } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { notifications } from "@mantine/notifications";
@@ -17,7 +17,7 @@ import {
   Text,
   ActionIcon,
   Tooltip,
-  Title,
+  Title, Group
 } from "@mantine/core";
 import { useState, useEffect } from "react";
 
@@ -166,11 +166,14 @@ export const ChefOrder = () => {
 
   return (
     <Container>
-      <Title order={3} size="h2" fw={900} ta="start"  my="md">
-        Chef Order
-      </Title>
+      <Group justify="space-between" my='md'>
+        <Title order={3} size="h2" fw={900} ta="center">
+          Chef
+        </Title>
+        <IconChefHat stroke={1.5} size={32} />
+      </Group>
 
-      <Card shadow="sm" padding="md" radius="md" withBorder mt="sm">
+      <Card padding="md" radius="md" withBorder mt="sm">
         <Table stickyHeader highlightOnHover verticalSpacing="sm">
           <Table.Thead>{head}</Table.Thead>
           <Table.Tbody>{row}</Table.Tbody>
