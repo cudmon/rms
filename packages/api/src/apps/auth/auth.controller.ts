@@ -56,9 +56,22 @@ export class AuthController {
 
   @Public()
   @Post("table-login")
-  async tableLogin(@Body() data: TableLoginDto) {
+  async tableLogin(
+    @Body() data: TableLoginDto,
+    @Res({ passthrough: true }) res: Response
+  ) {
     try {
-      return await this.authService.tableLogin(data);
+      const table = await this.authService.tableLogin(data);
+
+      res.cookie("token", table.token, {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 1000 * 60 * 60 * 24,
+      });
+
+      delete table.token;
+
+      return table;
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "INVALID_CREDENTIALS") {
