@@ -12,8 +12,29 @@ export class BillsService {
   ) {}
 
   async findAll(params: { take?: number; skip?: number }) {
-    return await this.prisma.billing.findMany(params);
+    return await this.prisma.billing.findMany({
+      take: params.take || 100,
+      skip: params.skip || 0,
+      include: {
+        usage: {
+          include: {
+            order: {
+              include: {
+                menu: true 
+              }
+            },
+            table: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
+      },
+    });
   }
+  
+  
 
   async findById(id: string) {
     return await this.prisma.billing.findUniqueOrThrow({
@@ -25,6 +46,7 @@ export class BillsService {
 
   async createBill(tableId: string) {
     const usage = await this.usagesService.findActive(tableId);
+
 
     const bill = await this.prisma.billing.findFirst({
       where: {
