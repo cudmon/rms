@@ -43,9 +43,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
       .string()
       .refine(
         (value) =>
-          ["MANAGER", "CHEF", "STAFF", "CUSTOMER"].includes(
-            value.toLocaleUpperCase()
-          ),
+          ["MANAGER", "CHEF", "STAFF"].includes(value.toLocaleUpperCase()),
         {
           message: "Invalid role",
         }
@@ -128,7 +126,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             { value: "MANAGER", label: "Manager" },
             { value: "CHEF", label: "Chef" },
             { value: "STAFF", label: "Staff" },
-            { value: "CUSTOMER", label: "Customer" },
           ]}
           {...form.getInputProps("role")}
         />

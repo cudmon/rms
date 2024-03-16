@@ -15,7 +15,7 @@ import {
   IconBuildingStore,
   IconPhone,
   IconAt,
-  IconUserEdit
+  IconUserEdit,
 } from "@tabler/icons-react";
 import { z } from "zod";
 import { useForm } from "@mantine/form";
@@ -56,9 +56,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       .string()
       .refine(
         (value) =>
-          ["MANAGER", "CHEF", "STAFF", "CUSTOMER"].includes(
-            value.toLocaleUpperCase()
-          ),
+          ["MANAGER", "CHEF", "STAFF"].includes(value.toLocaleUpperCase()),
         {
           message: "Invalid role",
         }
@@ -149,7 +147,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             { value: "MANAGER", label: "Manager" },
             { value: "CHEF", label: "Chef" },
             { value: "STAFF", label: "Staff" },
-            { value: "CUSTOMER", label: "Customer" },
           ]}
           {...form.getInputProps("role")}
         />

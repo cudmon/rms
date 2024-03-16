@@ -26,10 +26,9 @@ type Props = {
   chef: ReactNode;
   staff: ReactNode;
   manager: ReactNode;
-  customer: ReactNode;
 };
 
-const ROLE = ["CHEF", "STAFF", "MANAGER", "CUSTOMER"];
+const ROLE = ["CHEF", "STAFF", "MANAGER"];
 
 const links = {
   MANAGER: [
@@ -44,8 +43,6 @@ const links = {
   CHEF: [{ to: "/dashboard", label: "Dashboard" }],
 
   STAFF: [{ to: "/dashboard", label: "Dashboard" }],
-
-  CUSTOMER: [{ to: "/dashboard", label: "Dashboard" }],
 };
 
 const Base = ({
@@ -149,7 +146,7 @@ const Base = ({
   );
 };
 
-export default function Layout({ chef, staff, manager, customer }: Props) {
+export default function Layout({ chef, staff, manager }: Props) {
   const router = useRouter();
   const { user, removeUser } = useUserStore();
 
@@ -175,7 +172,6 @@ export default function Layout({ chef, staff, manager, customer }: Props) {
         {user.role === "CHEF" && chef}
         {user.role === "STAFF" && staff}
         {user.role === "MANAGER" && manager}
-        {user.role === "CUSTOMER" && customer}
       </Base>
     );
   }
