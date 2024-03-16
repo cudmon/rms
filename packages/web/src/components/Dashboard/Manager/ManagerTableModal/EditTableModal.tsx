@@ -142,7 +142,7 @@ export const EditTableModal: React.FC<EditTableModalProps> = ({
             data={[
               { value: "IDLE", label: "Idle" },
               { value: "EATING", label: "Eating" },
-              { value: "RESERVED", label: "Reserved" },
+              
             ]}
             {...form.getInputProps("status")}
           />

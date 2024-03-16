@@ -26,7 +26,8 @@ import {
   Grid,
   Title,
   rem,
-  Center,Group
+  Center,
+  Group,
 } from "@mantine/core";
 
 import { AddTableModal } from "@/components/Dashboard/Manager/ManagerTableModal/AddTableModal";
@@ -219,9 +220,6 @@ export const ManagerTable = () => {
       case "IDLE":
         badgeColor = "green";
         break;
-      case "RESERVED":
-        badgeColor = "orange.5";
-        break;
       case "EATING":
         badgeColor = "red";
         break;
@@ -283,7 +281,7 @@ export const ManagerTable = () => {
     <>
       <Container my="md">
         <Group justify="space-between">
-          <Title order={3} size="h2" fw={900} ta="center" >
+          <Title order={3} size="h2" fw={900} ta="center">
             Tables
           </Title>
           <ActionIcon

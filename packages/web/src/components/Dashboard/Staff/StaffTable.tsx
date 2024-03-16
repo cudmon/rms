@@ -37,8 +37,6 @@ const getStatusColor = (status: string) => {
       return "green";
     case "EATING":
       return "red";
-    case "RESERVED":
-      return "orange.5";
   }
 };
 
@@ -124,7 +122,7 @@ export const TableStaff = () => {
       if (check === 0) {
         const res = await http().post(`/bills`, { tableId });
         const bill = res.data as Bill;
-     
+
         order.map((item) => {
           const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
           if (item.status === "CANCELED") {
@@ -241,12 +239,7 @@ export const TableStaff = () => {
         )
       );
     }
-  } 
-
-
-
-
-
+  };
 
   return (
     // --------------------------------------------------Table list--------------------------------------------------------
@@ -346,7 +339,6 @@ export const TableStaff = () => {
         tableName={tableName}
         markAsServed={markAsServed}
         cancelOrder={cancelOrder}
-
       />
       {/* ------------------------------------------------End modal order-------------------------------------------------------- */}
 
