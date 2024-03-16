@@ -149,7 +149,7 @@ export const TableStaff = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+    
       if (error instanceof AxiosError) {
         setBillOrder([]);
         setTableName(tableName);

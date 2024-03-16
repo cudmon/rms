@@ -30,7 +30,7 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
     id: string
   ) => {
     try {
-      console.log("in function");
+
       
       await http.patch(`/auth/${id}`, values);
       notifications.show({

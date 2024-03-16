@@ -114,7 +114,7 @@ export const ManagerTable = () => {
   }
 
   async function handleSubmitEdit(formDataEdit: TableEntity) {
-    console.log(formDataEdit);
+  
     try {
       const res_edit = await http.patch(`/tables/${formDataEdit.id}`, {
         name: formDataEdit.name,

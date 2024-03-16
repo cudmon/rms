@@ -114,7 +114,7 @@ export const ManagerUser = () => {
   }
 
   async function handleSubmitEdit(formDataEdit: User) {
-    console.log(formDataEdit);
+  
     try {
       const res_edit = await http.patch(`/users/${formDataEdit.id}`, {
         username: formDataEdit.username,
