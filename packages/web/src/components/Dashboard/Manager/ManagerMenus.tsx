@@ -288,7 +288,7 @@ export const ManagerMenus = () => {
               radius="md"
             >
               <IconTrash
-                style={{ width: "80%", height: "80%" }}
+                style={{ width: "80%", height: "80%", color:"white" }}
                 onClick={() => removeFood(food.id)}
               />
             </ActionIcon>

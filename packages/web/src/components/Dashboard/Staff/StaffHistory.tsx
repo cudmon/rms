@@ -117,15 +117,15 @@ export const StaffHistory = () => {
         <Tooltip label="Order List">
           <ActionIcon
             radius="md"
-            variant="default"
-            aria-label="Settings"
+            variant="filled"
+            aria-label="Order List"
             size={32}
-            color="#f03e3e"
+            color="blue.5"
     
             onClick={() => handleViewclick(bill)}
             mr="md"
           >
-            <IconReceipt style={{ width: "80%", height: "80%" }} />
+            <IconReceipt style={{ width: "80%", height: "80%" , color:"white" }} />
           </ActionIcon>
         </Tooltip>
   
@@ -161,7 +161,7 @@ export const StaffHistory = () => {
       <Container my="md">
         <Group justify="space-between">
           <Title order={3} size="h2" fw={900} ta="center" >
-            bill
+            Bill History
           </Title>
         </Group>
         <TextInput
