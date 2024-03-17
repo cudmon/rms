@@ -1,4 +1,5 @@
-import { Container } from "@mantine/core";
+
+import {DashBoardManager} from '@/components/Dashboard/Manager/DashBoardManager'
 
 export const metadata = {
   title: "Dashboard",
@@ -7,7 +8,7 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Container>Hello Manager!!</Container>
+      <DashBoardManager/>
     </>
   );
 }
