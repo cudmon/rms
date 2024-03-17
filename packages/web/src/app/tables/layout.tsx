@@ -46,7 +46,7 @@ export default function Layout({ children }: Props) {
         breakpoint: "md",
       }}
       padding="md"
-      header={{ height: 80 }}
+      header={{ height: 70 }}
     >
       <AppShell.Header
         withBorder
@@ -54,12 +54,12 @@ export default function Layout({ children }: Props) {
       >
         <Group h={80} px={32} justify="space-between">
           <Text
-            fz={36}
+            fz={24}
             fw={600}
             variant="gradient"
             gradient={{ from: "green.7", to: "lime.5" }}
           >
-            {table.name || "Table"}
+            RMS
           </Text>
           <Group justify="space-evenly">
             <Button
