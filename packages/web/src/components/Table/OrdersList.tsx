@@ -165,13 +165,13 @@ const List = ({ orders }: { orders: Order[] }) => {
                 <Table.Td>{order.menu.name}</Table.Td>
                 <Table.Td>{order.quantity}</Table.Td>
                 <Table.Td>
-                  <NumberFormatter
-                    prefix="$ "
-                    value={order.price * order.quantity}
-                  />
+                { new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(order.price * order.quantity)}
                 </Table.Td>
                 <Table.Td>
-                  <Badge color='green'>{order.status}</Badge>
+                  <Badge color={order.status === "CANCELED" ? "red" : "green"}>{order.status}</Badge>
                 </Table.Td>
                 <Table.Td>
                   {order.status === "PENDING" && (
