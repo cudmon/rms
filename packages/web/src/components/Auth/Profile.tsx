@@ -71,7 +71,7 @@ export function Profile() {
         onClose={closeInfo}
         title="Edit information"
       >
-        {user && <ChangeInfoModal user={user} />}
+        {user && <ChangeInfoModal user={user} setUser={setUser} />}
       </Modal>
       <Modal opened={openPassword} onClose={closePass} title="Edit password">
         {user && <ChangePasswordModal user={user} />}

@@ -4,7 +4,12 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { Button, Stack, TextInput } from "@mantine/core";
 
-export const ChangeInfoModal = ({ user }: { user: User }) => {
+interface ChangeInfoModalProps {
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+}
+
+export const ChangeInfoModal = ({ user, setUser }: ChangeInfoModalProps) => {
   const form = useForm({
     initialValues: {
       email: user.email,
@@ -34,12 +39,13 @@ export const ChangeInfoModal = ({ user }: { user: User }) => {
     id: string
   ) => {
     try {
-      await http.patch(`/users/${id}`, values);
+      const res = await http.patch(`/users/${id}`, values);
       notifications.show({
         title: "Success",
         message: "Complete change",
         color: "green",
       });
+      setUser(res.data);
     } catch (error) {
       notifications.show({
         title: "Failed",
