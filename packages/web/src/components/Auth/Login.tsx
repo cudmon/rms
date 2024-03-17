@@ -12,8 +12,6 @@ import {
   Card,
   Stack,
   Text,
-  Anchor,
-  Flex,
 } from "@mantine/core";
 import { AxiosError } from "axios";
 
@@ -100,11 +98,6 @@ export const Login = () => {
                 setPassword(e.currentTarget.value);
               }}
             />
-            <Anchor target="_blank" underline="always">
-              <Flex justify="flex-end" onClick={() => router.push("/register")}>
-                Don&apos;t have an account?
-              </Flex>
-            </Anchor>
             <Button
               onClick={login}
               loading={loading}
