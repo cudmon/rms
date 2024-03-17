@@ -12,8 +12,10 @@ import {
   Card,
   Stack,
   Text,
+  Anchor,
 } from "@mantine/core";
 import { AxiosError } from "axios";
+import Link from "next/link";
 
 export const Login = () => {
   const router = useRouter();
@@ -110,6 +112,17 @@ export const Login = () => {
             </Button>
           </Stack>
         </form>
+        <Anchor
+          component={Link}
+          href="/tables"
+          mt={16}
+          py={16}
+          fz={18}
+          fw={500}
+          ta="center"
+        >
+          Switch to table system
+        </Anchor>
       </Card>
     </>
   );

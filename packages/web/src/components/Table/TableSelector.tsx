@@ -7,10 +7,18 @@ import { TableEntity } from "@/types/entity";
 import { useRouter } from "next/navigation";
 import { useTableStore } from "@/store/table";
 import { notifications } from "@mantine/notifications";
-import { Button, Grid, PinInput, Stack, Title, MantineProvider } from "@mantine/core";
+import {
+  Button,
+  Grid,
+  PinInput,
+  Stack,
+  Title,
+  MantineProvider,
+  Anchor,
+} from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
 import classes from "@/styles/tables.module.css";
-
+import Link from "next/link";
 
 export const TableSelector = () => {
   const router = useRouter();
@@ -121,12 +129,25 @@ export const TableSelector = () => {
       <Button
         loading={loading}
         onClick={connect}
-        size="xl" fullWidth
+        size="xl"
+        fullWidth
         rightSection={<IconChevronRight size={26} />}
         leftSection={<span />}
-        justify="space-between">
+        justify="space-between"
+      >
         Connect
       </Button>
+      <Anchor
+        component={Link}
+        href="/login"
+        mt={16}
+        py={16}
+        fz={18}
+        fw={500}
+        ta="center"
+      >
+        Switch to management system
+      </Anchor>
     </Stack>
   );
 };
