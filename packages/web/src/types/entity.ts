@@ -53,7 +53,8 @@ export type Cart = {
 export type Bill = {
   id: string;
   createdAt : string;
-  price : number;
+  totalPrice : number;
+  subPrice : number;
   usage : Usage;
   status : "PAID" | "UNPAID" | "CANCELED";
 };

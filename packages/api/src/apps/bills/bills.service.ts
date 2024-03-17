@@ -29,11 +29,10 @@ export class BillsService {
         },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
   }
-  
 
   async findById(id: string) {
     return await this.prisma.billing.findUniqueOrThrow({
@@ -45,6 +44,7 @@ export class BillsService {
 
   async createBill(tableId: string) {
     const usage = await this.usagesService.findActive(tableId);
+    console.log("usage : ", usage);
 
     const bill = await this.prisma.billing.findFirst({
       where: {
@@ -60,20 +60,25 @@ export class BillsService {
     const tax = await this.settingService.findByName("BILLING_TAX");
     const charge = await this.settingService.findByName("SERVICE_CHARGE");
 
-    let total = usage.order.reduce((acc, curr) => {
-      return acc + curr.price;
+    let subTotal = usage.order.reduce((acc, curr) => {
+      return acc + curr.price * curr.quantity;
     }, 0);
 
-    total += (total * Number(charge.value)) / 100;
-    total += (total * Number(tax.value)) / 100;
+    let totalCharge = (subTotal * Number(charge.value)) / 100;
+
+    let totalTax = (subTotal * Number(tax.value)) / 100;
+
+    let total = subTotal + totalCharge + totalTax;
 
     return await this.prisma.billing.create({
       data: {
         usageId: usage.id,
-        price: total,
+        totalPrice: total,
+        subPrice : subTotal,
       },
     });
   }
+
 
   async confirm(id: string) {
     const bill = await this.findById(id);

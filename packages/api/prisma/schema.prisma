@@ -50,7 +50,8 @@ model Menu {
 model Billing {
   id        String     @id @default(uuid())
   createdAt DateTime   @default(now())
-  price     Float
+  subPrice     Float
+  totalPrice  Float
   status    BillStatus @default(UNPAID)
   usageId   String     @map("usage_id")
   usage     Usage?      @relation(fields: [usageId], references: [id])

@@ -79,7 +79,13 @@ export const OrderModal: React.FC<OrderModalProps> = ({
         <Table.Td>{SortedOrder.indexOf(item) + 1}</Table.Td>
         <Table.Td>{item.menu.name}</Table.Td>
         <Table.Td>{item.quantity}</Table.Td>
-        <Table.Td>{item.price}</Table.Td>
+        <Table.Td>{ new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(item.price)}</Table.Td>
+            <Table.Td>
+            {item.createdAt}
+            </Table.Td>
         <Table.Td>
           <Badge color={badgeColor} ta="center">
             {item.status}
@@ -118,6 +124,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
       <Table.Th ta="center">Menu Name</Table.Th>
       <Table.Th ta="center">Quantity</Table.Th>
       <Table.Th ta="center">Price</Table.Th>
+      <Table.Th ta="center">Date / Time</Table.Th>
       <Table.Th ta="center">Status</Table.Th>
       <Table.Th ta="center"></Table.Th>
     </Table.Tr>

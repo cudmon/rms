@@ -51,6 +51,10 @@ export const TableStaff = () => {
   const [tableName, setTableName] = useState<string>("");
   const [billID, setbillID] = useState<string>("");
   const [tableID, settableID] = useState<string>("");
+  const [selectedBill , setSelectedBill] = useState<Bill>(
+    {} as Bill
+  );
+ 
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -150,6 +154,7 @@ export const TableStaff = () => {
             const res = await http.post(`/bills`, { tableId });
             const bill = res.data as Bill;
 
+
             order.map((item) => {
               const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
               if (item.status === "CANCELED") {
@@ -157,12 +162,13 @@ export const TableStaff = () => {
               } else {
                 if (existing) {
                   existing.quantity += item.quantity;
-                  existing.price += item.price;
                 } else {
                   sumOrder.push({ ...item });
                 }
               }
             });
+
+            setSelectedBill(bill);
             setBillOrder(sumOrder);
             setTableName(tableName);
             setbillID(bill.id);
@@ -382,6 +388,8 @@ export const TableStaff = () => {
         tableName={tableName}
         billID={billID}
         tableID={tableID}
+        Bill={selectedBill}
+      
       />
       {/* ------------------------------------------------End Modal Billed-------------------------------------------------------- */}
     </Container>

@@ -43,7 +43,11 @@ export class UsagesService {
           include: {
             menu: true,
           },
+          orderBy: {
+            createdAt: 'asc' // เรียงจากวันเวลาที่สร้างข้อมูลแรกไปสู่ล่าสุด
+          }
         },
+        
       },
     });
   }
