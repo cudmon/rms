@@ -171,7 +171,7 @@ const List = ({ orders }: { orders: Order[] }) => {
                   />
                 </Table.Td>
                 <Table.Td>
-                  <Badge color='green'>{order.status}</Badge>
+                  <Badge color={order.status === "CANCELED" ? "red" : "green"}>{order.status}</Badge>
                 </Table.Td>
                 <Table.Td>
                   {order.status === "PENDING" && (
