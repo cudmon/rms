@@ -13,11 +13,8 @@ export class UsagesController {
   constructor(private readonly usagesService: UsagesService) {}
 
   @Get()
-  async findAll(@Query("take") take?: number, @Query("skip") skip?: number) {
-    return await this.usagesService.findAll({
-      take,
-      skip,
-    });
+  async findAll() {
+    return await this.usagesService.findAll();
   }
 
   @Get(":id")

@@ -12,7 +12,6 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
-  Query,
 } from "@nestjs/common";
 
 @Controller("users")
@@ -20,11 +19,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  async findAll(@Query("take") take: number, @Query("skip") skip: number) {
-    return await this.usersService.findAll({
-      skip,
-      take,
-    });
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @Get(":id")

@@ -15,8 +15,8 @@ export class OrdersService {
     private readonly usagesService: UsagesService
   ) {}
 
-  async findAll(params: { take?: number; skip?: number }) {
-    return await this.prisma.order.findMany(params);
+  async findAll() {
+    return await this.prisma.order.findMany();
   }
 
   async findById(id: string) {

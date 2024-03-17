@@ -6,8 +6,8 @@ import { PrismaService } from "@/providers/prisma.service";
 export class MenusService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(args: Prisma.MenuFindManyArgs) {
-    return await this.prisma.menu.findMany(args);
+  async findAll() {
+    return await this.prisma.menu.findMany();
   }
 
   async findOne(args: Prisma.MenuFindUniqueOrThrowArgs) {

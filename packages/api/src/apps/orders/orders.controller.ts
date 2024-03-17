@@ -19,8 +19,8 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Get()
-  async findAll(@Query() params: { take?: number; skip?: number }) {
-    return await this.ordersService.findAll(params);
+  async findAll() {
+    return await this.ordersService.findAll();
   }
 
   @Get(":id")

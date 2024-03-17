@@ -28,11 +28,8 @@ export class MenusController {
   constructor(private readonly menuService: MenusService) {}
 
   @Get()
-  async findAll(@Query("take") take?: number, @Query("skip") skip?: number) {
-    return await this.menuService.findAll({
-      take: take || 100,
-      skip: skip || 0,
-    });
+  async findAll() {
+    return await this.menuService.findAll();
   }
 
   @Get(":id")

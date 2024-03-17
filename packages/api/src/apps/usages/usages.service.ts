@@ -9,8 +9,8 @@ export class UsagesService {
     private readonly tablesService: TablesService
   ) {}
 
-  async findAll(params: { take?: number; skip?: number }) {
-    return await this.prisma.usage.findMany(params);
+  async findAll() {
+    return await this.prisma.usage.findMany();
   }
 
   async findById(id: string) {

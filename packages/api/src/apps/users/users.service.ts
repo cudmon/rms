@@ -7,10 +7,8 @@ import { CreateUserDto, UpdateUserDto } from "@/apps/users/users.dto";
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(params: { take?: number; skip?: number }) {
+  async findAll() {
     return await this.prisma.user.findMany({
-      take: params.take || 100,
-      skip: params.skip || 0,
       select: {
         id: true,
         username: true,

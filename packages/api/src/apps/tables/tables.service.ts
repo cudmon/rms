@@ -8,10 +8,8 @@ import { CreateTableDto, UpdateTableDto } from "@/apps/tables/tables.dto";
 export class TablesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(params: { take?: number; skip?: number }) {
+  async findAll() {
     return this.prisma.table.findMany({
-      take: params.take || 100,
-      skip: params.skip || 0,
       select: {
         id: true,
         name: true,

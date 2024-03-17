@@ -22,11 +22,8 @@ export class TablesController {
 
   @Public()
   @Get()
-  async findAll(@Query("take") take?: number, @Query("skip") skip?: number) {
-    return this.tableService.findAll({
-      take,
-      skip,
-    });
+  async findAll() {
+    return this.tableService.findAll();
   }
 
   @Get(":id")
