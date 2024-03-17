@@ -72,7 +72,10 @@ export const MenusList = () => {
                 {menu.name}
               </Text>
               <Badge size="lg" variant="light" c='green.8' color="green.8" fw={750}>
-                $ {menu.price}
+              { new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(menu.price)}
               </Badge>
             </Group>
             <Flex gap={8} align="center" justify="space-between">
