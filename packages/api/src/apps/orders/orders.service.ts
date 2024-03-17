@@ -37,6 +37,18 @@ export class OrdersService {
       },
       include: {
         menu: true,
+        usage: {
+          select: {
+            table: {
+              select: {
+                name: true 
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'asc'
       },
       ...params,
     });

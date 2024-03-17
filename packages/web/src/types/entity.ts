@@ -31,6 +31,7 @@ export type Order = {
   price: number;
   quantity: number;
   status: "PENDING" | "SERVED" | "CANCELED"| "FINISHED";
+  usage: Usage;
 };
 
 export type Usage = {

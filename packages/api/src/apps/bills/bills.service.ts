@@ -10,7 +10,6 @@ export class BillsService {
     private readonly usagesService: UsagesService,
     private readonly settingService: SettingsService
   ) {}
-
   async findAll() {
     return await this.prisma.billing.findMany({
       include: {
@@ -29,8 +28,12 @@ export class BillsService {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc'
+      }
     });
   }
+  
 
   async findById(id: string) {
     return await this.prisma.billing.findUniqueOrThrow({
