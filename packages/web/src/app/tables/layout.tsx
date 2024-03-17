@@ -15,10 +15,12 @@ import {
   Container,
   Group,
   Text,
-  Title, useMantineColorScheme,
+  Title,
+  useMantineColorScheme,
   useComputedColorScheme,
 } from "@mantine/core";
 import classes from "@/styles/dark-mode.module.css";
+import { useTableStore } from "@/store/table";
 
 type Props = {
   children: ReactNode;
@@ -27,6 +29,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   const pathname = usePathname();
   const [opened, handlers] = useDisclosure();
+  const { table } = useTableStore();
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
@@ -43,18 +46,20 @@ export default function Layout({ children }: Props) {
         breakpoint: "md",
       }}
       padding="md"
-      header={{ height: 60 }}
+      header={{ height: 80 }}
     >
-      <AppShell.Header withBorder style={{ boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}
+      <AppShell.Header
+        withBorder
+        style={{ boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}
       >
-        <Group h={60} px={32} justify="space-between">
+        <Group h={80} px={32} justify="space-between">
           <Text
-            fz={24}
+            fz={36}
             fw={600}
             variant="gradient"
             gradient={{ from: "green.7", to: "lime.5" }}
           >
-            RMS
+            {table.name || "Table"}
           </Text>
           <Group justify="space-evenly">
             <Button
