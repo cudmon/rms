@@ -3,17 +3,11 @@
 import { AxiosError } from "axios";
 import { Bill , Order} from "@/types/entity";
 import { http } from "@/modules/http";
-import { modals } from "@mantine/modals";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IconSearch , IconReceipt } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import {ManagerOrderModal} from "@/components/Dashboard/Manager/ManagerOrderModal/ManagerOrderModal"
-import {
-  IconEdit,
-  IconTrash,
-  IconSquareRoundedPlus,
-} from "@tabler/icons-react";
 import {
   Container,
   Group,
@@ -23,10 +17,8 @@ import {
   TextInput,
   Title,
   Tooltip,
-  Text,
   rem,
   Center,
-  Modal,
 } from "@mantine/core";
 
 import React from "react";
@@ -75,29 +67,14 @@ export const ManagerHistory = () => {
       </Center>
     );
   }
-  const SortBill = (bill : Bill[]) => {
-   
-    const unpaid = bill.filter((item) => item.status === "UNPAID");
-    const paid = bill.filter((item) => item.status === "PAID");
-    const canceled = bill.filter((item) => item.status === "CANCELED");
 
-    const mixBill= [
-      ...unpaid,
-      ...paid,
-      ...canceled,
-    ];
-
-    return mixBill;
-  };
-
-  const sortedBill = SortBill(bill);
 
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  const filteredRows = sortedBill.filter(
+  const filteredRows = bill.filter(
     (bill) =>
       bill.usage.table.name.toLowerCase().includes(search.toLowerCase()) ||
       bill.createdAt.toLowerCase().includes(search.toLowerCase()) ||
@@ -110,7 +87,10 @@ export const ManagerHistory = () => {
     <Table.Tr key={bill.id} ta="center">
       <Table.Td>{bill.usage.table.name}</Table.Td>
       <Table.Td>{bill.createdAt}</Table.Td>
-      <Table.Td>{bill.price}</Table.Td>
+      <Table.Td>{ new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(bill.price)}</Table.Td>
       <Table.Td>{bill.status}</Table.Td>
    
       <Table.Td>
@@ -165,7 +145,7 @@ export const ManagerHistory = () => {
           </Title>
         </Group>
         <TextInput
-          placeholder="Search for user information..."
+          placeholder="Search for Billing information..."
           my="md"
           leftSection={
             <IconSearch

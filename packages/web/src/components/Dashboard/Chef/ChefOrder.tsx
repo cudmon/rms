@@ -12,7 +12,6 @@ import {
   Card,
   Center,
   Container,
-  NumberFormatter,
   Table,
   Text,
   ActionIcon,
@@ -81,6 +80,9 @@ export const ChefOrder = () => {
       setOrders(orders.filter((order) => order.id !== id));
     }
   };
+  
+  
+  
 
   const cancel = (id: string) => {
     modals.openConfirmModal({
@@ -123,8 +125,13 @@ export const ChefOrder = () => {
       <Table.Td>{order.menu.name}</Table.Td>
       <Table.Td>{order.quantity}</Table.Td>
       <Table.Td>
-        <NumberFormatter prefix="$" value={order.price} />
+      { new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(order.price)}
       </Table.Td>
+      <Table.Td>{order.usage.table.name}</Table.Td>
+      <Table.Td>{order.createdAt}</Table.Td>
       <Table.Td>
         <Badge>{order.status}</Badge>
       </Table.Td>
@@ -159,6 +166,8 @@ export const ChefOrder = () => {
       <Table.Th ta="center">Menu</Table.Th>
       <Table.Th ta="center">Quantity</Table.Th>
       <Table.Th ta="center">Price</Table.Th>
+      <Table.Th ta="center">Table</Table.Th>
+      <Table.Th ta="center">Date/Time</Table.Th>
       <Table.Th ta="center">Status</Table.Th>
       <Table.Th ta="center"></Table.Th>
     </Table.Tr>
