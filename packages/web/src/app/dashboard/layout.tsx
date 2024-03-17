@@ -6,7 +6,7 @@ import { User } from "@/types/entity";
 import { http } from "@/modules/http";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import classes from "@/styles/dark-mode.module.css";
 import { IconMoon, IconSun, IconUserSquareRounded } from "@tabler/icons-react";
@@ -21,6 +21,7 @@ import {
   useMantineColorScheme,
   useComputedColorScheme,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 
 type Props = {
   chef: ReactNode;
@@ -42,8 +43,10 @@ const links = {
 
   CHEF: [{ to: "/dashboard", label: "Dashboard" }],
 
-  STAFF: [{ to: "/dashboard", label: "Dashboard" },
-  { to: "/dashboard/history", label: "History" }],
+  STAFF: [
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/dashboard/history", label: "History" },
+  ],
 };
 
 const Base = ({
@@ -60,6 +63,24 @@ const Base = ({
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
   });
+
+  const [title, setTitle] = useState("RMS");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await http.get("/settings/NAME");
+
+        setTitle(res.data.value);
+      } catch (e) {
+        notifications.show({
+          title: "Can't fetch title name",
+          message: "An error occurred. Please try again later.",
+          color: "red",
+        });
+      }
+    })();
+  }, []);
 
   const selector = (role: string) => {
     switch (role) {
@@ -84,10 +105,12 @@ const Base = ({
           <Text
             fz={24}
             fw={600}
+            component={Link}
+            href="/dashboard"
             variant="gradient"
             gradient={{ from: "green.7", to: "lime.5" }}
           >
-            RMS
+            {title}
           </Text>
 
           <Group justify="space-evenly">
