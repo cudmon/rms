@@ -32,6 +32,11 @@ export class MenusController {
     return await this.menuService.findAll();
   }
 
+  @Get("count")
+  async findcount() {
+    return await this.menuService.findcount();
+  }
+
   @Get(":id")
   async findOne(@Param("id", ParseUUIDPipe) id: string) {
     try {

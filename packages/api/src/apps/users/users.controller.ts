@@ -23,6 +23,11 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  @Get("count")
+  async findcount() {
+    return await this.usersService.findcount();
+  }
+
   @Get(":id")
   async findById(@Param("id", ParseUUIDPipe) id: string) {
     const user = await this.usersService.findById(id);

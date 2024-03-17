@@ -10,6 +10,10 @@ export class MenusService {
     return await this.prisma.menu.findMany();
   }
 
+  async findcount() {
+    return await this.prisma.menu.count();
+  }
+
   async findOne(args: Prisma.MenuFindUniqueOrThrowArgs) {
     return await this.prisma.menu.findUniqueOrThrow(args);
   }

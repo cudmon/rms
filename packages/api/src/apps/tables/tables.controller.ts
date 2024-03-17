@@ -26,6 +26,11 @@ export class TablesController {
     return this.tableService.findAll();
   }
 
+  @Get("count")
+  async findcount() {
+    return this.tableService.findcount();
+  }
+
   @Get(":id")
   async findById(@Param("id", ParseUUIDPipe) id: string) {
     const table = await this.tableService.findById(id);

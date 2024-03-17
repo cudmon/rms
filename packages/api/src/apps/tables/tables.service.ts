@@ -19,6 +19,10 @@ export class TablesService {
     });
   }
 
+  async findcount() {
+    return this.prisma.table.count();
+  }
+
   async findById(id: string) {
     return this.prisma.table.findUnique({
       where: { id },

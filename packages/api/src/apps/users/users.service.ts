@@ -20,6 +20,10 @@ export class UsersService {
     });
   }
 
+  async findcount() {
+    return await this.prisma.user.count();
+  }
+
   async findById(id: string) {
     return await this.prisma.user.findUnique({
       where: {
