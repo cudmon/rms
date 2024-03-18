@@ -17,7 +17,8 @@ import {
   Image,
   Text,
   NumberInput,
-  Flex, Tooltip
+  Flex,
+  Tooltip,
 } from "@mantine/core";
 import { http } from "@/modules/http";
 import classes from "@/styles/manager-menus.module.css";
@@ -71,11 +72,17 @@ export const MenusList = () => {
               <Text fz={18} fw={750}>
                 {menu.name}
               </Text>
-              <Badge size="lg" variant="light" c='green.8' color="green.8" fw={750}>
-              { new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(menu.price)}
+              <Badge
+                size="lg"
+                variant="light"
+                c="green.8"
+                color="green.8"
+                fw={750}
+              >
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(menu.price)}
               </Badge>
             </Group>
             <Flex gap={8} align="center" justify="space-between">
@@ -93,7 +100,7 @@ export const MenusList = () => {
                 leftSection={<IconShoppingCartPlus size={18} />}
                 fullWidth
                 variant="gradient"
-                gradient={{ from: 'green', to: 'lime', deg: 270 }}
+                gradient={{ from: "green", to: "lime", deg: 270 }}
                 onClick={() =>
                   add({
                     id: new Date().getTime().toString(),

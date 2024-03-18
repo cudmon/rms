@@ -273,12 +273,14 @@ export const ManagerMenus = () => {
 
         <Group justify="space-between" mb="xs">
           <Text size="sm">
-            {// format to currency
-            new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(food.price)
-            }</Text>
+            {
+              // format to currency
+              new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+              }).format(food.price)
+            }
+          </Text>
           <Tooltip label="Delete">
             <ActionIcon
               variant="filled"
@@ -288,7 +290,7 @@ export const ManagerMenus = () => {
               radius="md"
             >
               <IconTrash
-                style={{ width: "80%", height: "80%", color:"white" }}
+                style={{ width: "80%", height: "80%", color: "white" }}
                 onClick={() => removeFood(food.id)}
               />
             </ActionIcon>

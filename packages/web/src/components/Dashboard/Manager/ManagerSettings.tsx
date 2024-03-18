@@ -2,7 +2,14 @@
 
 import { http } from "@/modules/http";
 import { useEffect, useState } from "react";
-import { Card, NumberInput, Table, TextInput, Title, Group } from "@mantine/core";
+import {
+  Card,
+  NumberInput,
+  Table,
+  TextInput,
+  Title,
+  Group,
+} from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { log } from "console";
@@ -31,7 +38,7 @@ export function ManagerSettings() {
         const res = await http.get("/settings");
 
         setSettings(res.data);
-      } catch (error) { }
+      } catch (error) {}
     })();
   }, []);
 
@@ -42,12 +49,12 @@ export function ManagerSettings() {
 
     try {
       await http.patch(`/settings/${name}`, { value });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return (
     <>
-      <Group justify="space-between" my='md'>
+      <Group justify="space-between" my="md">
         <Title order={3} size="h2" fw={900} ta="center">
           Settings
         </Title>

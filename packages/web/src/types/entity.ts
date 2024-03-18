@@ -27,10 +27,10 @@ export type User = {
 export type Order = {
   id: string;
   menu: Menu;
-  createdAt : string;
+  createdAt: string;
   price: number;
   quantity: number;
-  status: "PENDING" | "SERVED" | "CANCELED"| "FINISHED";
+  status: "PENDING" | "SERVED" | "CANCELED" | "FINISHED";
   usage: Usage;
 };
 
@@ -52,10 +52,9 @@ export type Cart = {
 
 export type Bill = {
   id: string;
-  createdAt : string;
-  totalPrice : number;
-  subPrice : number;
-  usage : Usage;
-  status : "PAID" | "UNPAID" | "CANCELED";
+  createdAt: string;
+  totalPrice: number;
+  subPrice: number;
+  usage: Usage;
+  status: "PAID" | "UNPAID" | "CANCELED";
 };
-

@@ -51,10 +51,7 @@ export const TableStaff = () => {
   const [tableName, setTableName] = useState<string>("");
   const [billID, setbillID] = useState<string>("");
   const [tableID, settableID] = useState<string>("");
-  const [selectedBill , setSelectedBill] = useState<Bill>(
-    {} as Bill
-  );
- 
+  const [selectedBill, setSelectedBill] = useState<Bill>({} as Bill);
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -130,8 +127,8 @@ export const TableStaff = () => {
 
       children: (
         <Text>
-          Are you sure you want to create bill for <strong>table {tableName}</strong>{" "}
-          ?
+          Are you sure you want to create bill for{" "}
+          <strong>table {tableName}</strong> ?
         </Text>
       ),
 
@@ -153,7 +150,6 @@ export const TableStaff = () => {
           if (check === 0) {
             const res = await http.post(`/bills`, { tableId });
             const bill = res.data as Bill;
-
 
             order.map((item) => {
               const existing = sumOrder.find((x) => x.menu.id === item.menu.id);
@@ -389,7 +385,6 @@ export const TableStaff = () => {
         billID={billID}
         tableID={tableID}
         Bill={selectedBill}
-      
       />
       {/* ------------------------------------------------End Modal Billed-------------------------------------------------------- */}
     </Container>

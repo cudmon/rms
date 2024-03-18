@@ -1,4 +1,4 @@
-import {StaffHistory} from "@/components/Dashboard/Staff/StaffHistory"
+import { StaffHistory } from "@/components/Dashboard/Staff/StaffHistory";
 export const metadata = {
   title: "Manager",
 };
@@ -6,7 +6,6 @@ export const metadata = {
 export default async function Page() {
   return (
     <div>
-   
       <StaffHistory />
     </div>
   );

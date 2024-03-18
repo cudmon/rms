@@ -41,14 +41,14 @@ export class OrdersService {
           select: {
             table: {
               select: {
-                name: true 
-              }
-            }
-          }
-        }
+                name: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
-        createdAt: 'asc'
+        createdAt: "asc",
       },
       ...params,
     });

@@ -18,7 +18,8 @@ import {
   Skeleton,
   Stack,
   Table,
-  Text, ScrollArea
+  Text,
+  ScrollArea,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 
@@ -147,9 +148,14 @@ const List = ({ orders }: { orders: Order[] }) => {
 
   return (
     <Card p={0} withBorder>
-      <Table fz={16} verticalSpacing="md" horizontalSpacing="lg" highlightOnHover ta="center">
+      <Table
+        fz={16}
+        verticalSpacing="md"
+        horizontalSpacing="lg"
+        highlightOnHover
+        ta="center"
+      >
         <ScrollArea h={400} offsetScrollbars scrollHideDelay={2000}>
-
           <Table.Thead>
             <Table.Tr>
               <Table.Th ta="center">Name</Table.Th>
@@ -165,13 +171,15 @@ const List = ({ orders }: { orders: Order[] }) => {
                 <Table.Td>{order.menu.name}</Table.Td>
                 <Table.Td>{order.quantity}</Table.Td>
                 <Table.Td>
-                { new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(order.price * order.quantity)}
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(order.price * order.quantity)}
                 </Table.Td>
                 <Table.Td>
-                  <Badge color={order.status === "CANCELED" ? "red" : "green"}>{order.status}</Badge>
+                  <Badge color={order.status === "CANCELED" ? "red" : "green"}>
+                    {order.status}
+                  </Badge>
                 </Table.Td>
                 <Table.Td>
                   {order.status === "PENDING" && (

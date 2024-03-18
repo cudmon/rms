@@ -4,7 +4,7 @@ import { Cart } from "@/types/entity";
 import { http } from "@/modules/http";
 import { modals } from "@mantine/modals";
 import { useCartsStore } from "@/store/carts";
-import { IconTrash , IconArrowBigDown} from "@tabler/icons-react";
+import { IconTrash, IconArrowBigDown } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 
 import {
@@ -15,7 +15,8 @@ import {
   Stack,
   Text,
   Box,
-  Button, ScrollArea
+  Button,
+  ScrollArea,
 } from "@mantine/core";
 
 const Empty = () => {
@@ -23,8 +24,8 @@ const Empty = () => {
     <Card padding="xl" withBorder>
       <Center>
         <Stack gap={64}>
-          <Text fz={28} fw={500} >
-           <IconArrowBigDown size={26}/>  No items in cart
+          <Text fz={28} fw={500}>
+            <IconArrowBigDown size={26} /> No items in cart
           </Text>
         </Stack>
       </Center>
@@ -118,7 +119,7 @@ export const CartList = () => {
           >
             <ScrollArea h={400} offsetScrollbars scrollHideDelay={2000}>
               <Table.Thead>
-                <Table.Tr >
+                <Table.Tr>
                   <Table.Th ta="center">Item</Table.Th>
                   <Table.Th ta="center">Quantity</Table.Th>
                   <Table.Th ta="center">Price</Table.Th>

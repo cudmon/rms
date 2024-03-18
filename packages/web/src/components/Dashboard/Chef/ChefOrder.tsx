@@ -3,7 +3,7 @@
 import { http } from "@/modules/http";
 import { Order } from "@/types/entity";
 import { modals } from "@mantine/modals";
-import { IconX, IconCheck ,IconChefHat } from "@tabler/icons-react";
+import { IconX, IconCheck, IconChefHat } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { notifications } from "@mantine/notifications";
@@ -16,7 +16,8 @@ import {
   Text,
   ActionIcon,
   Tooltip,
-  Title, Group
+  Title,
+  Group,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
 
@@ -80,9 +81,6 @@ export const ChefOrder = () => {
       setOrders(orders.filter((order) => order.id !== id));
     }
   };
-  
-  
-  
 
   const cancel = (id: string) => {
     modals.openConfirmModal({
@@ -125,10 +123,10 @@ export const ChefOrder = () => {
       <Table.Td>{order.menu.name}</Table.Td>
       <Table.Td>{order.quantity}</Table.Td>
       <Table.Td>
-      { new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(order.price)}
+        {new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(order.price)}
       </Table.Td>
       <Table.Td>{order.usage.table.name}</Table.Td>
       <Table.Td>{order.createdAt}</Table.Td>
@@ -175,7 +173,7 @@ export const ChefOrder = () => {
 
   return (
     <Container>
-      <Group justify="space-between" my='md'>
+      <Group justify="space-between" my="md">
         <Title order={3} size="h2" fw={900} ta="center">
           Chef
         </Title>

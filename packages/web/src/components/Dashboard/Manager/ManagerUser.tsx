@@ -114,7 +114,6 @@ export const ManagerUser = () => {
   }
 
   async function handleSubmitEdit(formDataEdit: User) {
-  
     try {
       const res_edit = await http.patch(`/users/${formDataEdit.id}`, {
         username: formDataEdit.username,
@@ -170,7 +169,11 @@ export const ManagerUser = () => {
         color: "red",
       },
 
-      children: <Text>Are you sure you want to delete <strong>{username}</strong> ?</Text>,
+      children: (
+        <Text>
+          Are you sure you want to delete <strong>{username}</strong> ?
+        </Text>
+      ),
 
       onConfirm: async () => {
         try {
@@ -260,7 +263,7 @@ export const ManagerUser = () => {
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
       <Container my="md">
         <Group justify="space-between">
-          <Title order={3} size="h2" fw={900} ta="center" >
+          <Title order={3} size="h2" fw={900} ta="center">
             Users
           </Title>
           <ActionIcon

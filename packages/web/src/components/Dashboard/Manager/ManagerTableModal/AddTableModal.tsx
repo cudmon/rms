@@ -88,37 +88,36 @@ export const AddTableModal: React.FC<AddTableModalProps> = ({
           })();
         }}
       >
-          <TextInput
-            autoFocus
-            label="Table name"
-            placeholder="Table name"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconUserPlus size={16} />}
-            {...form.getInputProps("name")}
-          />
-          <NumberInput
-            label="Seat"
-            placeholder="Seat"
+        <TextInput
+          autoFocus
+          label="Table name"
+          placeholder="Table name"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconUserPlus size={16} />}
+          {...form.getInputProps("name")}
+        />
+        <NumberInput
+          label="Seat"
+          placeholder="Seat"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconUserPlus size={16} />}
+          {...form.getInputProps("seat")}
+          min={0}
+          allowDecimal={false}
+        />
 
-            withAsterisk
-            mt="sm"
-            leftSection={<IconUserPlus size={16} />}
-            {...form.getInputProps("seat")}
-            min={0}
-            allowDecimal={false}
-          />
-
-          <PasswordInput
-            autoFocus
-            label="Passcode"
-            placeholder="Passcode"
-            withAsterisk
-            mt="sm"
-            leftSection={<IconLockSquareRounded size={16} />}
-            {...form.getInputProps("passcode")}
-          />
-{/*     
+        <PasswordInput
+          autoFocus
+          label="Passcode"
+          placeholder="Passcode"
+          withAsterisk
+          mt="sm"
+          leftSection={<IconLockSquareRounded size={16} />}
+          {...form.getInputProps("passcode")}
+        />
+        {/*     
           <Select
             label="Status"
             placeholder="Table status"

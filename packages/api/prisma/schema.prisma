@@ -48,24 +48,23 @@ model Menu {
 }
 
 model Billing {
-  id        String     @id @default(uuid())
-  createdAt DateTime   @default(now())
-  subPrice     Float
-  totalPrice  Float
-  status    BillStatus @default(UNPAID)
-  usageId   String     @map("usage_id")
-  usage     Usage?      @relation(fields: [usageId], references: [id])
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  subPrice   Float
+  totalPrice Float
+  status     BillStatus @default(UNPAID)
+  usageId    String     @map("usage_id")
+  usage      Usage?     @relation(fields: [usageId], references: [id])
 }
 
 model Usage {
-  id        String    @id @default(uuid())
-  start     DateTime
-  end       DateTime?
-  order     Order[]
-  Billing   Billing[]
-  table     Table?    @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  tableId   String?
-
+  id      String    @id @default(uuid())
+  start   DateTime
+  end     DateTime?
+  order   Order[]
+  Billing Billing[]
+  table   Table?    @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tableId String?
 }
 
 model Setting {

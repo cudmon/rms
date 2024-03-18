@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Order , Bill} from "@/types/entity";
+import { Order, Bill } from "@/types/entity";
 import {
   Modal,
   Table,
@@ -18,14 +18,13 @@ import "@mantine/notifications/styles.css";
 interface BillModalProps {
   isOpen: boolean;
   CancelBill: (id: string) => void;
-  ConfirmBill: (billId: string ,tableId : string) => void;
+  ConfirmBill: (billId: string, tableId: string) => void;
   onClose: () => void;
   ServedOrder: Order[];
   tableName: string;
   billID: string;
   tableID: string;
-  Bill : Bill
-
+  Bill: Bill;
 }
 
 export const BillModal: React.FC<BillModalProps> = ({
@@ -38,7 +37,6 @@ export const BillModal: React.FC<BillModalProps> = ({
   billID,
   tableID,
   Bill,
-
 }) => {
   if (!isOpen) return null;
 
@@ -80,8 +78,6 @@ export const BillModal: React.FC<BillModalProps> = ({
       </Modal>
     );
   }
-
-
 
   return (
     <Modal
@@ -128,10 +124,15 @@ export const BillModal: React.FC<BillModalProps> = ({
             <Divider size="xs" my="sm" />
             <Grid mt="md">
               <Grid.Col span={6} py={0}>
-                <Text size="sm">Table : <strong>{tableName}</strong></Text>
+                <Text size="sm">
+                  Table : <strong>{tableName}</strong>
+                </Text>
               </Grid.Col>
               <Grid.Col span={12} py={0}>
-                <Text size="sm">Date/Time : <br/><strong>{Bill.createdAt}</strong></Text>
+                <Text size="sm">
+                  Date/Time : <br />
+                  <strong>{Bill.createdAt}</strong>
+                </Text>
               </Grid.Col>
               <Grid.Col span={12} py={0}>
                 <Divider size="xs" my="sm" />
@@ -140,14 +141,12 @@ export const BillModal: React.FC<BillModalProps> = ({
                 <Text size="sm">Sub Total :</Text>
               </Grid.Col>
 
-              <Grid.Col span={6} py={0} ta="right" >
-                
-                  {" "}
-                  { new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(Bill.subPrice)}{" "}
-             
+              <Grid.Col span={6} py={0} ta="right">
+                {" "}
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(Bill.subPrice)}{" "}
               </Grid.Col>
               <Grid.Col span={12} py={0}>
                 <Divider size="xs" my="sm" />
@@ -155,14 +154,14 @@ export const BillModal: React.FC<BillModalProps> = ({
               <Grid.Col span={6} py={0}>
                 <Text size="sm">Total :</Text>
               </Grid.Col>
-              
+
               <Grid.Col span={6} py={0}>
                 <Title order={3} ta="right">
                   {" "}
-                  { new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(Bill.totalPrice)}{" "}
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(Bill.totalPrice)}{" "}
                 </Title>
               </Grid.Col>
             </Grid>

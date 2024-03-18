@@ -32,7 +32,6 @@ export class BillsController {
     return bill;
   }
 
-
   @Post()
   async createBill(@Body("tableId", ParseUUIDPipe) tableId: string) {
     try {

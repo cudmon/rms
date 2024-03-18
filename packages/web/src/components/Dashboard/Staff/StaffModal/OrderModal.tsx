@@ -79,13 +79,13 @@ export const OrderModal: React.FC<OrderModalProps> = ({
         <Table.Td>{SortedOrder.indexOf(item) + 1}</Table.Td>
         <Table.Td>{item.menu.name}</Table.Td>
         <Table.Td>{item.quantity}</Table.Td>
-        <Table.Td>{ new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(item.price)}</Table.Td>
-            <Table.Td>
-            {item.createdAt}
-            </Table.Td>
+        <Table.Td>
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+          }).format(item.price)}
+        </Table.Td>
+        <Table.Td>{item.createdAt}</Table.Td>
         <Table.Td>
           <Badge color={badgeColor} ta="center">
             {item.status}
@@ -98,18 +98,20 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                 <IconCheck />
               </ActionIcon>
             </Tooltip>
-            
           ) : (
             " "
           )}
           &nbsp;
-            {item.status === "FINISHED" ? ( // Conditionally render ActionIcon
+          {item.status === "FINISHED" ? ( // Conditionally render ActionIcon
             <Tooltip label="Cancel order" position="top" offset={5}>
-              <ActionIcon radius="md" onClick={() => cancelOrder(item.id)} color="red">
+              <ActionIcon
+                radius="md"
+                onClick={() => cancelOrder(item.id)}
+                color="red"
+              >
                 <IconX />
               </ActionIcon>
             </Tooltip>
-            
           ) : (
             " "
           )}

@@ -27,7 +27,6 @@ export const BilledOrderModal: React.FC<OrderModalProps> = ({
   order,
   tableName,
   totalPrice,
-
 }) => {
   if (!isOpen) return null;
 
@@ -79,10 +78,12 @@ export const BilledOrderModal: React.FC<OrderModalProps> = ({
         <Table.Td>{SortedOrder.indexOf(item) + 1}</Table.Td>
         <Table.Td>{item.menu.name}</Table.Td>
         <Table.Td>{item.quantity}</Table.Td>
-        <Table.Td>{ new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(item.price)}</Table.Td>
+        <Table.Td>
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+          }).format(item.price)}
+        </Table.Td>
         <Table.Td>
           <Badge color={badgeColor} ta="center">
             {item.status}
@@ -151,15 +152,17 @@ export const BilledOrderModal: React.FC<OrderModalProps> = ({
           </ScrollArea>
         </Table>
         <Center>
-        <Text>
-        Total Price :     <strong>{ new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(totalPrice)}</strong> 
+          <Text>
+            Total Price :{" "}
+            <strong>
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+              }).format(totalPrice)}
+            </strong>
           </Text>
-          </Center>
+        </Center>
       </Card>
-   
     </Modal>
   );
 };

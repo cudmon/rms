@@ -74,11 +74,10 @@ export class BillsService {
       data: {
         usageId: usage.id,
         totalPrice: total,
-        subPrice : subTotal,
+        subPrice: subTotal,
       },
     });
   }
-
 
   async confirm(id: string) {
     const bill = await this.findById(id);

@@ -1,13 +1,13 @@
 "use client";
 
 import { AxiosError } from "axios";
-import { Bill , Order} from "@/types/entity";
+import { Bill, Order } from "@/types/entity";
 import { http } from "@/modules/http";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { IconSearch , IconReceipt } from "@tabler/icons-react";
+import { IconSearch, IconReceipt } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
-import {BilledOrderModal} from "@/components/Dashboard/Staff/StaffModal/BilledOrderModal"
+import { BilledOrderModal } from "@/components/Dashboard/Staff/StaffModal/BilledOrderModal";
 import {
   Container,
   Group,
@@ -77,9 +77,8 @@ export const StaffHistory = () => {
       bill.usage.table.name.toLowerCase().includes(search.toLowerCase()) ||
       bill.createdAt.toLowerCase().includes(search.toLowerCase()) ||
       bill.status.toLowerCase().includes(search.toLowerCase()) ||
-        bill.price.toString().includes(search.toLowerCase())
-  )
-  
+      bill.price.toString().includes(search.toLowerCase())
+  );
 
   const rows = filteredRows.map((bill) => (
     <Table.Tr key={bill.id} ta="center">
@@ -87,7 +86,7 @@ export const StaffHistory = () => {
       <Table.Td>{bill.createdAt}</Table.Td>
       <Table.Td>{bill.price}</Table.Td>
       <Table.Td>{bill.status}</Table.Td>
-   
+
       <Table.Td>
         <Tooltip label="Order List">
           <ActionIcon
@@ -96,14 +95,14 @@ export const StaffHistory = () => {
             aria-label="Order List"
             size={32}
             color="blue.5"
-    
             onClick={() => handleViewclick(bill)}
             mr="md"
           >
-            <IconReceipt style={{ width: "80%", height: "80%" , color:"white" }} />
+            <IconReceipt
+              style={{ width: "80%", height: "80%", color: "white" }}
+            />
           </ActionIcon>
         </Tooltip>
-  
       </Table.Td>
     </Table.Tr>
   ));
@@ -120,22 +119,19 @@ export const StaffHistory = () => {
 
   const handleViewclick = (bill: Bill) => {
     try {
-        setOrder(bill.usage.order);
-        setTableName(bill.usage.table.name);
-        setTotalPrice(bill.price);
-        
-        setModalOpenView(true);  
-        
-    } catch (error) {
-        
-    }
-  }
+      setOrder(bill.usage.order);
+      setTableName(bill.usage.table.name);
+      setTotalPrice(bill.price);
+
+      setModalOpenView(true);
+    } catch (error) {}
+  };
   return (
     <>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
       <Container my="md">
         <Group justify="space-between">
-          <Title order={3} size="h2" fw={900} ta="center" >
+          <Title order={3} size="h2" fw={900} ta="center">
             Bill History
           </Title>
         </Group>
@@ -157,20 +153,17 @@ export const StaffHistory = () => {
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
         </Card>
-
-          
       </Container>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
-    
 
-    {/* ------------------------------------------------ Modal --------------------------------------------- */}
-          <BilledOrderModal
-            isOpen={ModalOpenView}
-            onClose={() => setModalOpenView(false)}
-            order={order}
-            tableName={tableName}
-            totalPrice={totalPrice}
-            />
+      {/* ------------------------------------------------ Modal --------------------------------------------- */}
+      <BilledOrderModal
+        isOpen={ModalOpenView}
+        onClose={() => setModalOpenView(false)}
+        order={order}
+        tableName={tableName}
+        totalPrice={totalPrice}
+      />
     </>
   );
 };

@@ -1,5 +1,4 @@
-
-import {DashBoardManager} from '@/components/Dashboard/Manager/DashBoardManager'
+import { DashBoardManager } from "@/components/Dashboard/Manager/DashBoardManager";
 
 export const metadata = {
   title: "Dashboard",
@@ -8,7 +7,7 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <DashBoardManager/>
+      <DashBoardManager />
     </>
   );
 }

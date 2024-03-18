@@ -13,12 +13,12 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
     },
 
     validate: {
-        password: (value) =>
-            value?.length < 8 ? "Password must be longer than 8" : null,
-        newPassword: (value) =>
-            value?.length < 8 ? "Password must be longer than 8" : null,
-        confirmPassword: (value, pass) =>
-            value != pass.newPassword ? "Password does not match" : null,
+      password: (value) =>
+        value?.length < 8 ? "Password must be longer than 8" : null,
+      newPassword: (value) =>
+        value?.length < 8 ? "Password must be longer than 8" : null,
+      confirmPassword: (value, pass) =>
+        value != pass.newPassword ? "Password does not match" : null,
     },
   });
 
@@ -30,8 +30,6 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
     id: string
   ) => {
     try {
-
-      
       await http.patch(`/auth/${id}`, values);
       notifications.show({
         title: "Success",
@@ -49,14 +47,17 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
 
   return (
     <>
-    <form
+      <form
         onSubmit={form.onSubmit((values) => {
-            ChangePassword({
-                password: values.password || "",
-                newPassword: values.newPassword,
-            }, user.id);
+          ChangePassword(
+            {
+              password: values.password || "",
+              newPassword: values.newPassword,
+            },
+            user.id
+          );
         })}
-    >
+      >
         <Stack w={400} px={20} py={10}>
           <PasswordInput
             withAsterisk

@@ -44,10 +44,9 @@ export class UsagesService {
             menu: true,
           },
           orderBy: {
-            createdAt: 'asc' // เรียงจากวันเวลาที่สร้างข้อมูลแรกไปสู่ล่าสุด
-          }
+            createdAt: "asc", // เรียงจากวันเวลาที่สร้างข้อมูลแรกไปสู่ล่าสุด
+          },
         },
-        
       },
     });
   }

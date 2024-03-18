@@ -69,9 +69,6 @@
     box-shadow 150ms ease;
 }
 
-
-
-
 .card_staff {
   position: relative;
   overflow: visible;
@@ -92,7 +89,7 @@
   left: calc(50% - rem(30px));
 }
 
-.title_staff  {
+.title_staff {
   font-family:
     Greycliff CF,
     var(--mantine-font-family);

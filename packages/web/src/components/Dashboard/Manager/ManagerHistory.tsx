@@ -1,13 +1,13 @@
 "use client";
 
 import { AxiosError } from "axios";
-import { Bill , Order} from "@/types/entity";
+import { Bill, Order } from "@/types/entity";
 import { http } from "@/modules/http";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { IconSearch , IconReceipt } from "@tabler/icons-react";
+import { IconSearch, IconReceipt } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
-import {ManagerOrderModal} from "@/components/Dashboard/Manager/ManagerOrderModal/ManagerOrderModal"
+import { ManagerOrderModal } from "@/components/Dashboard/Manager/ManagerOrderModal/ManagerOrderModal";
 import {
   Container,
   Group,
@@ -68,8 +68,6 @@ export const ManagerHistory = () => {
     );
   }
 
-
-
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
@@ -79,20 +77,21 @@ export const ManagerHistory = () => {
       bill.usage.table.name.toLowerCase().includes(search.toLowerCase()) ||
       bill.createdAt.toLowerCase().includes(search.toLowerCase()) ||
       bill.status.toLowerCase().includes(search.toLowerCase()) ||
-        bill.price.toString().includes(search.toLowerCase())
-  )
-  
+      bill.price.toString().includes(search.toLowerCase())
+  );
 
   const rows = filteredRows.map((bill) => (
     <Table.Tr key={bill.id} ta="center">
       <Table.Td>{bill.usage.table.name}</Table.Td>
       <Table.Td>{bill.createdAt}</Table.Td>
-      <Table.Td>{ new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(bill.price)}</Table.Td>
+      <Table.Td>
+        {new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(bill.price)}
+      </Table.Td>
       <Table.Td>{bill.status}</Table.Td>
-   
+
       <Table.Td>
         <Tooltip label="Order List">
           <ActionIcon
@@ -103,12 +102,12 @@ export const ManagerHistory = () => {
             color="blue.5"
             mr="md"
             onClick={() => handleViewclick(bill)}
-            
           >
-            <IconReceipt style={{ width: "80%", height: "80%" ,color:"white"}} />
+            <IconReceipt
+              style={{ width: "80%", height: "80%", color: "white" }}
+            />
           </ActionIcon>
         </Tooltip>
-  
       </Table.Td>
     </Table.Tr>
   ));
@@ -125,23 +124,20 @@ export const ManagerHistory = () => {
 
   const handleViewclick = (bill: Bill) => {
     try {
-        setOrder(bill.usage.order);
-        setTableName(bill.usage.table.name);
-        setTotalPrice(bill.price);
-        
-        setModalOpenView(true);  
-        
-    } catch (error) {
-        
-    }
-  }
+      setOrder(bill.usage.order);
+      setTableName(bill.usage.table.name);
+      setTotalPrice(bill.price);
+
+      setModalOpenView(true);
+    } catch (error) {}
+  };
   return (
     <>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
       <Container my="md">
         <Group justify="space-between">
-          <Title order={3} size="h2" fw={900} ta="center" >
-          Bill History
+          <Title order={3} size="h2" fw={900} ta="center">
+            Bill History
           </Title>
         </Group>
         <TextInput
@@ -162,20 +158,17 @@ export const ManagerHistory = () => {
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
         </Card>
-
-          
       </Container>
       {/*----------------------------------------------------Container Rows--------------------------------------------------------------*/}
-    
 
-    {/* ------------------------------------------------ Modal --------------------------------------------- */}
-          <ManagerOrderModal
-            isOpen={ModalOpenView}
-            onClose={() => setModalOpenView(false)}
-            order={order}
-            tableName={tableName}
-            totalPrice={totalPrice}
-            />
+      {/* ------------------------------------------------ Modal --------------------------------------------- */}
+      <ManagerOrderModal
+        isOpen={ModalOpenView}
+        onClose={() => setModalOpenView(false)}
+        order={order}
+        tableName={tableName}
+        totalPrice={totalPrice}
+      />
     </>
   );
 };
