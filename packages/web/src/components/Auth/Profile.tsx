@@ -10,11 +10,11 @@ import {
   Card,
   Flex,
   Menu,
-  Button,
   Modal,
+  Tooltip,
+  ActionIcon,
 } from "@mantine/core";
 import {
-  IconAddressBook,
   IconAt,
   IconCrown,
   IconEdit,
@@ -87,7 +87,17 @@ export function Profile() {
                     {"Profile  "}
                     <Menu>
                       <Menu.Target>
-                        <IconEdit />
+                        <Tooltip label="Edit">
+                          <ActionIcon
+                            radius="md"
+                            variant="default"
+                            aria-label="Settings"
+                            size={32}
+                            mr="md"
+                          >
+                            <IconEdit style={{ width: "80%", height: "80%" }} />
+                          </ActionIcon>
+                        </Tooltip>
                       </Menu.Target>
                       <Menu.Dropdown>
                         <Menu.Label>Edit</Menu.Label>
@@ -118,7 +128,7 @@ export function Profile() {
                     label="Username"
                     value={user?.username}
                     styles={style}
-                    leftSection={<IconAddressBook size={18} />}
+                    leftSection={<IconUser size={18} />}
                   />
                 </GridCol>
                 <GridCol span={6}>

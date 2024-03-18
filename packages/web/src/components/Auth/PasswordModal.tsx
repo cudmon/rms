@@ -3,6 +3,7 @@ import { User } from "@/types/entity";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { Button, PasswordInput, Stack } from "@mantine/core";
+import { IconLock, IconLockCog } from "@tabler/icons-react";
 
 export const ChangePasswordModal = ({ user }: { user: User }) => {
   const form = useForm({
@@ -37,6 +38,7 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
         color: "green",
       });
     } catch (error) {
+      console.log(values.password, values.newPassword);
       notifications.show({
         title: "Failed",
         message: "Failed to change password",
@@ -60,6 +62,7 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
       >
         <Stack w={400} px={20} py={10}>
           <PasswordInput
+            leftSection={<IconLock size={18} />}
             withAsterisk
             label="Password"
             placeholder="Password"
@@ -67,6 +70,7 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
             {...form.getInputProps("password")}
           />
           <PasswordInput
+            leftSection={<IconLockCog size={18} />}
             withAsterisk
             label="New password"
             placeholder="New password"
@@ -74,6 +78,7 @@ export const ChangePasswordModal = ({ user }: { user: User }) => {
             {...form.getInputProps("newPassword")}
           />
           <PasswordInput
+            leftSection={<IconLockCog size={18} />}
             withAsterisk
             label="Confirm password"
             placeholder="Confirm password"

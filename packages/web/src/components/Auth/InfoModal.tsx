@@ -3,6 +3,7 @@ import { User } from "@/types/entity";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { Button, Stack, TextInput } from "@mantine/core";
+import { IconAt, IconPhone, IconUser } from "@tabler/icons-react";
 
 interface ChangeInfoModalProps {
   user: User;
@@ -65,6 +66,7 @@ export const ChangeInfoModal = ({ user, setUser }: ChangeInfoModalProps) => {
         <Stack w={400} px={20} py={10}>
           <TextInput
             disabled={user.role === "MANAGER" ? false : true}
+            leftSection={<IconUser size={18}/>}
             withAsterisk
             label="Usename"
             placeholder="Usename"
@@ -72,6 +74,7 @@ export const ChangeInfoModal = ({ user, setUser }: ChangeInfoModalProps) => {
             {...form.getInputProps("username")}
           />
           <TextInput
+            leftSection={<IconUser size={18}/>}
             withAsterisk
             label="Name"
             placeholder="Name"
@@ -79,6 +82,7 @@ export const ChangeInfoModal = ({ user, setUser }: ChangeInfoModalProps) => {
             {...form.getInputProps("name")}
           />
           <TextInput
+            leftSection={<IconAt size={18}/>}
             withAsterisk
             label="Email"
             placeholder="Email"
@@ -86,6 +90,7 @@ export const ChangeInfoModal = ({ user, setUser }: ChangeInfoModalProps) => {
             {...form.getInputProps("email")}
           />
           <TextInput
+            leftSection={<IconPhone size={18}/>}
             withAsterisk
             label="Telephone"
             placeholder="Telephone"
