@@ -109,7 +109,7 @@ export const TableStaff = () => {
   const handleBill = async (tableId: string, tableName: string) => {
     modals.openConfirmModal({
       title: (
-        <Text fz={18} fw={500}>
+        <Text fz={18} fw={750}>
           Create Bill
         </Text>
       ),

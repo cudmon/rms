@@ -85,8 +85,8 @@ export const DashBoardManager = () => {
                   <Text fz={28} fw={750}>
                     {countData[0]}
                   </Text>
-                  <ActionIcon variant="transparent">
-                    <IconChevronRight size="1.4rem" stroke={1.5} />
+                  <ActionIcon variant="transparent" component="a" href="/dashboard/users">
+                    <IconChevronRight size="1.7rem" stroke={2} />
                   </ActionIcon>
                 </Group>
                 <Group justify="space-between">
@@ -116,8 +116,8 @@ export const DashBoardManager = () => {
                   <Text fz={28} fw={750}>
                     {countData[1]}
                   </Text>
-                  <ActionIcon variant="transparent">
-                    <IconChevronRight size="1.4rem" stroke={2} />
+                  <ActionIcon variant="transparent" component="a" href="/dashboard/menus">
+                    <IconChevronRight size="1.7rem" stroke={2} />
                   </ActionIcon>
                 </Group>
                 <Group justify="space-between">
@@ -147,8 +147,8 @@ export const DashBoardManager = () => {
                   <Text fz={28} fw={750}>
                     {countData[2]}
                   </Text>
-                  <ActionIcon variant="transparent">
-                    <IconChevronRight size="1.4rem" stroke={1.5} />
+                  <ActionIcon variant="transparent" component="a" href="/dashboard/tables">
+                    <IconChevronRight size="1.7rem" stroke={2}/>
                   </ActionIcon>
                 </Group>
                 <Group justify="space-between">

@@ -85,7 +85,7 @@ export const ChefOrder = () => {
   const cancel = (id: string) => {
     modals.openConfirmModal({
       title: (
-        <Text fz={18} fw={500}>
+        <Text fz={18} fw={750}>
           Cancel Order
         </Text>
       ),

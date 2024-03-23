@@ -21,7 +21,7 @@ import {
   IconSalad,
   IconAlignBoxLeftTop,
   IconSquareRoundedPlus,
-  IconTrash,
+  IconTrash, IconCurrencyDollar
 } from "@tabler/icons-react";
 import {
   Container,
@@ -186,8 +186,8 @@ export const ManagerMenus = () => {
   const removeFood = (id: string) => {
     modals.openConfirmModal({
       title: (
-        <Text fz={18} fw={500}>
-          Remove menu
+        <Text fz={18} fw={750}>
+          Delete menu
         </Text>
       ),
 
@@ -203,7 +203,7 @@ export const ManagerMenus = () => {
       },
 
       children: (
-        <Text>Are you sure you want to remove this menu from the list?</Text>
+        <Text>Are you sure you want to delete this menu from the list?</Text>
       ),
 
       onConfirm: async () => {
@@ -214,14 +214,14 @@ export const ManagerMenus = () => {
         } catch (e) {
           notifications.show({
             title: "Error",
-            message: "Failed to remove menu",
+            message: "Failed to delete menu",
             color: "red",
           });
         }
 
         notifications.show({
-          title: "Menu removed",
-          message: "Menu was successfully removed from the list",
+          title: "Menu deleted",
+          message: "Menu was successfully deleted from the list",
           color: "blue",
         });
       },
@@ -348,10 +348,12 @@ export const ManagerMenus = () => {
         </SimpleGrid>
       </Container>
 
+      {/*-------------------------------------------- Modal Edit Menus ------------------------------------------------*/}
+
       <Modal
         opened={editMenuModal[0]}
         onClose={editMenuModal[1].close}
-        title="Create Menu"
+        title="Edit Menu"
         size="lg"
       >
         <Container>
@@ -432,7 +434,7 @@ export const ManagerMenus = () => {
                 placeholder="Prices..."
                 hideControls
                 mt="sm"
-                leftSection={<IconCoins size={16} />}
+                leftSection={<IconCurrencyDollar size={16} />}
                 withAsterisk
                 {...form.getInputProps("price")}
               />
@@ -474,12 +476,12 @@ export const ManagerMenus = () => {
         </Container>
       </Modal>
 
-      {/*-------------------------------------------- Modal Edit Menus ------------------------------------------------*/}
+      {/*-------------------------------------------- Modal Add Menus ------------------------------------------------*/}
 
       <Modal
         opened={addMenuModal[0]}
         onClose={addMenuModal[1].close}
-        title="Create Menu"
+        title="Add Menu"
         size="lg"
       >
         <Container>
@@ -560,7 +562,7 @@ export const ManagerMenus = () => {
                 placeholder="Prices..."
                 hideControls
                 mt="sm"
-                leftSection={<IconCoins size={16} />}
+                leftSection={<IconCurrencyDollar size={16} />}
                 withAsterisk
                 {...form.getInputProps("price")}
               />
@@ -586,7 +588,7 @@ export const ManagerMenus = () => {
                 type="submit"
                 onClick={addMenu}
               >
-                Save
+                Add
               </Button>
               <Button
                 variant="filled"

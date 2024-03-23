@@ -156,7 +156,7 @@ export const ManagerTable = () => {
   const remove = (id: string, name: string) => {
     modals.openConfirmModal({
       title: (
-        <Text fz={18} fw={500}>
+        <Text fz={18} fw={750}>
           Delete Table
         </Text>
       ),
