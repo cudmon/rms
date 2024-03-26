@@ -13,6 +13,7 @@ import {
   Modal,
   Tooltip,
   ActionIcon,
+  Group, ThemeIcon
 } from "@mantine/core";
 import {
   IconAt,
@@ -83,9 +84,17 @@ export function Profile() {
             <Stack w={400} px={20}>
               <Grid gutter={15}>
                 <GridCol span={12}>
-                  <Text fz={28} ta="center">
-                    {"Profile  "}
-                    <Menu>
+                  <Group justify="space-between">
+                  <ThemeIcon variant="white" color="rgba(255, 255, 255, 1)" mr={22}>
+                      <IconUserSquareRounded
+                        stroke={1.5}
+                        color='white'
+                      />
+                    </ThemeIcon>
+                    <Text fz={28} ta="center">
+                      {"Profile  "}
+                    </Text>
+                    <Menu position="right-start" offset={4} withArrow>
                       <Menu.Target>
                         <Tooltip label="Edit">
                           <ActionIcon
@@ -115,7 +124,7 @@ export function Profile() {
                         </Menu.Item>
                       </Menu.Dropdown>
                     </Menu>
-                  </Text>
+                  </Group>
                 </GridCol>
                 <GridCol span={12}>
                   <Flex justify="center">
