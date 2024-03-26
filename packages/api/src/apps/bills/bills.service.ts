@@ -61,6 +61,10 @@ export class BillsService {
     const charge = await this.settingService.findByName("SERVICE_CHARGE");
 
     let subTotal = usage.order.reduce((acc, curr) => {
+      if (curr.status === "CANCELED") {
+        return acc;
+      }
+
       return acc + curr.price * curr.quantity;
     }, 0);
 
