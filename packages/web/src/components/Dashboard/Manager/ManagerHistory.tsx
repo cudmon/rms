@@ -29,6 +29,9 @@ export const ManagerHistory = () => {
   const [order, setOrder] = useState<Order[]>([]);
   const [tableName, setTableName] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
+  const [selectedBill, setSelectedBill] = useState<Bill>({} as Bill);
+  const [tax, setTax] = useState(0);
+  const [charge, setCharge] = useState(0);
 
   const { isError, data } = useQuery({
     queryKey: ["bill"],
@@ -56,7 +59,7 @@ export const ManagerHistory = () => {
   useEffect(() => {
     if (data !== undefined) {
       setbill(data);
-      console.log(data);
+  
     }
   }, [data]);
 
@@ -71,13 +74,14 @@ export const ManagerHistory = () => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
-
+  
   const filteredRows = bill.filter(
     (bill) =>
       bill.usage.table.name.toLowerCase().includes(search.toLowerCase()) ||
       bill.createdAt.toLowerCase().includes(search.toLowerCase()) ||
       bill.status.toLowerCase().includes(search.toLowerCase()) ||
-      bill.price.toString().includes(search.toLowerCase())
+      bill.subPrice.toString().includes(search.toLowerCase()) ||
+      bill.totalPrice.toString().includes(search.toLowerCase())
   );
 
   const rows = filteredRows.map((bill) => (
@@ -85,10 +89,17 @@ export const ManagerHistory = () => {
       <Table.Td>{bill.usage.table.name}</Table.Td>
       <Table.Td>{bill.createdAt}</Table.Td>
       <Table.Td>
+        {" "}
         {new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
-        }).format(bill.price)}
+        }).format(bill.subPrice)}
+      </Table.Td>
+      <Table.Td>
+        {new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(bill.totalPrice)}
       </Table.Td>
       <Table.Td>{bill.status}</Table.Td>
 
@@ -116,17 +127,26 @@ export const ManagerHistory = () => {
     <Table.Tr>
       <Table.Th ta="center">Table Name</Table.Th>
       <Table.Th ta="center">Date / Time</Table.Th>
+      <Table.Th ta="center">SubTotal Price</Table.Th>
       <Table.Th ta="center">Total Price</Table.Th>
       <Table.Th ta="center">Status</Table.Th>
       <Table.Th ta="center"></Table.Th>
     </Table.Tr>
   );
 
-  const handleViewclick = (bill: Bill) => {
+  const handleViewclick = async (bill: Bill) => {
     try {
+      const resTax = await http.get(`/settings/BILLING_TAX`);
+      const tax = resTax.data.value;
+      const resCharge = await http.get(`/settings/SERVICE_CHARGE`);
+      const charge = resCharge.data.value;
+
       setOrder(bill.usage.order);
       setTableName(bill.usage.table.name);
-      setTotalPrice(bill.price);
+      setTotalPrice(bill.subPrice);
+      setSelectedBill(bill);
+      setTax(Number(tax));
+      setCharge(Number(charge));
 
       setModalOpenView(true);
     } catch (error) {}
@@ -168,6 +188,10 @@ export const ManagerHistory = () => {
         order={order}
         tableName={tableName}
         totalPrice={totalPrice}
+        Bill={selectedBill}
+        tax={tax}
+        charge={charge}
+
       />
     </>
   );

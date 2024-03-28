@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import { Order, Bill } from "@/types/entity";
 import {
   Modal,
@@ -25,6 +25,8 @@ interface BillModalProps {
   billID: string;
   tableID: string;
   Bill: Bill;
+  tax : number;
+  charge : number;
 }
 
 export const BillModal: React.FC<BillModalProps> = ({
@@ -37,6 +39,8 @@ export const BillModal: React.FC<BillModalProps> = ({
   billID,
   tableID,
   Bill,
+  tax,
+  charge
 }) => {
   if (!isOpen) return null;
 
@@ -101,7 +105,7 @@ export const BillModal: React.FC<BillModalProps> = ({
             withTableBorder
           >
             <ScrollArea
-              h={293}
+              h={347}
               type="always"
               offsetScrollbars
               scrollbarSize={12}
@@ -148,6 +152,19 @@ export const BillModal: React.FC<BillModalProps> = ({
                   currency: "USD",
                 }).format(Bill.subPrice)}{" "}
               </Grid.Col>
+              <Grid.Col span={6} py={2}>
+                <Text size="sm">Service Charge :</Text>
+              </Grid.Col>
+              <Grid.Col span={6} py={2} ta={"right"}>
+                <Text size="md">{charge} %</Text>
+              </Grid.Col>
+              <Grid.Col span={6} py={0}>
+                <Text size="sm">Tax :</Text>
+              </Grid.Col>
+              <Grid.Col span={6} py={0} ta={"right"}>
+                <Text size="md">{tax} %</Text>
+              </Grid.Col>
+
               <Grid.Col span={12} py={0}>
                 <Divider size="xs" my="sm" />
               </Grid.Col>

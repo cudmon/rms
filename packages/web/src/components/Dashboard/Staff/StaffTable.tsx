@@ -52,6 +52,8 @@ export const TableStaff = () => {
   const [billID, setbillID] = useState<string>("");
   const [tableID, settableID] = useState<string>("");
   const [selectedBill, setSelectedBill] = useState<Bill>({} as Bill);
+  const [tax , setTax] = useState(0);
+  const [charge , setCharge] = useState(0);
 
   const { isError, data } = useQuery({
     queryKey: ["tables"],
@@ -134,11 +136,14 @@ export const TableStaff = () => {
 
       onConfirm: async () => {
         try {
-          const res_usage = await http.get(`/usages/active/${tableId}`);
-          const usage = res_usage.data as Usage;
+          const resUsage = await http.get(`/usages/active/${tableId}`);
+          const usage = resUsage.data as Usage;
           const order = usage.order;
           const sumOrder: Order[] = [];
-
+          const resTax = await http.get(`/settings/BILLING_TAX`);
+          const tax = resTax.data.value;
+          const resCharge = await http.get(`/settings/SERVICE_CHARGE`);
+          const charge = resCharge.data.value;
           let check = 0;
 
           order.map((item) => {
@@ -170,6 +175,8 @@ export const TableStaff = () => {
             setbillID(bill.id);
             settableID(tableId);
             setModalBilled(true);
+            setTax(Number(tax));
+            setCharge(Number(charge));
           } else {
             notifications.show({
               title: "Error",
@@ -385,6 +392,8 @@ export const TableStaff = () => {
         billID={billID}
         tableID={tableID}
         Bill={selectedBill}
+        tax={tax}
+        charge={charge}
       />
       {/* ------------------------------------------------End Modal Billed-------------------------------------------------------- */}
     </Container>

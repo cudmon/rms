@@ -14,7 +14,6 @@ import { http } from "@/modules/http";
 import { AxiosError } from "axios";
 import {
   IconEdit,
-  IconCoins,
   IconUpload,
   IconX,
   IconPhotoDown,
@@ -274,7 +273,6 @@ export const ManagerMenus = () => {
         <Group justify="space-between" mb="xs">
           <Text size="sm">
             {
-              // format to currency
               new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD",
