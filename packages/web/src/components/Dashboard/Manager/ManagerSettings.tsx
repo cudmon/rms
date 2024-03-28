@@ -9,11 +9,16 @@ import {
   TextInput,
   Title,
   Group,
+  Box,
+  Button,
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { log } from "console";
 import { TimeInput } from "@mantine/dates";
+import { set, z } from "zod";
+import { useForm, zodResolver } from "@mantine/form";
+
 
 function toNormalCase(str: string) {
   return (str.at(0)?.toUpperCase() + str.slice(1).toLowerCase()).replace(
@@ -23,34 +28,70 @@ function toNormalCase(str: string) {
 }
 
 export function ManagerSettings() {
-  const [settings, setSettings] = useState<
-    {
-      id: number;
-      name: string;
-      value: string;
-      type: string;
-    }[]
-  >([]);
+
+  type setting = {
+    id: string;
+    name: string;
+    value: any;
+    type: string;
+  }[];
+
+  const schema = z.object({
+    billingTax: z.number().min(0).max(100),
+    restaurantName: z.string().min(3).max(20),
+    serviceCharge: z.number().min(0).max(100),
+  });
+
+  const form = useForm({
+    initialValues: {
+      billingTax: 0,
+      restaurantName: "",
+      serviceCharge: 0,
+    },
+    validate: zodResolver(schema),
+  });
 
   useEffect(() => {
     (async () => {
       try {
         const res = await http.get("/settings");
 
-        setSettings(res.data);
+        const data = res.data as setting;
+
+        console.log(data);
+
+        form.setValues({
+          billingTax: Number(data.find((s) => s.name === "BILLING_TAX")?.value),
+          restaurantName: data.find((s) => s.name === "NAME")?.value,
+          serviceCharge: Number(data.find((s) => s.name === "SERVICE_CHARGE")?.value),
+        });
+        
+        
       } catch (error) {}
     })();
   }, []);
 
-  const updateSetting = async (name: string, value: string) => {
-    setSettings((prev) =>
-      prev.map((s) => (s.name === name ? { ...s, value } : s))
-    );
-
+  const onUpdateSettings = async (data: any) => {
     try {
-      await http.patch(`/settings/${name}`, { value });
-    } catch (error) {}
-  };
+      await http.patch(`/settings/BILLING_TAX`, { value: String(data.billingTax) });
+      await http.patch(`/settings/NAME`, { value: String(data.restaurantName) });
+      await http.patch(`/settings/SERVICE_CHARGE`, { value: String(data.serviceCharge) });
+      notifications.show({
+        title: "Settings updated",
+        message: "Settings updated successfully",
+        color: "teal",
+      });
+    }
+    catch (error) {
+      notifications.show({
+        title: "Error",
+        message: "Something went wrong. Please try again later",
+        color: "red",
+      });
+    }
+
+  }
+
 
   return (
     <>
@@ -62,6 +103,12 @@ export function ManagerSettings() {
       </Group>
 
       <Card padding="lg" radius="md" withBorder mt="md">
+        <form    onSubmit={(event) => {
+          event.preventDefault();
+          form.onSubmit((data) => {
+            onUpdateSettings(data);
+          })();
+        }}>
         <Table fz={16} horizontalSpacing="md" verticalSpacing="md">
           <Table.Thead>
             <Table.Tr>
@@ -70,35 +117,38 @@ export function ManagerSettings() {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {settings.map((setting) => (
-              <Table.Tr key={setting.id}>
-                <Table.Td>{toNormalCase(setting.name)}</Table.Td>
-                {setting.type === "STRING" && (
-                  <Table.Td>
-                    <TextInput
-                      value={setting.value}
-                      onChange={(v) => {
-                        updateSetting(setting.name, v.currentTarget.value);
-                      }}
-                    />
-                  </Table.Td>
-                )}
-                {setting.type === "NUMBER" && (
-                  <Table.Td>
-                    <TextInput
-                      type="number"
-                      value={setting.value}
-                      placeholder="0 will be used if empty"
-                      onChange={(v) => {
-                        updateSetting(setting.name, v.currentTarget.value);
-                      }}
-                    />
-                  </Table.Td>
-                )}
-              </Table.Tr>
-            ))}
+            <Table.Tr>
+              <Table.Td>Billing tax</Table.Td>
+              <Table.Td>
+                <NumberInput {...form.getInputProps("billingTax")} />
+              </Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Td>Restaurant Name</Table.Td>
+              <Table.Td>
+                <TextInput {...form.getInputProps("restaurantName")} />
+              </Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Td>Service charge</Table.Td>
+              <Table.Td>
+                <NumberInput {...form.getInputProps("serviceCharge")} />
+              </Table.Td>
+            </Table.Tr>
           </Table.Tbody>
         </Table>
+        <Box mt="lg" ta="end">
+        <Button
+            type="submit"
+            variant="filled"
+            radius="lg"
+            mt="sm"
+            color="green"
+          >
+            Save
+          </Button>
+        </Box>
+        </form>
       </Card>
     </>
   );
