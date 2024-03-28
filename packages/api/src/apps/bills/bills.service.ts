@@ -44,7 +44,6 @@ export class BillsService {
 
   async createBill(tableId: string) {
     const usage = await this.usagesService.findActive(tableId);
-    console.log("usage : ", usage);
 
     const bill = await this.prisma.billing.findFirst({
       where: {
