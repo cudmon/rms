@@ -68,7 +68,7 @@ export const MenusList = () => {
                 />
               </Tooltip>
             </CardSection>
-            <Group justify="space-between" mt="md" mb="xs">
+            <Group justify="space-between" mt="md" >
               <Text fz={18} fw={750}>
                 {menu.name}
               </Text>
@@ -84,6 +84,11 @@ export const MenusList = () => {
                   currency: "USD",
                 }).format(menu.price)}
               </Badge>
+            </Group>
+            <Group my="xs" >
+              <Text
+              size="sm"
+              >{menu.detail}</Text>
             </Group>
             <Flex gap={8} align="center" justify="space-between">
               <NumberInput
